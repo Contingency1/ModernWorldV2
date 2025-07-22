@@ -22,3 +22,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           yaml-file: .github/labels.yaml
+
+### crazy-max/ghaction-github-labeler@v5 공식문서
+### https://github.com/crazy-max/ghaction-github-labeler?tab=readme-ov-file#workflow
