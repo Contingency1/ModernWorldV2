@@ -1,0 +1,21 @@
+name: Sync Labels
+
+on:
+  push:
+    paths:
+      - .github/labels.yml
+  workflow_dispatch:
+
+jobs:
+  sync-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 체크아웃
+        uses: actions/checkout@v3
+
+      - name: 깃허브 라벨 동기화
+        uses: crazy-max/ghaction-github-labeler@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          yaml-file: .github/labels.ym
+          # 기존에 있던건 삭제가 안됨, 수동으로 삭제해야함.
