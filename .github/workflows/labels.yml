@@ -9,6 +9,10 @@ on:
 jobs:
   sync-labels:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
     steps:
       - name: 체크아웃
         uses: actions/checkout@v3
@@ -18,4 +22,3 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           yaml-file: .github/labels.yaml
-          # 기존에 있던건 삭제가 안됨, 수동으로 삭제해야함.
