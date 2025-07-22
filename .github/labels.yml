@@ -1,0 +1,32 @@
+labels:
+  - name: feat
+    color: 2ECC71
+    description: 새로운 기능 추가
+
+  - name: fix
+    color: E74C3C
+    description: 기능 변경 포함한 수정
+
+  - name: refactor
+    color: 9B59B6
+    description: 구조 개선 (기능 변경 없음)
+
+  - name: style
+    color: F39C12
+    description: 코드 스타일 수정
+
+  - name: docs
+    color: 3498DB
+    description: 문서 관련 변경
+
+  - name: test
+    color: 1ABC9C
+    description: 테스트 코드 추가 / 수정
+
+  - name: chore
+    color: 95A5A6
+    description: 설정, 빌드, 기타 작업
+
+  - name: bug
+    color: D73A4A
+    description: 오류 또는 예외 상황을 추적하고 수정
