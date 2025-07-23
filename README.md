@@ -25,6 +25,16 @@ JS (Nest.js) -> JAVA (Spring Boot) 전환을 위한 레포지토리입니다.
 
 ├── README.md
 
+---
+
+## 📋 브랜치 컨벤션
+이 프로젝트는 [브랜치명 컨벤션](.github/BRANCH_CONVENTION.md)을 따릅니다.
+
+형식: `<type>/<이슈번호>-<간단한설명>`
+```
+- `feat/42-login-api`
+- `fix/17-header-overlap`
+```
 
 ---
 
