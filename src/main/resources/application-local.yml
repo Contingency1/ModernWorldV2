@@ -1,0 +1,5 @@
+spring:
+  docker:
+    compose:
+      file: docker-compose.local.yml
+      enabled: true
