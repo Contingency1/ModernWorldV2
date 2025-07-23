@@ -1,4 +1,10 @@
 spring:
+  profiles:
+    active: local  # 로컬 실행 시 기본 active
   application:
     name:
       modern-world-v2
+  docker:
+    compose:
+      enabled: true
+      file: docker-compose.yml
