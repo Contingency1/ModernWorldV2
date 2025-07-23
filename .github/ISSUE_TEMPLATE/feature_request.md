@@ -2,7 +2,7 @@
 name: 기능 추가 요청
 about: 새로운 기능이나 개선사항 제안
 title: "[Feature] "
-labels: enhancement
+labels: feat
 ---
 
 ## ✨ 기능
