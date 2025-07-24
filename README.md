@@ -10,6 +10,7 @@ JS (Nest.js) -> JAVA (Spring Boot) 전환을 위한 레포지토리입니다.
 
 - Junit을 활용한 테스트 구현
 - Thymeleaf를 이용한 Admin Page 구현
+- Admin 관련 User Ban 기능 활성화 및 권한 강화
 
 ---
 
@@ -25,6 +26,16 @@ JS (Nest.js) -> JAVA (Spring Boot) 전환을 위한 레포지토리입니다.
 
 ├── README.md
 
+---
+
+## 📋 브랜치 컨벤션
+이 프로젝트는 [브랜치명 컨벤션](.github/BRANCH_CONVENTION.md)을 따릅니다.
+
+형식: `<type>/<이슈번호>-<간단한설명>`
+```
+- `feat/42-login-api`
+- `fix/17-header-overlap`
+```
 
 ---
 

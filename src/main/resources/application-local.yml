@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/mw
+    username: root
+    password: secret
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true # SQL 쿼리를 표준 출력(console) 에 출력
+    properties:
+      hibernate:
+        format_sql: true # 출력되는 SQL 쿼리를 가독성 좋게 포맷
+
+logging:
+  level:
+    root: info
+    org.hibernate.SQL: debug # 실행된 SQL 문장
+    org.hibernate.type.descriptor.sql.BasicBinder: trace # 쿼리의 PreparedStatement에 바인딩되는 실제 값들을 로그로 출력
+    org.springframework.web: debug # 요청 처리 흐름 보기
