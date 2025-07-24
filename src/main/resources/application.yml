@@ -8,3 +8,10 @@ spring:
     compose:
       enabled: true
       file: docker-compose.yml
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: info
