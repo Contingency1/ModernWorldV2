@@ -1,8 +1,10 @@
-package kr.modernworld.modernworldv2.global.persistence.enitity;
+package kr.modernworld.modernworldv2.user.infrastructure.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
@@ -27,14 +29,15 @@ import org.hibernate.annotations.OnDeleteAction;
 public class TokenJPAEntity {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "no", columnDefinition = "int UNSIGNED not null")
-  private Long id;
+  private Long no;
 
   @NotNull
   @OneToOne(fetch = FetchType.LAZY, optional = false)
   @OnDelete(action = OnDeleteAction.CASCADE)
-  @JoinColumn(name = "user_no", nullable = false)
-  private UserJPAEntity userNo;
+  @JoinColumn(name = "user_no", nullable = false, unique = true)
+  private UserJPAEntity user;
 
   @Size(max = 300)
   @Column(name = "social_access", length = 300)

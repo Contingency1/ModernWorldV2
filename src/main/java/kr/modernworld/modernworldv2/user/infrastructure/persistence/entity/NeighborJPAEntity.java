@@ -1,16 +1,16 @@
-package kr.modernworld.modernworldv2.global.persistence.enitity;
+package kr.modernworld.modernworldv2.user.infrastructure.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import java.time.Instant;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,40 +21,37 @@ import org.hibernate.annotations.OnDeleteAction;
 @Getter
 @Setter
 @Entity
-@Table(name = "report", schema = "modernworld", indexes = {
+@Table(name = "neighbor", schema = "modernworld", indexes = {
     @Index(name = "sender_no", columnList = "sender_no"),
     @Index(name = "receiver_no", columnList = "receiver_no")
 })
-public class ReportJPAEntity {
+public class NeighborJPAEntity {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "no", columnDefinition = "int UNSIGNED not null")
-  private Long id;
+  private Long no;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @OnDelete(action = OnDeleteAction.SET_NULL)
-  @JoinColumn(name = "sender_no")
-  private UserJPAEntity senderNo;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @OnDelete(action = OnDeleteAction.SET_NULL)
-  @JoinColumn(name = "receiver_no")
-  private UserJPAEntity receiverNo;
-
-  @Size(max = 300)
   @NotNull
-  @Column(name = "content", nullable = false, length = 300)
-  private String content;
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  @JoinColumn(name = "sender_no", nullable = false)
+  private UserJPAEntity sender;
+
+  @NotNull
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  @JoinColumn(name = "receiver_no", nullable = false)
+  private UserJPAEntity receiver;
+
+  @NotNull
+  @ColumnDefault("0")
+  @Column(name = "status", nullable = false)
+  private Boolean status = false;
 
   @NotNull
   @ColumnDefault("CURRENT_TIMESTAMP")
   @Column(name = "created_at", nullable = false)
   private Instant createdAt;
-
-  @NotNull
-  @ColumnDefault("'other'")
-  @Lob
-  @Column(name = "category", nullable = false)
-  private String category;
 
 }

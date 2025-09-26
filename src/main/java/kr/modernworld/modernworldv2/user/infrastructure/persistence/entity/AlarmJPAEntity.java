@@ -1,12 +1,13 @@
-package kr.modernworld.modernworldv2.global.persistence.enitity;
+package kr.modernworld.modernworldv2.user.infrastructure.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -21,39 +22,41 @@ import org.hibernate.annotations.OnDeleteAction;
 @Getter
 @Setter
 @Entity
-@Table(name = "rsp_game_record", schema = "modernworld", indexes = {
+@Table(name = "alarm", schema = "modernworld", indexes = {
     @Index(name = "user_no", columnList = "user_no")
 })
-public class RspGameRecordJPAEntity {
+public class AlarmJPAEntity {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "no", columnDefinition = "int UNSIGNED not null")
-  private Long id;
+  private Long no;
 
   @NotNull
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "user_no", nullable = false)
-  private UserJPAEntity userNo;
+  private UserJPAEntity user;
 
-  @Size(max = 10)
+  @Size(max = 500)
   @NotNull
-  @Column(name = "user_choice", nullable = false, length = 10)
-  private String userChoice;
-
-  @Size(max = 10)
-  @NotNull
-  @Column(name = "computer_choice", nullable = false, length = 10)
-  private String computerChoice;
+  @Column(name = "content", nullable = false, length = 500)
+  private String content;
 
   @NotNull
-  @Lob
-  @Column(name = "result", nullable = false)
-  private String result;
+  @ColumnDefault("0")
+  @Column(name = "status", nullable = false)
+  private Boolean status = false;
 
   @NotNull
   @ColumnDefault("CURRENT_TIMESTAMP")
   @Column(name = "created_at", nullable = false)
   private Instant createdAt;
+
+  @Size(max = 20)
+  @NotNull
+  @ColumnDefault("'기타'")
+  @Column(name = "title", nullable = false, length = 20)
+  private String title;
 
 }

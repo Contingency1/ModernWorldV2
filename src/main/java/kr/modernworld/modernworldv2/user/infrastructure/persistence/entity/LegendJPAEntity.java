@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.global.persistence.enitity;
+package kr.modernworld.modernworldv2.user.infrastructure.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +22,7 @@ public class LegendJPAEntity {
 
   @Id
   @Column(name = "user_no", columnDefinition = "int UNSIGNED not null")
-  private Long id;
+  private Long no;
 
   @MapsId
   @OneToOne(fetch = FetchType.LAZY, optional = false)

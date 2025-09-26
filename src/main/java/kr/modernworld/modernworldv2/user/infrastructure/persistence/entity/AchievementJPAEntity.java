@@ -1,12 +1,20 @@
-package kr.modernworld.modernworldv2.global.persistence.enitity;
+package kr.modernworld.modernworldv2.user.infrastructure.persistence.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -18,8 +26,9 @@ import org.hibernate.annotations.ColumnDefault;
 public class AchievementJPAEntity {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "no", columnDefinition = "int UNSIGNED not null")
-  private Long id;
+  private Long no;
 
   @Size(max = 20)
   @NotNull
@@ -37,9 +46,9 @@ public class AchievementJPAEntity {
   private String title;
 
   @NotNull
-  @Lob
+  @Enumerated(EnumType.STRING)
   @Column(name = "level", nullable = false)
-  private String level;
+  private AchievementLevel level;
 
   @Column(name = "point", columnDefinition = "int UNSIGNED not null")
   private Long point;
@@ -49,5 +58,8 @@ public class AchievementJPAEntity {
   @ColumnDefault("'기타'")
   @Column(name = "category", nullable = false, length = 10)
   private String category;
+
+  @OneToMany(mappedBy = "achievement", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  private List<UserAchievementJPAEntity> userAchievements = new ArrayList<>();
 
 }

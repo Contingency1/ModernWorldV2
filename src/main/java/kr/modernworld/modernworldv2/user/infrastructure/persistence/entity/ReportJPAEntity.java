@@ -1,8 +1,12 @@
-package kr.modernworld.modernworldv2.global.persistence.enitity;
+package kr.modernworld.modernworldv2.user.infrastructure.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
@@ -20,25 +24,26 @@ import org.hibernate.annotations.OnDeleteAction;
 @Getter
 @Setter
 @Entity
-@Table(name = "comment", schema = "modernworld", indexes = {
-    @Index(name = "receiver_no", columnList = "receiver_no"),
-    @Index(name = "sender_no", columnList = "sender_no")
+@Table(name = "report", schema = "modernworld", indexes = {
+    @Index(name = "sender_no", columnList = "sender_no"),
+    @Index(name = "receiver_no", columnList = "receiver_no")
 })
-public class CommentJPAEntity {
+public class ReportJPAEntity {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "no", columnDefinition = "int UNSIGNED not null")
-  private Long id;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @OnDelete(action = OnDeleteAction.SET_NULL)
-  @JoinColumn(name = "receiver_no")
-  private UserJPAEntity receiverNo;
+  private Long no;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @OnDelete(action = OnDeleteAction.SET_NULL)
   @JoinColumn(name = "sender_no")
-  private UserJPAEntity senderNo;
+  private UserJPAEntity sender;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @OnDelete(action = OnDeleteAction.SET_NULL)
+  @JoinColumn(name = "receiver_no")
+  private UserJPAEntity receiver;
 
   @Size(max = 300)
   @NotNull
@@ -50,7 +55,10 @@ public class CommentJPAEntity {
   @Column(name = "created_at", nullable = false)
   private Instant createdAt;
 
-  @Column(name = "deleted_at")
-  private Instant deletedAt;
+  @NotNull
+  @ColumnDefault("'other'")
+  @Enumerated(EnumType.STRING)
+  @Column(name = "category", nullable = false)
+  private ReportCategory category;
 
 }
