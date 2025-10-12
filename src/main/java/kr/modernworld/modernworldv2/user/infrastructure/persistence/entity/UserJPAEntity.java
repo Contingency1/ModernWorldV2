@@ -57,7 +57,7 @@ public class UserJPAEntity {
 
   @Column(name = "attendance")
   @JdbcTypeCode(SqlTypes.JSON)
-  private Map<String, Object> attendance;
+  private Map<String, List<Integer>> attendance;
 
   @NotNull
   @ColumnDefault("0")
@@ -163,4 +163,17 @@ public class UserJPAEntity {
   @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
   private List<ReportJPAEntity> receivedReports = new ArrayList<>();
 
+  public void setToken(TokenJPAEntity token) {
+    this.token = token;
+    if (token != null) {
+      token.setUser(this);
+    }
+  }
+
+  public void setLegend(LegendJPAEntity legend) {
+    this.legend = legend;
+    if (legend != null) {
+      legend.setUser(this);
+    }
+  }
 }

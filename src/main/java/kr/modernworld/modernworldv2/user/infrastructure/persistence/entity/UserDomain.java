@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.user.infrastructure.persistence.entity;
 
-enum UserDomain {
+public enum UserDomain {
   naver,
   kakao,
   google
