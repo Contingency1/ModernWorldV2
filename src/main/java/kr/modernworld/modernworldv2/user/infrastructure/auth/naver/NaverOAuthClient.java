@@ -1,0 +1,110 @@
+package kr.modernworld.modernworldv2.user.infrastructure.auth.naver;
+
+import kr.modernworld.modernworldv2.global.exception.OAuthTokenErrorException;
+import kr.modernworld.modernworldv2.user.application.oauth.OAuthTokenDTO;
+import kr.modernworld.modernworldv2.user.application.oauth.SocialUserInfoDTO;
+import kr.modernworld.modernworldv2.user.domain.port.OAuthClient;
+import kr.modernworld.modernworldv2.user.domain.user.UserDomain;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+
+@Service("naverOAuthClient")
+@Slf4j
+public class NaverOAuthClient implements OAuthClient {
+
+  private final WebClient tokenWebClient;
+  private final WebClient apiWebClient;
+  private final NaverOAuthProperties properties;
+
+  @Autowired
+  public NaverOAuthClient(WebClient webClient, NaverOAuthProperties properties) {
+    this.tokenWebClient = webClient.mutate()
+        .baseUrl("https://nid.naver.com")
+        .defaultHeader(HttpHeaders.CONTENT_TYPE,
+            MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+        .build();
+
+    this.apiWebClient = webClient.
+        mutate().
+        baseUrl("https://openapi.naver.com")
+        .build();
+
+    this.properties = properties;
+  }
+
+  public OAuthTokenDTO getSocialToken(String state, String authorizationCode) {
+    NaverTokenDTO response = getNaverToken(state, authorizationCode);
+
+    return new OAuthTokenDTO(response.accessToken(), response.refreshToken(), response.expiresIn());
+  }
+
+  @Override
+  public SocialUserInfoDTO getSocialUserInfo(String socialAccessToken) {
+
+    NaverUserInfoDTO response = apiWebClient
+        .get()
+        .uri("/v1/nid/me")
+        .header(HttpHeaders.AUTHORIZATION, "Bearer " + socialAccessToken)
+        .exchangeToMono(res -> {
+          if (res.statusCode().isError()) {
+            return res.bodyToMono(NaverUserInfoDTO.class)
+                .flatMap(error -> Mono.error(new OAuthTokenErrorException(
+                    "[NaverOAuthClient] error message: " + error.message()
+                        + " error code: " + error.resultCode())));
+          }
+
+          return res.bodyToMono(NaverUserInfoDTO.class);
+        })
+        .block();
+
+    NaverUserInfoResponseDTO info = response.response();
+
+    return new SocialUserInfoDTO(info.id(), info.name(), info.profileImage());
+  }
+
+  private NaverTokenDTO getNaverToken(String state, String authorizationCode) {
+    String tokenUrl = "/oauth2.0/token";
+
+    // 비동기 결과를 동기적으로 기다림
+    return tokenWebClient.post()
+        .uri(tokenUrl)
+        .body(BodyInserters.fromFormData("grant_type", "authorization_code")
+            .with("client_id", properties.id())
+            .with("client_secret", properties.secret())
+            .with("code", authorizationCode)
+            .with("state", state))
+        .exchangeToMono(res -> {
+          if (res.statusCode().isError()) {
+            return res.bodyToMono(NaverTokenDTO.class)
+                .flatMap(error -> Mono.error(new OAuthTokenErrorException(
+                    "[NaverOAuthClient] OAuth token error: " + error.error()
+                        + "\nDescription: " + error.errorDescription())));
+          }
+
+          return res.bodyToMono(NaverTokenDTO.class);
+        })
+        .block();
+  }
+
+  @Override
+  public UserDomain getProviderName() {
+    return UserDomain.naver;
+  }
+
+  @Override
+  public String getLoginUrl(String state) {
+    String path = "/oauth2.0/authorize";
+    String responseType = "?response_type=code";
+    String clientId = "&client_id=" + properties.id();
+    String redirectUri = "&redirect_uri=" + properties.callbackUrl();
+    String finalState = "&state=" + state;
+
+    return "https://nid.naver.com" + path + responseType + clientId + redirectUri + finalState;
+  }
+}
