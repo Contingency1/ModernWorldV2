@@ -1,0 +1,97 @@
+package kr.modernworld.modernworldv2.user.application.oauth;
+
+import java.util.UUID;
+import kr.modernworld.modernworldv2.user.application.event.LoginFailEvent;
+import kr.modernworld.modernworldv2.user.application.event.LoginSuccessEvent;
+import kr.modernworld.modernworldv2.user.domain.port.OAuthClient;
+import kr.modernworld.modernworldv2.user.domain.port.RefreshTokenRepository;
+import kr.modernworld.modernworldv2.user.domain.port.SessionRepository;
+import kr.modernworld.modernworldv2.user.domain.port.TokenProvider;
+import kr.modernworld.modernworldv2.user.domain.port.user.UserRepository;
+import kr.modernworld.modernworldv2.user.domain.user.User;
+import kr.modernworld.modernworldv2.user.domain.user.UserDomain;
+import kr.modernworld.modernworldv2.user.infrastructure.repository.TokenResultDTO;
+import kr.modernworld.modernworldv2.user.presentation.oauth.LoginResultDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+public class OAuthService {
+
+  private final SessionRepository sessionRepository;
+  private final OAuthProvider authProvider;
+  private final ApplicationEventPublisher eventPublisher;
+
+  private final UserRepository userRepository;
+  private final TokenProvider tokenProvider;
+  private final RefreshTokenRepository refreshTokenRepository;
+
+  public String buildLoginUrl(UserDomain providerName) {
+
+    OAuthClient client = authProvider.getOAuthClient(providerName);
+
+    String state = UUID.randomUUID().toString();
+    sessionRepository.save("SESSION_KEY", state);
+
+    return client.getLoginUrl(state);
+  }
+
+  @Transactional
+  public LoginResultDTO login(UserDomain providerName, String authCode, String state) {
+    String storedSate = sessionRepository.findValue("SESSION_KEY");
+
+    // 테스트 할때는 아래 state값 확인로직 주석처리할것.
+    if (!storedSate.equals(state)) {
+      eventPublisher.publishEvent(new LoginFailEvent(this));
+      throw new RuntimeException("Login failed");
+    }
+
+    OAuthClient client = authProvider.getOAuthClient(providerName);
+
+    OAuthTokenDTO socialToken = client.getSocialToken(state, authCode);
+    SocialUserInfoDTO socialUserInfo = client.getSocialUserInfo(socialToken.socialAccessToken());
+
+    //--------------------------------------------------------------------------------------
+    //밴 됐는지 확인하는 로직 추후에 추가할것.
+
+    //--------------------------------------------------------------------------------------
+
+    User user = userRepository.findByUniqueIdentifier(socialUserInfo.uniqueIdentifier())
+        .orElseGet(() ->
+            User.createFromSocial(
+                socialUserInfo.uniqueIdentifier(),
+                socialUserInfo.name(),
+                socialUserInfo.profileImageUrl(),
+                client.getProviderName()
+            )
+        );
+
+    user.nullifyDeletedAt();
+    user.updateToken(socialToken.socialAccessToken(), socialToken.socialRefreshToken());
+
+    User savedUser = userRepository.save(user);
+
+    // 여기부터 토큰 저장 로직 ㄱㄱ 근데 위 로직은 트랜잭션으로 따로 빼야할듯.
+
+    Long now = System.currentTimeMillis();
+
+    TokenResultDTO accessToken = tokenProvider.createAccess(savedUser.getNo(), false, now);
+    TokenResultDTO refreshToken = tokenProvider.createRefresh(savedUser.getNo(), false, now);
+
+    refreshTokenRepository.save(savedUser.getNo(), refreshToken.token(),
+        refreshToken.expirationMillis());
+
+    eventPublisher.publishEvent(new LoginSuccessEvent(this));
+
+    return new LoginResultDTO(accessToken.token(), refreshToken.token(),
+        savedUser.getSocialName(),
+        savedUser.getNo(),
+        accessToken.expirationMillis(),
+        refreshToken.expirationMillis());
+  }
+
+
+}
