@@ -3,7 +3,8 @@ package kr.modernworld.modernworldv2.user.application.oauth;
 public record OAuthTokenDTO(
     String socialAccessToken,
     String socialRefreshToken,
-    Integer expiredIn
+    Integer accessExpiresIn,
+    Integer refreshExpiresIn
 ) {
 
 }
