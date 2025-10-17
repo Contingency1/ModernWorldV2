@@ -13,7 +13,11 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import kr.modernworld.modernworldv2.admin.infrastructure.persistence.entity.CharacterJPAEntity;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
@@ -29,6 +33,9 @@ import org.hibernate.annotations.OnDeleteAction;
     @UniqueConstraint(name = "character_locker_user_no_character_no_key", columnNames = {"user_no",
         "character_no"})
 })
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class CharacterLockerJPAEntity {
 
   @Id

@@ -19,7 +19,11 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -32,6 +36,9 @@ import org.hibernate.type.SqlTypes;
     @UniqueConstraint(name = "nickname", columnNames = {"nickname"}),
     @UniqueConstraint(name = "unique_identifier", columnNames = {"unique_identifier"})
 })
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class UserJPAEntity {
 
   @Id
