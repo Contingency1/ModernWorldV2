@@ -1,10 +1,15 @@
 package kr.modernworld.modernworldv2.user.infrastructure.auth.naver;
 
-import kr.modernworld.modernworldv2.global.exception.OAuthTokenErrorException;
+import kr.modernworld.modernworldv2.global.exception.OAuthException;
 import kr.modernworld.modernworldv2.user.application.oauth.OAuthTokenDTO;
 import kr.modernworld.modernworldv2.user.application.oauth.SocialUserInfoDTO;
 import kr.modernworld.modernworldv2.user.domain.port.OAuthClient;
 import kr.modernworld.modernworldv2.user.domain.user.UserDomain;
+import kr.modernworld.modernworldv2.user.infrastructure.auth.naver.dto.NaverTokenFailDTO;
+import kr.modernworld.modernworldv2.user.infrastructure.auth.naver.dto.NaverTokenSuccessDTO;
+import kr.modernworld.modernworldv2.user.infrastructure.auth.naver.dto.NaverUserInfoFailDTO;
+import kr.modernworld.modernworldv2.user.infrastructure.auth.naver.dto.NaverUserInfoResponseDTO;
+import kr.modernworld.modernworldv2.user.infrastructure.auth.naver.dto.NaverUserInfoSuccessDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 @Service("naverOAuthClient")
@@ -39,36 +45,44 @@ public class NaverOAuthClient implements OAuthClient {
   }
 
   public OAuthTokenDTO getSocialToken(String state, String authorizationCode) {
-    NaverTokenDTO response = getNaverToken(state, authorizationCode);
+    NaverTokenSuccessDTO response = getNaverToken(state, authorizationCode);
 
-    return new OAuthTokenDTO(response.accessToken(), response.refreshToken(), response.expiresIn());
+    return new OAuthTokenDTO(response.accessToken(), response.refreshToken(),
+        response.expiresIn(),
+        response.expiresIn());
   }
 
   @Override
   public SocialUserInfoDTO getSocialUserInfo(String socialAccessToken) {
-
-    NaverUserInfoDTO response = apiWebClient
-        .get()
-        .uri("/v1/nid/me")
-        .header(HttpHeaders.AUTHORIZATION, "Bearer " + socialAccessToken)
-        .exchangeToMono(res -> {
-          if (res.statusCode().isError()) {
-            return res.bodyToMono(NaverUserInfoDTO.class)
-                .flatMap(error -> Mono.error(new OAuthTokenErrorException(
-                    "[NaverOAuthClient] error message: " + error.message()
-                        + " error code: " + error.resultCode())));
-          }
-
-          return res.bodyToMono(NaverUserInfoDTO.class);
-        })
-        .block();
+    NaverUserInfoSuccessDTO response = getNaverUserInfo(socialAccessToken);
 
     NaverUserInfoResponseDTO info = response.response();
 
     return new SocialUserInfoDTO(info.id(), info.name(), info.profileImage());
   }
 
-  private NaverTokenDTO getNaverToken(String state, String authorizationCode) {
+  private NaverUserInfoSuccessDTO getNaverUserInfo(String socialAccessToken) {
+    return apiWebClient
+        .get()
+        .uri("/v1/nid/me")
+        .header(HttpHeaders.AUTHORIZATION, "Bearer " + socialAccessToken)
+        .exchangeToMono(res -> {
+          if (res.statusCode().isError()) {
+            return res.bodyToMono(NaverUserInfoFailDTO.class)
+                .flatMap(error -> Mono.error(new OAuthException(
+                    "[NaverOAuthClient] error message: " + error.message().orElse(null)
+                        + " error code: " + error.resultCode().orElse(null))));
+          }
+
+          return res.bodyToMono(NaverUserInfoSuccessDTO.class);
+        })
+        .switchIfEmpty(
+            Mono.error(new IllegalStateException(
+                "[NaverOAuthClient] Naver Auth API response body is empty.")))
+        .block();
+  }
+
+  private NaverTokenSuccessDTO getNaverToken(String state, String authorizationCode) {
     String tokenUrl = "/oauth2.0/token";
 
     // 비동기 결과를 동기적으로 기다림
@@ -81,14 +95,16 @@ public class NaverOAuthClient implements OAuthClient {
             .with("state", state))
         .exchangeToMono(res -> {
           if (res.statusCode().isError()) {
-            return res.bodyToMono(NaverTokenDTO.class)
-                .flatMap(error -> Mono.error(new OAuthTokenErrorException(
-                    "[NaverOAuthClient] OAuth token error: " + error.error()
-                        + "\nDescription: " + error.errorDescription())));
+            return res.bodyToMono(NaverTokenFailDTO.class)
+                .flatMap(error -> Mono.error(new OAuthException(
+                    "[NaverOAuthClient] OAuth token error: " + error.error().orElse(null)
+                        + "\nDescription: " + error.errorDescription().orElse(null))));
           }
 
-          return res.bodyToMono(NaverTokenDTO.class);
+          return res.bodyToMono(NaverTokenSuccessDTO.class);
         })
+        .switchIfEmpty(Mono.error(
+            new IllegalStateException("[NaverOAuthClient] Naver API response body is empty.")))
         .block();
   }
 
@@ -99,12 +115,14 @@ public class NaverOAuthClient implements OAuthClient {
 
   @Override
   public String getLoginUrl(String state) {
-    String path = "/oauth2.0/authorize";
-    String responseType = "?response_type=code";
-    String clientId = "&client_id=" + properties.id();
-    String redirectUri = "&redirect_uri=" + properties.callbackUrl();
-    String finalState = "&state=" + state;
-
-    return "https://nid.naver.com" + path + responseType + clientId + redirectUri + finalState;
+    return UriComponentsBuilder
+        .fromUriString("https://nid.naver.com")
+        .path("/oauth2.0/authorize")
+        .queryParam("response_type", "code")
+        .queryParam("client_id", properties.id())
+        .queryParam("redirect_uri", properties.callbackUrl())
+        .queryParam("state", state)
+        .encode()
+        .toUriString();
   }
 }
