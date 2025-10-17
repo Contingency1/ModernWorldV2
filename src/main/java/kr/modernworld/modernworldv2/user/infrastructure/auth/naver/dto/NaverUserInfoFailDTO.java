@@ -1,13 +1,12 @@
 package kr.modernworld.modernworldv2.user.infrastructure.auth.naver.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Optional;
 
-public record NaverUserInfoDTO(
+public record NaverUserInfoFailDTO(
     @JsonProperty("resultcode")
-    String resultCode,
-    String message,
-    NaverUserInfoResponseDTO response
+    Optional<String> resultCode,
+    Optional<String> message
 ) {
-
 
 }
