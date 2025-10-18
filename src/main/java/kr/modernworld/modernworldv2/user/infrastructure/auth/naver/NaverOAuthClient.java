@@ -71,7 +71,7 @@ public class NaverOAuthClient implements OAuthClient {
             return res.bodyToMono(NaverUserInfoFailDTO.class)
                 .flatMap(error -> Mono.error(new OAuthException(
                     "[NaverOAuthClient] error message: " + error.message().orElse(null)
-                        + " error code: " + error.resultCode().orElse(null))));
+                        + ", error code: " + error.resultCode().orElse(null))));
           }
 
           return res.bodyToMono(NaverUserInfoSuccessDTO.class);
@@ -98,7 +98,7 @@ public class NaverOAuthClient implements OAuthClient {
             return res.bodyToMono(NaverTokenFailDTO.class)
                 .flatMap(error -> Mono.error(new OAuthException(
                     "[NaverOAuthClient] OAuth token error: " + error.error().orElse(null)
-                        + "\nDescription: " + error.errorDescription().orElse(null))));
+                        + ", Description: " + error.errorDescription().orElse(null))));
           }
 
           return res.bodyToMono(NaverTokenSuccessDTO.class);
