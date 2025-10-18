@@ -17,7 +17,11 @@ import jakarta.validation.constraints.Size;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
@@ -30,6 +34,9 @@ import org.hibernate.annotations.OnDeleteAction;
     @Index(name = "receiver_no", columnList = "receiver_no"),
     @Index(name = "sender_no", columnList = "sender_no")
 })
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class CommentJPAEntity {
 
   @Id

@@ -19,7 +19,11 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -32,6 +36,9 @@ import org.hibernate.type.SqlTypes;
     @UniqueConstraint(name = "nickname", columnNames = {"nickname"}),
     @UniqueConstraint(name = "unique_identifier", columnNames = {"unique_identifier"})
 })
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class UserJPAEntity {
 
   @Id
@@ -57,7 +64,7 @@ public class UserJPAEntity {
 
   @Column(name = "attendance")
   @JdbcTypeCode(SqlTypes.JSON)
-  private Map<String, Object> attendance;
+  private Map<String, List<Integer>> attendance;
 
   @NotNull
   @ColumnDefault("0")
@@ -163,4 +170,17 @@ public class UserJPAEntity {
   @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
   private List<ReportJPAEntity> receivedReports = new ArrayList<>();
 
+  public void setToken(TokenJPAEntity token) {
+    this.token = token;
+    if (token != null) {
+      token.setUser(this);
+    }
+  }
+
+  public void setLegend(LegendJPAEntity legend) {
+    this.legend = legend;
+    if (legend != null) {
+      legend.setUser(this);
+    }
+  }
 }

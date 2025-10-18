@@ -14,7 +14,11 @@ import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 import kr.modernworld.modernworldv2.admin.infrastructure.persistence.entity.ItemJPAEntity;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
@@ -29,6 +33,9 @@ import org.hibernate.annotations.OnDeleteAction;
 }, uniqueConstraints = {
     @UniqueConstraint(name = "inventory_user_no_item_no_key", columnNames = {"user_no", "item_no"})
 })
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class InventoryJPAEntity {
 
   @Id

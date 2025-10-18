@@ -4,7 +4,6 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-
 ### STS ###
 .apt_generated
 .classpath
@@ -41,3 +40,6 @@ out/
 /src/main/resources/application-dev.yml
 /docker-compose.dev.yml
 /docker-compose.prod.yml
+
+# MapStruct generated files in the src directory
+/src/main/generated/
