@@ -1,5 +1,7 @@
 package kr.modernworld.modernworldv2.user.infrastructure.auth.naver;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.modernworld.modernworldv2.global.exception.OAuthException;
 import kr.modernworld.modernworldv2.user.application.oauth.OAuthTokenDTO;
 import kr.modernworld.modernworldv2.user.application.oauth.SocialUserInfoDTO;
@@ -27,9 +29,11 @@ public class NaverOAuthClient implements OAuthClient {
   private final WebClient tokenWebClient;
   private final WebClient apiWebClient;
   private final NaverOAuthProperties properties;
+  private final ObjectMapper objectMapper;
 
   @Autowired
-  public NaverOAuthClient(WebClient webClient, NaverOAuthProperties properties) {
+  public NaverOAuthClient(WebClient webClient, NaverOAuthProperties properties,
+      ObjectMapper objectMapper) {
     this.tokenWebClient = webClient.mutate()
         .baseUrl("https://nid.naver.com")
         .defaultHeader(HttpHeaders.CONTENT_TYPE,
@@ -42,6 +46,7 @@ public class NaverOAuthClient implements OAuthClient {
         .build();
 
     this.properties = properties;
+    this.objectMapper = objectMapper;
   }
 
   public OAuthTokenDTO getSocialToken(String state, String authorizationCode) {
@@ -101,7 +106,24 @@ public class NaverOAuthClient implements OAuthClient {
                         + ", Description: " + error.errorDescription().orElse(null))));
           }
 
-          return res.bodyToMono(NaverTokenSuccessDTO.class);
+          return res.bodyToMono(String.class).flatMap(body -> {
+            if (body.contains("access_token")) {
+              try {
+                return Mono.just(objectMapper.readValue(body, NaverTokenSuccessDTO.class));
+              } catch (JsonProcessingException e) {
+                return Mono.error(new OAuthException("Naver Token Success DTO parsing fail."));
+              }
+            }
+
+            try {
+              NaverTokenFailDTO failDTO = objectMapper.readValue(body, NaverTokenFailDTO.class);
+              return Mono.error(new OAuthException(
+                  "[NaverOAuthClient] OAuth token error: " + failDTO.error().orElse(null)
+                      + ", Description: " + failDTO.errorDescription().orElse(null)));
+            } catch (JsonProcessingException e) {
+              return Mono.error(new OAuthException("Naver Token Fail DTO parsing fail."));
+            }
+          });
         })
         .switchIfEmpty(Mono.error(
             new IllegalStateException("[NaverOAuthClient] Naver API response body is empty.")))
