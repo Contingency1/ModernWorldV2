@@ -1,30 +1,45 @@
 package kr.modernworld.modernworldv2.user.infrastructure.auth.kakao;
 
+import kr.modernworld.modernworldv2.global.exception.OAuthException;
 import kr.modernworld.modernworldv2.user.application.oauth.OAuthTokenDTO;
 import kr.modernworld.modernworldv2.user.application.oauth.SocialUserInfoDTO;
 import kr.modernworld.modernworldv2.user.domain.port.OAuthClient;
 import kr.modernworld.modernworldv2.user.domain.user.UserDomain;
+import kr.modernworld.modernworldv2.user.infrastructure.auth.kakao.dto.KakaoAPIErrorDTO;
+import kr.modernworld.modernworldv2.user.infrastructure.auth.kakao.dto.KakaoTokenFailDTO;
+import kr.modernworld.modernworldv2.user.infrastructure.auth.kakao.dto.KakaoTokenSuccessDTO;
+import kr.modernworld.modernworldv2.user.infrastructure.auth.kakao.dto.KakaoUserDetailsDTO;
+import kr.modernworld.modernworldv2.user.infrastructure.auth.kakao.dto.KakaoUserInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Mono;
 
 @Service("kakaoOAuthClient")
 public class KakaoOAuthClient implements OAuthClient {
 
-  private final WebClient webClient;
+  private final WebClient apiWebClient;
+  private final WebClient tokenWebClient;
   private final KakaoOAuthProperties properties;
-
-  private final String BASE_URL = "https://kauth.kakao.com";
 
   @Autowired
   public KakaoOAuthClient(WebClient webClient, KakaoOAuthProperties properties) {
-    this.webClient = webClient.mutate()
-        .baseUrl(BASE_URL)
+    this.tokenWebClient = webClient.mutate()
+        .baseUrl("https://kauth.kakao.com")
         .defaultHeader(HttpHeaders.CONTENT_TYPE,
-            MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+            MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=utf-8")
         .build();
+
+    this.apiWebClient = webClient.mutate()
+        .baseUrl("https://kapi.kakao.com")
+        .defaultHeader(HttpHeaders.CONTENT_TYPE,
+            MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=utf-8")
+        .build();
+
     this.properties = properties;
   }
 
@@ -35,23 +50,90 @@ public class KakaoOAuthClient implements OAuthClient {
 
   @Override
   public String getLoginUrl(String state) {
-    String path = "/oauth/authorize";
-    String responseType = "?response_type=code";
-    String clientId = "&client_id=" + properties.id();
-    String redirectUri = "&redirect_uri=" + properties.callbackUrl();
-    String finalState = "&state=" + state;
 
-    return BASE_URL + path + responseType + clientId + redirectUri + finalState;
+    return UriComponentsBuilder
+        .fromUriString("https://kauth.kakao.com")
+        .path("/oauth/authorize")
+        .queryParam("response_type", "code")
+        .queryParam("client_id", properties.id())
+        .queryParam("redirect_uri", properties.callbackUrl())
+        .queryParam("state", state)
+        .encode()
+        .toUriString();
   }
 
   @Override
   public OAuthTokenDTO getSocialToken(String state, String authCode) {
-    return null;
+    String path = "/oauth/token";
+
+    KakaoTokenSuccessDTO response = getKakaoToken(authCode, path);
+
+    return new OAuthTokenDTO(response.accessToken(), response.refreshToken().orElseThrow(),
+        response.expiresIn(),
+        response.refreshTokenExpiresIn().orElse(response.expiresIn()));
+  }
+
+  private KakaoTokenSuccessDTO getKakaoToken(String authCode, String path) {
+    return tokenWebClient.post()
+        .uri(path)
+        .body(BodyInserters
+            .fromFormData("grant_type", "authorization_code")
+            .with("client_id", properties.id())
+            .with("redirect_uri", properties.callbackUrl())
+            .with("code", authCode)
+            .with("client_secret", properties.secret())
+        ).exchangeToMono(res -> {
+          if (res.statusCode().isError()) {
+            return res.bodyToMono(KakaoTokenFailDTO.class)
+                .flatMap(error -> Mono.error(new OAuthException(
+                    "[KakaoOAuthClient] OAuth token error: " + error.error().orElse(null)
+                        + ", Description: " + error.errorDescription().orElse(null))));
+          }
+
+          return res.bodyToMono(KakaoTokenSuccessDTO.class);
+        })
+        .switchIfEmpty(
+            Mono.error(
+                new IllegalStateException(
+                    "[KakaoOAuthClient] Kakao Auth API response body is empty.")))
+        .block();
   }
 
   @Override
   public SocialUserInfoDTO getSocialUserInfo(String socialAccessToken) {
-    return null;
+
+    KakaoUserInfoDTO result = getKakaoUserInfo(socialAccessToken);
+
+    KakaoUserDetailsDTO userInfo = result.properties();
+
+    return new SocialUserInfoDTO(
+        result.id().toString(),
+        userInfo.nickname(),
+        userInfo.profileImage()
+    );
+  }
+
+  private KakaoUserInfoDTO getKakaoUserInfo(String socialAccessToken) {
+    String uri = "/v2/user/me";
+    String secure = "?secure_resource=true";
+
+    return apiWebClient.get()
+        .uri(uri + secure)
+        .header(HttpHeaders.AUTHORIZATION, "Bearer " + socialAccessToken)
+        .exchangeToMono(res -> {
+          if (res.statusCode().isError()) {
+            return res.bodyToMono(KakaoAPIErrorDTO.class)
+                .flatMap(error -> Mono.error(new OAuthException(
+                    "[KakaoOAuthClient] OAuth token error: " + error.code().orElse(null)
+                        + ", Description: " + error.msg().orElse(null))));
+          }
+
+          return res.bodyToMono(KakaoUserInfoDTO.class);
+        })
+        .switchIfEmpty(
+            Mono.error(
+                new IllegalStateException("[KakaoOAuthClient] Kakao API response body is empty.")))
+        .block();
   }
 
 }

@@ -34,6 +34,7 @@ spring:
     restart:
       enabled: false
 
+# 테스트용이라 노출되도 상관 없음.
 naver:
   client:
     id: pYRBf_gt4ONiKuhNJiLJ # 테스트용
@@ -42,15 +43,15 @@ naver:
 
 kakao:
   client:
-    id: f1644b1260c2602c093d5192051f2cd7
-    secret: EOM-JUN-SICK
-    callback-url: https://modern-world.kr/kakao/auth/callback
+    id: f1600533301ee8bb3e83d7039807f2c1 # 테스트용
+    secret: xrQU4GHeSLlrvTGn0AAnQ4Zi7fviJyOj # 테스트용
+    callback-url: https://localhost:8080/kakao/auth/callback
 
 google:
   client:
-    id: 405123921282-a7j0bavj43huo4k62p6obl9bp953atto.apps.googleusercontent.com
-    secret: EOM-JUN-SICK
-    callback-url: https://modern-world.kr/google/auth/callback
+    id: 936165156791-45vvvsi9allk1petgtoq6ttrerf7vqh4.apps.googleusercontent.com # 테스트용
+    secret: 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 # 테스트용
+    callback-url: https://localhost:8080/google/auth/callback
 
 server:
   servlet:

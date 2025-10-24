@@ -7,15 +7,13 @@ import kr.modernworld.modernworldv2.user.domain.port.OAuthClient;
 import kr.modernworld.modernworldv2.user.domain.port.RefreshTokenRepository;
 import kr.modernworld.modernworldv2.user.domain.port.SessionRepository;
 import kr.modernworld.modernworldv2.user.domain.port.TokenProvider;
-import kr.modernworld.modernworldv2.user.domain.port.user.UserRepository;
 import kr.modernworld.modernworldv2.user.domain.user.User;
 import kr.modernworld.modernworldv2.user.domain.user.UserDomain;
-import kr.modernworld.modernworldv2.user.infrastructure.repository.TokenResultDTO;
+import kr.modernworld.modernworldv2.user.infrastructure.repository.jwt.TokenResultDTO;
 import kr.modernworld.modernworldv2.user.presentation.oauth.LoginResultDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,9 +23,9 @@ public class OAuthService {
   private final OAuthProvider authProvider;
   private final ApplicationEventPublisher eventPublisher;
 
-  private final UserRepository userRepository;
   private final TokenProvider tokenProvider;
   private final RefreshTokenRepository refreshTokenRepository;
+  private final OAuthPersistenceService oAuthPersistenceService;
 
   public String buildLoginUrl(UserDomain providerName) {
 
@@ -39,7 +37,6 @@ public class OAuthService {
     return client.getLoginUrl(state);
   }
 
-  @Transactional
   public LoginResultDTO login(UserDomain providerName, String authCode, String state) {
     String storedSate = sessionRepository.findValue("SESSION_KEY");
 
@@ -59,27 +56,15 @@ public class OAuthService {
 
     //--------------------------------------------------------------------------------------
 
-    User user = userRepository.findByUniqueIdentifier(socialUserInfo.uniqueIdentifier())
-        .orElseGet(() ->
-            User.createFromSocial(
-                socialUserInfo.uniqueIdentifier(),
-                socialUserInfo.name(),
-                socialUserInfo.profileImageUrl(),
-                client.getProviderName()
-            )
-        );
-
-    user.nullifyDeletedAt();
-    user.updateToken(socialToken.socialAccessToken(), socialToken.socialRefreshToken());
-
-    User savedUser = userRepository.save(user);
-
-    // 여기부터 토큰 저장 로직 ㄱㄱ 근데 위 로직은 트랜잭션으로 따로 빼야할듯.
+    User savedUser = oAuthPersistenceService.toPersistentedUser(socialUserInfo, client,
+        socialToken);
 
     Long now = System.currentTimeMillis();
 
-    TokenResultDTO accessToken = tokenProvider.createAccess(savedUser.getNo(), false, now);
-    TokenResultDTO refreshToken = tokenProvider.createRefresh(savedUser.getNo(), false, now);
+    TokenResultDTO accessToken = tokenProvider.createAccess(savedUser.getNo(), savedUser.getAdmin(),
+        now);
+    TokenResultDTO refreshToken = tokenProvider.createRefresh(savedUser.getNo(),
+        savedUser.getAdmin(), now);
 
     refreshTokenRepository.save(savedUser.getNo(), refreshToken.token(),
         refreshToken.expirationMillis());
