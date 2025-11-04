@@ -92,6 +92,15 @@ public class User {
     this.legend = UserLegend.init(no);
   }
 
+  public void decreaseCurrentPoint(Long point) {
+    if (point > this.currentPoint) {
+      throw new IllegalArgumentException("Current point is greater than the input point");
+    }
+
+    this.currentPoint -= point;
+  }
+
+
   public void nullifyDeletedAt() {
     if (this.deletedAt != null) {
       this.deletedAt = null;
