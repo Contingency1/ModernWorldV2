@@ -50,7 +50,7 @@ public class CharacterJPAEntity {
   private String species;
 
   @ColumnDefault("'0'")
-  @Column(name = "price", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "price")
   private Long price;
 
   @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
