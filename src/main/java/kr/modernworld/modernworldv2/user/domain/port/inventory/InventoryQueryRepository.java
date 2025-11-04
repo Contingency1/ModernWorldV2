@@ -15,6 +15,6 @@ public interface InventoryQueryRepository {
 
   InventoryCollection findInventoryByUserNoAndTypeNo(Long userNo, ItemType type);
 
-  Boolean isExists(Long userNo, Long itemNo);
+  Boolean exists(Long userNo, Long itemNo);
 
 }

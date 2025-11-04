@@ -115,7 +115,7 @@ public class InventoryQueryRepositoryImpl implements InventoryQueryRepository {
   }
 
   @Override
-  public Boolean isExists(Long userNo, Long itemNo) {
+  public Boolean exists(Long userNo, Long itemNo) {
     Integer exist = queryFactory
         .selectOne()
         .from(inventoryJPAEntity)

@@ -35,7 +35,7 @@ public class InventoryService {
 
   @Transactional(readOnly = true)
   public void validateItemNotExists(Long userNo, Long itemNo) {
-    if (inventoryQueryRepository.isExists(userNo, itemNo)) {
+    if (inventoryQueryRepository.exists(userNo, itemNo)) {
       throw new BusinessException(BusinessErrorCode.ITEM_ALREADY_EXISTS_IN_INVENTORY);
     }
   }
