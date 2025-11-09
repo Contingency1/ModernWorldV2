@@ -37,7 +37,7 @@ public class PostJPAEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "no", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "no")
   private Long no;
 
   @ManyToOne(fetch = FetchType.LAZY)

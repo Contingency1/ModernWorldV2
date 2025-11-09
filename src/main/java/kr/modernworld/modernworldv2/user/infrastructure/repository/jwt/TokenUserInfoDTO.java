@@ -1,7 +1,7 @@
 package kr.modernworld.modernworldv2.user.infrastructure.repository.jwt;
 
 public record TokenUserInfoDTO(
-    String userNo,
+    Long userNo,
     boolean isAdmin
 ) {
 

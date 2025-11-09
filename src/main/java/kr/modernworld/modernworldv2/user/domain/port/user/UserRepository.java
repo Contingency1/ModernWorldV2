@@ -1,11 +1,10 @@
 package kr.modernworld.modernworldv2.user.domain.port.user;
 
-import java.util.Optional;
 import kr.modernworld.modernworldv2.user.domain.user.User;
 
 public interface UserRepository {
 
-  Optional<User> findByUniqueIdentifier(String uniqueIdentifier);
+  void updateCurrentPoint(Long userNo, Long newPoint);
 
   User save(User user);
 }

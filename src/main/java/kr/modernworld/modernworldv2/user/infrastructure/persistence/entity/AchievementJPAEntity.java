@@ -34,7 +34,7 @@ public class AchievementJPAEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "no", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "no")
   private Long no;
 
   @Size(max = 20)
@@ -57,7 +57,7 @@ public class AchievementJPAEntity {
   @Column(name = "level", nullable = false)
   private AchievementLevel level;
 
-  @Column(name = "point", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "point")
   private Long point;
 
   @Size(max = 10)
