@@ -1,6 +1,7 @@
 package kr.modernworld.modernworldv2.user.application.oauth;
 
 import kr.modernworld.modernworldv2.user.domain.port.OAuthClient;
+import kr.modernworld.modernworldv2.user.domain.port.user.UserQueryRepository;
 import kr.modernworld.modernworldv2.user.domain.port.user.UserRepository;
 import kr.modernworld.modernworldv2.user.domain.user.User;
 import lombok.RequiredArgsConstructor;
@@ -12,11 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class OAuthPersistenceService {
 
   private final UserRepository userRepository;
+  private final UserQueryRepository userQueryRepository;
 
   @Transactional
   public User toPersistentedUser(SocialUserInfoDTO socialUserInfo, OAuthClient client,
       OAuthTokenDTO socialToken) {
-    User user = userRepository.findByUniqueIdentifier(socialUserInfo.uniqueIdentifier())
+    User user = userQueryRepository.findByUniqueIdentifier(socialUserInfo.uniqueIdentifier())
         .orElseGet(() ->
             User.createFromSocial(
                 socialUserInfo.uniqueIdentifier(),

@@ -43,7 +43,7 @@ public class UserJPAEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "no", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "no")
   private Long no;
 
   @Size(max = 10)
@@ -51,11 +51,11 @@ public class UserJPAEntity {
   private String nickname;
 
   @ColumnDefault("'0'")
-  @Column(name = "current_point", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "current_point")
   private Long currentPoint;
 
   @ColumnDefault("'0'")
-  @Column(name = "accumulation_point", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "accumulation_point")
   private Long accumulationPoint;
 
   @Size(max = 150)
@@ -105,7 +105,7 @@ public class UserJPAEntity {
   private UserDomain domain;
 
   @ColumnDefault("'10'")
-  @Column(name = "chance", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "chance")
   private Long chance;
 
   // User의 생명주기와 완전히 동일한 관계

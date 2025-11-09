@@ -56,7 +56,7 @@ public class JwtTokenProvider implements TokenProvider {
     try {
       Claims payload = accessParser.parseSignedClaims(token).getPayload();
 
-      String userNo = payload.getSubject();
+      Long userNo = Long.valueOf(payload.getSubject());
       boolean isAdmin = payload.get("isAdmin", Boolean.class) == Boolean.TRUE;
 
       return new TokenUserInfoDTO(userNo, isAdmin);
@@ -72,7 +72,7 @@ public class JwtTokenProvider implements TokenProvider {
     try {
       Claims payload = refreshParser.parseSignedClaims(token).getPayload();
 
-      String userNo = payload.getSubject();
+      Long userNo = Long.valueOf(payload.getSubject());
       boolean isAdmin = payload.get("isAdmin", Boolean.class) == Boolean.TRUE;
       return new TokenUserInfoDTO(userNo, isAdmin);
     } catch (ExpiredJwtException e) {

@@ -19,12 +19,13 @@ spring:
       supersecretsecretsecretsecretsecretsupersecretsecretsecretsecretsecretsupersecretsecretsecretsecretsecret
     refresh-secret:
       secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret
-    access-expiration: 10_800_000 # 3h
+    access-expiration: 2_419_200_000 # 테스트용 30일 짜리 # 10_800_000 # 3h
     refresh-expiration: 604_800_000 # 7d
     issuer: Eomjunsick.com
   jpa:
+    open-in-view: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: update # production 환경에서 update 한번 할것.
     show-sql: true # SQL 쿼리를 표준 출력(console) 에 출력
     properties:
       hibernate:
@@ -64,6 +65,7 @@ server:
 logging:
   level:
     root: info
+    org.springframework.security: debug
     org.hibernate.SQL: debug # 실행된 SQL 문장
     org.hibernate.type.descriptor.sql.BasicBinder: trace # 쿼리의 PreparedStatement에 바인딩되는 실제 값들을 로그로 출력
     org.springframework.web: debug # 요청 처리 흐름 보기
