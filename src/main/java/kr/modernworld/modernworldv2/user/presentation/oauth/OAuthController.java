@@ -8,6 +8,7 @@ import kr.modernworld.modernworldv2.user.domain.user.UserDomain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,5 +46,16 @@ public class OAuthController {
     return new ResponseEntity<>(
         new LoginResponseDTO(result.accessToken(), result.nickname(), result.userNo()),
         HttpStatus.OK);
+  }
+
+  @GetMapping("/new-access-token")
+  public RenewalAccessTokenResponseDTO renewAccessToken(
+//      @AuthenticationPrincipal TokenUserInfoDTO user,
+      @CookieValue("refreshToken") String cookie) {
+
+    System.out.println("refreshToken = " + cookie);
+
+    return null;
+
   }
 }
