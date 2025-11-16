@@ -2,9 +2,7 @@ package kr.modernworld.modernworldv2.admin.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.Getter;
 
-@Getter
 public enum CharacterSpecies {
 
   DOG("dog"), CAT("cat");
@@ -16,7 +14,7 @@ public enum CharacterSpecies {
   }
 
   @JsonCreator
-  public CharacterSpecies toCharacterSpecies(String str) {
+  public static CharacterSpecies stringToCharacterSpecies(String str) {
     for (CharacterSpecies species : CharacterSpecies.values()) {
       if (species.name.equals(str)) {
         return species;
@@ -28,6 +26,6 @@ public enum CharacterSpecies {
 
   @JsonValue
   public String getName() {
-    return name;
+    return this.name;
   }
 }
