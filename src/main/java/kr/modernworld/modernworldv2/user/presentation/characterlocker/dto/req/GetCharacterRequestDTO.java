@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.user.presentation.dto.req;
+package kr.modernworld.modernworldv2.user.presentation.characterlocker.dto.req;
 
 import kr.modernworld.modernworldv2.admin.domain.CharacterSpecies;
 
