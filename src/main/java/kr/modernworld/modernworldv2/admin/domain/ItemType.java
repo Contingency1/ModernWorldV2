@@ -12,12 +12,12 @@ public enum ItemType {
 
   private final String str;
 
-  public static ItemType strToItemType(String str) {
-    return itemTypeToStr(str);
+  ItemType(String str) {
+    this.str = str;
   }
 
   @JsonCreator
-  public static ItemType itemTypeToStr(String str) {
+  public static ItemType stringToItemType(String str) {
     for (ItemType itemType : ItemType.values()) {
       if (itemType.str.equals(str)) {
         return itemType;
@@ -30,9 +30,5 @@ public enum ItemType {
   @JsonValue
   public String getStr() {
     return this.str;
-  }
-
-  ItemType(String str) {
-    this.str = str;
   }
 }
