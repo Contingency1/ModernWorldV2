@@ -13,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
+import kr.modernworld.modernworldv2.admin.domain.CharacterSpecies;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.CharacterLockerJPAEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +27,7 @@ public class CharacterJPAEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "no", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "no")
   private Long no;
 
   @Size(max = 15)
@@ -47,7 +48,7 @@ public class CharacterJPAEntity {
   @Size(max = 10)
   @NotNull
   @Column(name = "species", nullable = false, length = 10)
-  private String species;
+  private CharacterSpecies species;
 
   @ColumnDefault("'0'")
   @Column(name = "price")

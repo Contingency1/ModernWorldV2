@@ -7,6 +7,12 @@ import org.springframework.http.HttpStatus;
 public enum BusinessErrorCode {
   NO_SUCH_ITEM(HttpStatus.NOT_FOUND, "There is no item."),
 
+  NO_SUCH_CHARACTER(HttpStatus.NOT_FOUND, "There is no character."),
+
+  CHARACTER_ALREADY_EXISTS(HttpStatus.CONFLICT, "User already owns the character."),
+  CHARACTER_NOT_FOUND_IN_CHARACTER_LOCKER(HttpStatus.NOT_FOUND,
+      "User does not have that character."),
+
   ITEM_ALREADY_EXISTS_IN_INVENTORY(HttpStatus.CONFLICT, "User already owns the item."),
   ITEM_TYPE_NOT_FOUND_IN_INVENTORY(HttpStatus.NOT_FOUND, "There is no item type like that."),
   ITEM_NOT_FOUND_IN_INVENTORY(HttpStatus.NOT_FOUND, "User doesn't have that item."),

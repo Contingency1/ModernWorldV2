@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -36,9 +37,15 @@ public class GlobalExceptionHandler {
     String bindingResults = ex.getBindingResult()
         .getFieldErrors()
         .stream()
-        .map(error ->
-            String.format("%s: %s", error.getField(), error.getDefaultMessage()))
-        .collect(Collectors.joining(","));
+        .map(error -> {
+          if (error.isBindingFailure()) {
+            return String.format("'%s': invalid input. (input: '%s')",
+                error.getField(), error.getRejectedValue());
+          } else {
+            return String.format("'%s': %s", error.getField(), error.getDefaultMessage());
+          }
+        })
+        .collect(Collectors.joining(", "));
 
     ErrorResponseDTO response = new ErrorResponseDTO(bindingResults,
         HttpStatus.BAD_REQUEST.getReasonPhrase(),
@@ -47,8 +54,24 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
 
+  // validation type mismatch.
+  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+  public ResponseEntity<ErrorResponseDTO> handleMethodArgumentTypeMismatch(
+      MethodArgumentTypeMismatchException ex) {
+
+    String fieldName = ex.getName();
+
+    String message = String.format("'%s' filed type is mismatched.", fieldName);
+
+    ErrorResponseDTO response = new ErrorResponseDTO(message,
+        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+        HttpStatus.BAD_REQUEST.value());
+
+    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+  }
+
   // validation failed.
-  @ExceptionHandler(ConstraintViolationException.class)
+  @ExceptionHandler({ConstraintViolationException.class, BindException.class})
   public ResponseEntity<ErrorResponseDTO> handleConstraintViolation(
       ConstraintViolationException ex) {
 
@@ -61,17 +84,6 @@ public class GlobalExceptionHandler {
 
     ErrorResponseDTO response = new ErrorResponseDTO(
         violations,
-        HttpStatus.BAD_REQUEST.getReasonPhrase(), HttpStatus.BAD_REQUEST.value());
-
-    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-  }
-
-  // validation type mismatch.
-  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-  public ResponseEntity<ErrorResponseDTO> handleMethodArgumentTypeMismatch(
-      MethodArgumentTypeMismatchException ex) {
-    ErrorResponseDTO response = new ErrorResponseDTO(
-        ex.getParameter().getParameterName() + " type is wrong.",
         HttpStatus.BAD_REQUEST.getReasonPhrase(), HttpStatus.BAD_REQUEST.value());
 
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

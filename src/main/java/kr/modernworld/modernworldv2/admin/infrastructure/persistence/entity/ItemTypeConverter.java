@@ -22,6 +22,6 @@ public class ItemTypeConverter implements AttributeConverter<ItemType, String> {
       return null;
     }
 
-    return ItemType.strToItemType(dbData);
+    return ItemType.stringToItemType(dbData);
   }
 }

@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import java.util.List;
 import kr.modernworld.modernworldv2.user.application.InventoryService;
-import kr.modernworld.modernworldv2.user.application.ItemShopService;
+import kr.modernworld.modernworldv2.user.application.shop.ItemShopService;
 import kr.modernworld.modernworldv2.user.domain.Inventory;
 import kr.modernworld.modernworldv2.user.infrastructure.repository.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.presentation.inventory.dto.request.BuyOneItemRequestDTO;
