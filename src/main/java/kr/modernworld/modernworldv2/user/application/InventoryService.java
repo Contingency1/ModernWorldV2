@@ -29,8 +29,8 @@ public class InventoryService {
   }
 
   @Transactional
-  public Inventory addOneItemInInventory(Long userNo, Long itemNo, ItemType itemType) {
-    return inventoryRepository.save(Inventory.create(userNo, itemNo, itemType));
+  public Inventory addOneItemInInventory(Long userNo, Long itemNo) {
+    return inventoryRepository.save(Inventory.create(userNo, itemNo));
   }
 
   @Transactional(readOnly = true)
