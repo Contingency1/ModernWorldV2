@@ -21,27 +21,18 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
   private final JPAQueryFactory queryFactory;
 
   @Override
-  public Optional<User> findUserCurrentPointByNo(Long userNo) {
-    Long curPoint = queryFactory
-        .select(userJPAEntity.currentPoint)
-        .from(userJPAEntity)
-        .where(userJPAEntity.no.eq(userNo))
-        .fetchOne();
-
-    if (curPoint == null) {
-      return Optional.empty();
-    }
-
-    User user = User.builder()
-        .no(userNo)
-        .currentPoint(curPoint)
-        .build();
-
-    return Optional.of(user);
+  public Optional<User> findByUniqueIdentifier(String uniqueIdentifier) {
+    return userJPARepository.findByUniqueIdentifier(uniqueIdentifier).map(userMapper::toDomain);
   }
 
   @Override
-  public Optional<User> findByUniqueIdentifier(String uniqueIdentifier) {
-    return userJPARepository.findByUniqueIdentifier(uniqueIdentifier).map(userMapper::toDomain);
+  public Boolean exists(Long userNo) {
+    Integer one = queryFactory
+        .selectOne()
+        .from(userJPAEntity)
+        .where(userJPAEntity.no.eq(userNo))
+        .fetchFirst();
+
+    return one != null;
   }
 }
