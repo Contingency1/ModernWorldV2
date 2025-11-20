@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.user.infrastructure.repository;
+package kr.modernworld.modernworldv2.user.infrastructure.repository.characterlocker;
 
 import static kr.modernworld.modernworldv2.admin.infrastructure.persistence.entity.QCharacterJPAEntity.characterJPAEntity;
 import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QCharacterLockerJPAEntity.characterLockerJPAEntity;
@@ -89,23 +89,14 @@ public class CharacterLockerQueryRepositoryImpl implements CharacterLockerQueryR
 
   @Override
   public Boolean exists(Long userNo, Long characterNo) {
-    CharacterLockerJPAEntity data = queryFactory
-        .select(characterLockerJPAEntity)
+    Integer exist = queryFactory
+        .selectOne()
         .from(characterLockerJPAEntity)
         .where(
             characterLockerJPAEntity.user.no.eq(userNo),
-            characterNoEq(characterNo))
-        .fetchOne();
+            characterLockerJPAEntity.character.no.eq(characterNo))
+        .fetchFirst();
 
-    return data != null;
+    return exist != null;
   }
-
-  private static BooleanExpression characterNoEq(Long characterNo) {
-    if (characterNo == null) {
-      return null;
-    }
-
-    return characterLockerJPAEntity.character.no.eq(characterNo);
-  }
-
 }

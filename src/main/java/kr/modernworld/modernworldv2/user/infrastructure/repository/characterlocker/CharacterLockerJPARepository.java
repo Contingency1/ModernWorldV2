@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.user.infrastructure.repository;
+package kr.modernworld.modernworldv2.user.infrastructure.repository.characterlocker;
 
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.CharacterLockerJPAEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
