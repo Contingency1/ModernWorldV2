@@ -26,11 +26,11 @@ public class Inventory {
     this.createdAt = createdAt;
   }
 
-  public static Inventory create(Long userNo, Long itemNo, ItemType itemType) {
+  public static Inventory create(Long userNo, Long itemNo) {
     return Inventory.builder()
         .userNo(userNo)
         .itemNo(itemNo)
-        .itemType(itemType)
+        .itemType(null)
         .status(false)
         .createdAt(Instant.now())
         .build();

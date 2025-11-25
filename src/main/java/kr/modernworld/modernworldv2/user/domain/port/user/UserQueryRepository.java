@@ -5,8 +5,8 @@ import kr.modernworld.modernworldv2.user.domain.user.User;
 
 public interface UserQueryRepository {
 
-  Optional<User> findUserCurrentPointByNo(Long userNo);
-
   Optional<User> findByUniqueIdentifier(String uniqueIdentifier);
+
+  Boolean exists(Long userNo);
 
 }

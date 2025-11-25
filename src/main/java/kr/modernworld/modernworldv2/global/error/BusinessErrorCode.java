@@ -5,10 +5,10 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum BusinessErrorCode {
+  ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no item."),
   NO_SUCH_ALARM(HttpStatus.NOT_FOUND, "No such alarm"),
   ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "User doesn't have that alarm."),
 
-  NO_SUCH_ITEM(HttpStatus.NOT_FOUND, "There is no item."),
 
   NO_SUCH_CHARACTER(HttpStatus.NOT_FOUND, "There is no character."),
 
@@ -21,7 +21,11 @@ public enum BusinessErrorCode {
   ITEM_NOT_FOUND_IN_INVENTORY(HttpStatus.NOT_FOUND, "User doesn't have that item."),
 
   USER_NOT_HAS_ENOUGH_POINT(HttpStatus.FORBIDDEN, "User does not have enough point."),
-  USER_NOT_FOUND(HttpStatus.FORBIDDEN, "User not found.");
+  USER_NOT_FOUND(HttpStatus.FORBIDDEN, "User not found."),
+
+  PRESENT_INVALID_STATE(HttpStatus.CONFLICT, "Cannot process the present request."),
+  PRESENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Present not found."),
+  PRESENT_ACCESS_DENIED(HttpStatus.FORBIDDEN, "Present access denied.");
 
   BusinessErrorCode(HttpStatus status, String message) {
     this.status = status;

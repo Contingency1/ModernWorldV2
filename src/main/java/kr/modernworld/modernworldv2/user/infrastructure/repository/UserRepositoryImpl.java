@@ -4,6 +4,8 @@ import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entit
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.LockModeType;
+import java.util.Optional;
 import kr.modernworld.modernworldv2.user.domain.port.user.UserRepository;
 import kr.modernworld.modernworldv2.user.domain.user.User;
 import kr.modernworld.modernworldv2.user.infrastructure.mapper.UserMapper;
@@ -22,17 +24,7 @@ public class UserRepositoryImpl implements UserRepository {
   private final UserMapper userMapper;
 
   @Override
-  public void updateCurrentPoint(Long userNo, Long newPoint) {
-    queryFactory
-        .update(userJPAEntity)
-        .set(userJPAEntity.currentPoint, newPoint)
-        .where(userJPAEntity.no.eq(userNo))
-        .execute();
-  }
-
-  @Override
   public User save(User user) {
-
     if (user.getNo() == null) {
       return userMapper.toDomain(userJPARepository.save(userMapper.toEntity(user)));
     }
@@ -43,6 +35,21 @@ public class UserRepositoryImpl implements UserRepository {
     userMapper.updateUserEntityFromDomain(user, userJPAEntity);
 
     return userMapper.toDomain(userJPAEntity);
+  }
+
+  @Override
+  public Optional<User> findUserByUserNoForUpdate(Long userNo) {
+    UserJPAEntity entity = queryFactory
+        .selectFrom(userJPAEntity)
+        .where(userJPAEntity.no.eq(userNo))
+        .setLockMode(LockModeType.PESSIMISTIC_WRITE)
+        .fetchOne();
+
+    if (entity == null) {
+      return Optional.empty();
+    }
+
+    return Optional.of(userMapper.toDomain(entity));
   }
 
 }

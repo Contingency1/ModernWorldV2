@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public class CharacterLockerCollection {
 
-  List<CharacterLocker> characterLocker;
+  private List<CharacterLocker> characterLocker;
 
   public CharacterLockerCollection(List<CharacterLocker> characterLocker) {
     this.characterLocker = characterLocker;
