@@ -3,6 +3,7 @@ package kr.modernworld.modernworldv2.user.infrastructure.repository.inventory;
 import static kr.modernworld.modernworldv2.admin.infrastructure.persistence.entity.QItemJPAEntity.itemJPAEntity;
 import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QInventoryJPAEntity.inventoryJPAEntity;
 
+import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -32,22 +33,7 @@ public class InventoryQueryRepositoryImpl implements InventoryQueryRepository {
   public List<GetInventoryResponseDTO> getInventory(Long userNo, String theme, Boolean status,
       String itemName) {
     return queryFactory
-        .select(Projections.constructor(GetInventoryResponseDTO.class,
-            inventoryJPAEntity.no,
-            inventoryJPAEntity.user.no,
-            inventoryJPAEntity.item.no,
-            inventoryJPAEntity.createdAt,
-            inventoryJPAEntity.status,
-            Projections.constructor(InventoryItemDTO.class,
-                itemJPAEntity.no,
-                itemJPAEntity.name,
-                itemJPAEntity.description,
-                itemJPAEntity.image,
-                itemJPAEntity.theme,
-                itemJPAEntity.type,
-                itemJPAEntity.price
-            )
-        ))
+        .select(inventorySelect())
         .from(inventoryJPAEntity)
         .join(inventoryJPAEntity.item, itemJPAEntity)
         .where(
@@ -57,6 +43,25 @@ public class InventoryQueryRepositoryImpl implements InventoryQueryRepository {
             itemNameContains(itemName)
         )
         .fetch();
+  }
+
+  private static ConstructorExpression<GetInventoryResponseDTO> inventorySelect() {
+    return Projections.constructor(GetInventoryResponseDTO.class,
+        inventoryJPAEntity.no,
+        inventoryJPAEntity.user.no,
+        inventoryJPAEntity.item.no,
+        inventoryJPAEntity.createdAt,
+        inventoryJPAEntity.status,
+        Projections.constructor(InventoryItemDTO.class,
+            itemJPAEntity.no,
+            itemJPAEntity.name,
+            itemJPAEntity.description,
+            itemJPAEntity.image,
+            itemJPAEntity.theme,
+            itemJPAEntity.type,
+            itemJPAEntity.price
+        )
+    );
   }
 
   private BooleanExpression itemThemeContains(String theme) {
@@ -103,7 +108,10 @@ public class InventoryQueryRepositoryImpl implements InventoryQueryRepository {
   public InventoryCollection findInventoryByUserNoAndTypeNo(Long userId, ItemType type) {
 
     List<Inventory> userItems = queryFactory
-        .selectFrom(inventoryJPAEntity)
+        .select(inventoryJPAEntity)
+        .from(inventoryJPAEntity)
+        .join(inventoryJPAEntity.item, itemJPAEntity)
+        .fetchJoin()
         .where(inventoryJPAEntity.user.no.eq(userId),
             inventoryJPAEntity.item.type.eq(type))
         .fetch()

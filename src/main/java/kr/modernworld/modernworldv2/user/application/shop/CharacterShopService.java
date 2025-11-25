@@ -1,7 +1,7 @@
 package kr.modernworld.modernworldv2.user.application.shop;
 
 import kr.modernworld.modernworldv2.admin.application.api.CharacterApi;
-import kr.modernworld.modernworldv2.user.application.PaymentService;
+import kr.modernworld.modernworldv2.user.application.UserPointService;
 import kr.modernworld.modernworldv2.user.application.characterlocker.CharacterLockerService;
 import kr.modernworld.modernworldv2.user.domain.characterlocker.CharacterLocker;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ public class CharacterShopService {
 
   private final CharacterLockerService characterLockerService;
   private final CharacterApi characterApi;
-  private final PaymentService paymentService;
+  private final UserPointService userPointService;
 
   @Transactional
   public CharacterLocker buyOneCharacter(Long userNo, Long characterNo) {
@@ -22,7 +22,7 @@ public class CharacterShopService {
 
     Long characterPrice = characterApi.getPrice(characterNo);
 
-    paymentService.pay(userNo, characterPrice);
+    userPointService.decreaseCurrentPoint(userNo, characterPrice);
 
     return characterLockerService.addCharacter(userNo, characterNo);
   }

@@ -6,13 +6,13 @@ import lombok.Getter;
 @Getter
 public class CharacterLocker {
 
-  Long no;
+  private Long no;
 
-  Long userNo;
+  private Long userNo;
 
-  Long characterNo;
+  private Long characterNo;
 
-  Boolean status;
+  private Boolean status;
 
   public void equip() {
     this.status = true;

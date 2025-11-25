@@ -1,9 +1,8 @@
 package kr.modernworld.modernworldv2.user.application.shop;
 
 import kr.modernworld.modernworldv2.admin.application.api.ItemApi;
-import kr.modernworld.modernworldv2.admin.application.api.ItemPriceAndTypeDTO;
 import kr.modernworld.modernworldv2.user.application.InventoryService;
-import kr.modernworld.modernworldv2.user.application.PaymentService;
+import kr.modernworld.modernworldv2.user.application.UserPointService;
 import kr.modernworld.modernworldv2.user.domain.Inventory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,17 +14,17 @@ public class ItemShopService {
 
   private final ItemApi itemApi;
   private final InventoryService inventoryService;
-  private final PaymentService paymentService;
+  private final UserPointService userPointService;
 
   @Transactional
   public Inventory buyOneItem(Long userNo, Long itemNo) {
     inventoryService.validateItemNotExists(userNo, itemNo);
 
-    ItemPriceAndTypeDTO itemInfo = itemApi.getPrice(itemNo);
+    Long itemPrice = itemApi.getPrice(itemNo);
 
-    paymentService.pay(userNo, itemInfo.price());
+    userPointService.decreaseCurrentPoint(userNo, itemPrice);
 
-    return inventoryService.addOneItemInInventory(userNo, itemNo, itemInfo.type());
+    return inventoryService.addOneItemInInventory(userNo, itemNo);
   }
 
 }

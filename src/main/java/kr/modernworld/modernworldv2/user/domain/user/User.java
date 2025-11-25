@@ -100,6 +100,10 @@ public class User {
     this.currentPoint -= point;
   }
 
+  public void increaseCurrentAccumulationPoint(Long point) {
+    this.currentPoint += point;
+    this.accumulationPoint += point;
+  }
 
   public void nullifyDeletedAt() {
     if (this.deletedAt != null) {
