@@ -1,6 +1,8 @@
 package kr.modernworld.modernworldv2.user.domain.user;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.Builder;
@@ -41,14 +43,12 @@ public class User {
 
   private UserToken token;
 
-  private UserLegend legend;
-
   @Builder
   private User(Long no, String nickname, Long currentPoint, Long accumulationPoint,
       String description, Map<String, List<Integer>> attendance, Boolean status,
       LocalDateTime createdAt, LocalDateTime deletedAt, Boolean admin,
       String uniqueIdentifier, String socialName, String image,
-      UserDomain domain, Long chance, UserToken token, UserLegend legend) {
+      UserDomain domain, Long chance, UserToken token) {
     this.no = no;
     this.nickname = nickname;
     this.currentPoint = currentPoint;
@@ -65,7 +65,6 @@ public class User {
     this.domain = domain;
     this.chance = chance;
     this.token = token;
-    this.legend = legend;
   }
 
   public static User createFromSocial(String uniqueIdentifier, String socialName, String imageUrl,
@@ -81,15 +80,10 @@ public class User {
         .status(false)
         .admin(false)
         .createdAt(LocalDateTime.now())
+        .attendance(createInitialAttendance())
         .build();
 
-    user.initLegend();
-
     return user;
-  }
-
-  private void initLegend() {
-    this.legend = UserLegend.init(no);
   }
 
   public void decreaseCurrentPoint(Long point) {
@@ -118,6 +112,20 @@ public class User {
     }
 
     this.token.update(accessToken, refreshToken);
+  }
+
+  private static Map<String, List<Integer>> createInitialAttendance() {
+    Map<String, List<Integer>> data = new LinkedHashMap<>();
+
+    data.put("0", new ArrayList<>(List.of(0, 100)));
+    data.put("1", new ArrayList<>(List.of(0, 200)));
+    data.put("2", new ArrayList<>(List.of(0, 300)));
+    data.put("3", new ArrayList<>(List.of(0, 200)));
+    data.put("4", new ArrayList<>(List.of(0, 400)));
+    data.put("5", new ArrayList<>(List.of(0, 300)));
+    data.put("6", new ArrayList<>(List.of(0, 300)));
+
+    return data;
   }
 
 }
