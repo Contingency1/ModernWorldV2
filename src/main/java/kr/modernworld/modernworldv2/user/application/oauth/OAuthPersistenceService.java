@@ -1,5 +1,6 @@
 package kr.modernworld.modernworldv2.user.application.oauth;
 
+import kr.modernworld.modernworldv2.user.application.LegendService;
 import kr.modernworld.modernworldv2.user.domain.port.OAuthClient;
 import kr.modernworld.modernworldv2.user.domain.port.user.UserQueryRepository;
 import kr.modernworld.modernworldv2.user.domain.port.user.UserRepository;
@@ -14,6 +15,7 @@ public class OAuthPersistenceService {
 
   private final UserRepository userRepository;
   private final UserQueryRepository userQueryRepository;
+  private final LegendService legendService;
 
   @Transactional
   public User toPersistentedUser(SocialUserInfoDTO socialUserInfo, OAuthClient client,
@@ -31,6 +33,14 @@ public class OAuthPersistenceService {
     user.nullifyDeletedAt();
     user.updateToken(socialToken.socialAccessToken(), socialToken.socialRefreshToken());
 
-    return userRepository.save(user);
+    boolean isFirst = user.getNo() == null;
+
+    User savedUser = userRepository.save(user);
+
+    if (isFirst) {
+      legendService.create(savedUser.getNo());
+    }
+
+    return savedUser;
   }
 }

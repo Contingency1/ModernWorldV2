@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
@@ -183,4 +184,12 @@ public class UserJPAEntity {
       legend.setUser(this);
     }
   }
+
+  @PrePersist
+  public void setRelation() {
+    if (this.token != null && this.token.getUser() == null) {
+      this.token.setUser(this);
+    }
+  }
+
 }
