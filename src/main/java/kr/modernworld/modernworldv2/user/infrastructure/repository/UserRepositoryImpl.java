@@ -26,15 +26,21 @@ public class UserRepositoryImpl implements UserRepository {
   @Override
   public User save(User user) {
     if (user.getNo() == null) {
-      return userMapper.toDomain(userJPARepository.save(userMapper.toEntity(user)));
+      UserJPAEntity entity = userMapper.toEntity(user);
+
+      if (entity.getToken() != null) {
+        entity.getToken().setUser(entity);
+      }
+
+      return userMapper.toDomain(userJPARepository.save(entity));
     }
 
-    UserJPAEntity userJPAEntity = userJPARepository.findById(user.getNo())
+    UserJPAEntity entity = userJPARepository.findById(user.getNo())
         .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + user.getNo()));
 
-    userMapper.updateUserEntityFromDomain(user, userJPAEntity);
+    userMapper.updateUserEntityFromDomain(user, entity);
 
-    return userMapper.toDomain(userJPAEntity);
+    return userMapper.toDomain(entity);
   }
 
   @Override
