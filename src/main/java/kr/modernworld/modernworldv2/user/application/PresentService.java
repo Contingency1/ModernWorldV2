@@ -2,8 +2,13 @@ package kr.modernworld.modernworldv2.user.application;
 
 import java.util.List;
 import kr.modernworld.modernworldv2.admin.application.api.ItemApi;
+import kr.modernworld.modernworldv2.admin.application.api.ItemNameAndPriceDTO;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
+import kr.modernworld.modernworldv2.user.application.event.AlarmEvent;
+import kr.modernworld.modernworldv2.user.application.event.UpdateLegendCheckAchievementEvent;
+import kr.modernworld.modernworldv2.user.application.userachievement.LegendField;
+import kr.modernworld.modernworldv2.user.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.user.domain.port.inventory.InventoryQueryRepository;
 import kr.modernworld.modernworldv2.user.domain.port.present.PresentQueryRepository;
 import kr.modernworld.modernworldv2.user.domain.port.present.PresentRepository;
@@ -13,6 +18,7 @@ import kr.modernworld.modernworldv2.user.presentation.present.HandlePresentStatu
 import kr.modernworld.modernworldv2.user.presentation.present.dto.req.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.user.presentation.present.dto.res.GetPresentResponseDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +33,7 @@ public class PresentService {
   private final UserQueryRepository userQueryRepository;
   private final InventoryService inventoryService;
   private final UserPointService userPointService;
+  private final ApplicationEventPublisher applicationEventPublisher;
 
   @Transactional
   public GetPresentResponseDTO getOnePresent(Long userNo, Long presentNo) {
@@ -70,14 +77,18 @@ public class PresentService {
           " reason: " + e.getMessage());
     }
 
-    Long itemPrice = itemApi.getPrice(itemNo);
+    ItemNameAndPriceDTO itemNameAndPrice = itemApi.getNameAndPrice(itemNo);
+    Long itemPrice = itemNameAndPrice.price();
+    String itemName = itemNameAndPrice.name();
 
-    //======================= 할 것.======================
+    applicationEventPublisher.publishEvent(
+        new UpdateLegendCheckAchievementEvent(this, senderNo, LegendField.PRESENT_COUNT));
 
-    // legend, userAchievement 갱신
-    // 알람 table, sse 발행
-
-    //======================= 할 것.======================
+    // ============================== 추후에 익명 바꿀것. =============================
+    String eventMessage = String.format("%s님이 %s을(를) 선물로 보냈습니다.", "익명",
+        itemName);
+    applicationEventPublisher.publishEvent(
+        new AlarmEvent(this, receiverNo, eventMessage, AlarmTitle.PRESENT));
 
     userPointService.decreaseCurrentPoint(senderNo, itemPrice);
     return presentRepository.save(present);
@@ -125,24 +136,22 @@ public class PresentService {
     Boolean itemExists = inventoryQueryRepository.exists(userNo, present.getItemNo());
 
     if (itemExists) {
-      Long itemHalfPrice = itemApi.getPrice(present.getItemNo()) / 2;
+      ItemNameAndPriceDTO nameAndPrice = itemApi.getNameAndPrice(present.getItemNo());
+      Long itemPrice = nameAndPrice.price();
+      String itemName = nameAndPrice.name();
 
-      //======================= 이벤트 처리 할 것.======================
+      Long itemHalfPrice = itemPrice / 2;
 
-      // 알람 table, sse 발행
-
-      //======================= 이벤트 처리 할 것.======================
+      String evenetMessage = String.format(
+          "%s은(는) 이미 보유중인 아이템 입니다. 아이템 가격의 50%%, [%s]포인트로 반환되었습니다.",
+          itemName, itemHalfPrice);
+      applicationEventPublisher.publishEvent(
+          new AlarmEvent(this, userNo, evenetMessage, AlarmTitle.PRESENT));
 
       userPointService.increaseCurrentAccumulationPoint(userNo, itemHalfPrice);
 
       return presentRepository.save(present);
     }
-
-    //======================= 앞으로 할 것.======================
-
-    // legend 기록, userAchievement 기록
-
-    //======================= 앞으로 할 것.======================
 
     inventoryService.addOneItemInInventory(userNo, present.getItemNo());
 
