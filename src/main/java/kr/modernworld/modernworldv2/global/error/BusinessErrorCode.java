@@ -9,6 +9,11 @@ public enum BusinessErrorCode {
   NO_SUCH_ALARM(HttpStatus.NOT_FOUND, "No such alarm"),
   ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "User doesn't have that alarm."),
 
+  ACHIEVEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no achievement."),
+
+  USER_ACHIEVEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "User doesn't have that achievement."),
+
+  LEGEND_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no legend."),
 
   NO_SUCH_CHARACTER(HttpStatus.NOT_FOUND, "There is no character."),
 
