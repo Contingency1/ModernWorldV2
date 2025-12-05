@@ -26,7 +26,7 @@ public class Alarm {
   }
 
   @Builder
-  public Alarm(Long no, Long userNo, AlarmTitle title, String content, Boolean status,
+  private Alarm(Long no, Long userNo, AlarmTitle title, String content, Boolean status,
       Instant createdAt) {
     this.no = no;
     this.userNo = userNo;
@@ -34,6 +34,16 @@ public class Alarm {
     this.content = content;
     this.status = status;
     this.createdAt = createdAt;
+  }
+
+  public static Alarm init(Long userNo, AlarmTitle title, String content) {
+    return Alarm.builder()
+        .userNo(userNo)
+        .title(title)
+        .content(content)
+        .status(false)
+        .createdAt(Instant.now())
+        .build();
   }
 
   public void validationUser(Long userNo) {
