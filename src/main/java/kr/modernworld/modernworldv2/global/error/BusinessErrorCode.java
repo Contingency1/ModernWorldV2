@@ -9,6 +9,8 @@ public enum BusinessErrorCode {
   NO_SUCH_ALARM(HttpStatus.NOT_FOUND, "No such alarm"),
   ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "User doesn't have that alarm."),
 
+  POST_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no post."),
+  POST_USER_NOT_HAVE(HttpStatus.FORBIDDEN, "This present is not user's"),
 
   NO_SUCH_CHARACTER(HttpStatus.NOT_FOUND, "There is no character."),
 
