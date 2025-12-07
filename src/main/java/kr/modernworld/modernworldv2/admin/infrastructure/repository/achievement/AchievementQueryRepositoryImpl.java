@@ -21,8 +21,8 @@ public class AchievementQueryRepositoryImpl implements AchievementQueryRepositor
     AchievementInfoDTO data = jpaQueryFactory
         .select(Projections.constructor(AchievementInfoDTO.class,
             achievementJPAEntity.no,
-            achievementJPAEntity.name,
-            achievementJPAEntity.point
+            achievementJPAEntity.point,
+            achievementJPAEntity.name
         ))
         .from(achievementJPAEntity)
         .where(achievementJPAEntity.name.eq(name))
