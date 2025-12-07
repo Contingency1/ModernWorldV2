@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.user.presentation.present.dto.req;
+package kr.modernworld.modernworldv2.global.common;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
@@ -13,9 +13,9 @@ public enum SenderReceiverNoField {
 
   @JsonCreator
   public static SenderReceiverNoField stringToSenderReceiverNoField(String str) {
-    for (SenderReceiverNoField senderReceiverNoField : SenderReceiverNoField.values()) {
-      if (senderReceiverNoField.str.equals(str)) {
-        return senderReceiverNoField;
+    for (SenderReceiverNoField role : SenderReceiverNoField.values()) {
+      if (role.str.equals(str)) {
+        return role;
       }
     }
 

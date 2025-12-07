@@ -2,6 +2,7 @@ package kr.modernworld.modernworldv2.user.application;
 
 import java.util.List;
 import kr.modernworld.modernworldv2.admin.application.api.ItemApi;
+import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.user.domain.port.inventory.InventoryQueryRepository;
@@ -10,7 +11,6 @@ import kr.modernworld.modernworldv2.user.domain.port.present.PresentRepository;
 import kr.modernworld.modernworldv2.user.domain.port.user.UserQueryRepository;
 import kr.modernworld.modernworldv2.user.domain.present.Present;
 import kr.modernworld.modernworldv2.user.presentation.present.HandlePresentStatus;
-import kr.modernworld.modernworldv2.user.presentation.present.dto.req.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.user.presentation.present.dto.res.GetPresentResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
