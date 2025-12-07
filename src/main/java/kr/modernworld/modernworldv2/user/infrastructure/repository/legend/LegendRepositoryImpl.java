@@ -25,18 +25,27 @@ public class LegendRepositoryImpl implements LegendRepository {
 
   @Override
   public Legend save(Legend legend) {
-    LegendJPAEntity entity = legendMapper.toEntity(legend);
+    Optional<LegendJPAEntity> entity = legendJPARepository.findById(legend.getUserNo());
 
-    if (legend.getUserNo() != null) {
-      entity.setUser(entityManager.getReference(UserJPAEntity.class, legend.getUserNo()));
+    if (entity.isPresent()) {
+      LegendJPAEntity existingEntity = entity.get();
+
+      legendMapper.updateEntityFromDomain(legend, existingEntity);
+
+      return legendMapper.toDomain(legendJPARepository.save(existingEntity));
     }
 
-    return legendMapper.toDomain(legendJPARepository.save(entity));
+    LegendJPAEntity newEntity = legendMapper.toEntity(legend);
+
+    if (legend.getUserNo() != null) {
+      newEntity.setUser(entityManager.getReference(UserJPAEntity.class, legend.getUserNo()));
+    }
+
+    return legendMapper.toDomain(legendJPARepository.save(newEntity));
   }
 
   @Override
   public Optional<Legend> findByUserNoForUpdate(Long userNo) {
-
     LegendJPAEntity entity = queryFactory
         .select(legendJPAEntity)
         .from(legendJPAEntity)
