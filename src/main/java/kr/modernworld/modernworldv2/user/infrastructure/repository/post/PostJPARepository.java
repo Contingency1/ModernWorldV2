@@ -1,0 +1,10 @@
+package kr.modernworld.modernworldv2.user.infrastructure.repository.post;
+
+import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.PostJPAEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface PostJPARepository extends JpaRepository<PostJPAEntity, Long> {
+
+}
