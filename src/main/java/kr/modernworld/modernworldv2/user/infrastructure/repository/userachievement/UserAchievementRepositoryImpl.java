@@ -29,10 +29,12 @@ public class UserAchievementRepositoryImpl implements UserAchievementRepository 
   }
 
   @Override
-  public Optional<UserAchievement> findByNoForUpdate(Long userAchievementNo) {
+  public Optional<UserAchievement> findOneForUpdate(Long userNo, Long achievementNo) {
     UserAchievementJPAEntity entity = queryFactory
         .selectFrom(userAchievementJPAEntity)
-        .where(userAchievementJPAEntity.no.eq(userAchievementNo))
+        .where(
+            userAchievementJPAEntity.user.no.eq(userNo),
+            userAchievementJPAEntity.achievement.no.eq(achievementNo))
         .setLockMode(LockModeType.PESSIMISTIC_WRITE)
         .fetchOne();
 

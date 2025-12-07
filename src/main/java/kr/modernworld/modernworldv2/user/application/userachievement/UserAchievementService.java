@@ -39,7 +39,7 @@ public class UserAchievementService {
   public UserAchievement updateUserAchievementStatus
       (Long userNo, Long achievementNo, Boolean status) {
     UserAchievement target = userAchievementRepository.
-        findByNoForUpdate(achievementNo)
+        findOneForUpdate(userNo, achievementNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.USER_ACHIEVEMENT_NOT_FOUND));
 
     try {

@@ -7,7 +7,7 @@ public interface UserAchievementRepository {
 
   UserAchievement save(UserAchievement userAchievement);
 
-  Optional<UserAchievement> findByNoForUpdate(Long userAchievementNo);
+  Optional<UserAchievement> findOneForUpdate(Long userNo, Long userAchievementNo);
 
   Optional<UserAchievement> findByUserNoAndStatusForUpdate(Long userNo, Boolean status);
 
