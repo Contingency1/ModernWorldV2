@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class Legend {
 
-  private Long userNo;
+  private final Long userNo;
 
   private Long attendanceCount;
 
