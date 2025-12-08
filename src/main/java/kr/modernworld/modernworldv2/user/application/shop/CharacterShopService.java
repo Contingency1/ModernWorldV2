@@ -1,8 +1,8 @@
 package kr.modernworld.modernworldv2.user.application.shop;
 
 import kr.modernworld.modernworldv2.admin.application.api.CharacterApi;
-import kr.modernworld.modernworldv2.user.application.UserPointService;
 import kr.modernworld.modernworldv2.user.application.characterlocker.CharacterLockerService;
+import kr.modernworld.modernworldv2.user.application.user.UserService;
 import kr.modernworld.modernworldv2.user.domain.characterlocker.CharacterLocker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ public class CharacterShopService {
 
   private final CharacterLockerService characterLockerService;
   private final CharacterApi characterApi;
-  private final UserPointService userPointService;
+  private final UserService userService;
 
   @Transactional
   public CharacterLocker buyOneCharacter(Long userNo, Long characterNo) {
@@ -22,7 +22,7 @@ public class CharacterShopService {
 
     Long characterPrice = characterApi.getPrice(characterNo);
 
-    userPointService.decreaseCurrentPoint(userNo, characterPrice);
+    userService.decreaseCurrentPoint(userNo, characterPrice);
 
     return characterLockerService.addCharacter(userNo, characterNo);
   }

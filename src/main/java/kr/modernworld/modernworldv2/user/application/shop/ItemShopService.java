@@ -3,7 +3,7 @@ package kr.modernworld.modernworldv2.user.application.shop;
 import kr.modernworld.modernworldv2.admin.application.api.ItemApi;
 import kr.modernworld.modernworldv2.admin.application.api.ItemNameAndPriceDTO;
 import kr.modernworld.modernworldv2.user.application.InventoryService;
-import kr.modernworld.modernworldv2.user.application.UserPointService;
+import kr.modernworld.modernworldv2.user.application.user.UserService;
 import kr.modernworld.modernworldv2.user.domain.Inventory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class ItemShopService {
 
   private final ItemApi itemApi;
   private final InventoryService inventoryService;
-  private final UserPointService userPointService;
+  private final UserService userService;
 
   @Transactional
   public Inventory buyOneItem(Long userNo, Long itemNo) {
@@ -23,9 +23,8 @@ public class ItemShopService {
 
     ItemNameAndPriceDTO itemInfo = itemApi.getNameAndPrice(itemNo);
 
-    userPointService.decreaseCurrentPoint(userNo, itemInfo.price());
+    userService.decreaseCurrentPoint(userNo, itemInfo.price());
 
     return inventoryService.addOneItemInInventory(userNo, itemNo);
   }
-
 }

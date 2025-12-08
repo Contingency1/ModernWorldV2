@@ -3,6 +3,7 @@ package kr.modernworld.modernworldv2.user.application.oauth;
 import java.util.UUID;
 import kr.modernworld.modernworldv2.user.application.event.LoginFailEvent;
 import kr.modernworld.modernworldv2.user.application.event.LoginSuccessEvent;
+import kr.modernworld.modernworldv2.user.application.user.UserService;
 import kr.modernworld.modernworldv2.user.domain.port.OAuthClient;
 import kr.modernworld.modernworldv2.user.domain.port.RefreshTokenRepository;
 import kr.modernworld.modernworldv2.user.domain.port.SessionRepository;
@@ -25,7 +26,7 @@ public class OAuthService {
 
   private final TokenProvider tokenProvider;
   private final RefreshTokenRepository refreshTokenRepository;
-  private final OAuthPersistenceService oAuthPersistenceService;
+  private final UserService userService;
 
   public String buildLoginUrl(UserDomain providerName) {
 
@@ -56,7 +57,7 @@ public class OAuthService {
 
     //--------------------------------------------------------------------------------------
 
-    User savedUser = oAuthPersistenceService.toPersistentedUser(socialUserInfo, client,
+    User savedUser = userService.toPersistentedUser(socialUserInfo, client,
         socialToken);
 
     Long now = System.currentTimeMillis();
