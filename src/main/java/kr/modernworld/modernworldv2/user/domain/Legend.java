@@ -1,12 +1,13 @@
 package kr.modernworld.modernworldv2.user.domain;
 
+import kr.modernworld.modernworldv2.user.application.userachievement.LegendField;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class Legend {
 
-  private Long userNo;
+  private final Long userNo;
 
   private Long attendanceCount;
 
@@ -45,34 +46,41 @@ public class Legend {
         .build();
   }
 
-  public void incrementAttendanceCount(Long userNo) {
+  public void incrementLegend(Long userNo, LegendField legendField) {
     validationUser(userNo);
-    attendanceCount++;
+
+    switch (legendField) {
+      case ATTENDANCE_COUNT -> incrementAttendanceCount();
+      case ITEM_COUNT -> incrementItemCount();
+      case PRESENT_COUNT -> incrementPresentCount();
+      case LIKE_COUNT -> incrementLikeCount();
+      case COMMENT_COUNT -> incrementCommentCount();
+      case RSP_WINT_COUNT -> incrementRspWinCount();
+    }
   }
 
-  public void incrementItemCount(Long userNo) {
-    validationUser(userNo);
-    itemCount++;
+  private void incrementAttendanceCount() {
+    this.attendanceCount++;
   }
 
-  public void incrementPresentCount(Long userNo) {
-    validationUser(userNo);
-    presentCount++;
+  private void incrementItemCount() {
+    this.itemCount++;
   }
 
-  public void incrementLikeCount(Long userNo) {
-    validationUser(userNo);
-    likeCount++;
+  private void incrementPresentCount() {
+    this.presentCount++;
   }
 
-  public void incrementCommentCount(Long userNo) {
-    validationUser(userNo);
-    commentCount++;
+  private void incrementLikeCount() {
+    this.likeCount++;
   }
 
-  public void incrementRspWinCount(Long userNo) {
-    validationUser(userNo);
-    rspWinCount++;
+  private void incrementCommentCount() {
+    this.commentCount++;
+  }
+
+  private void incrementRspWinCount() {
+    this.rspWinCount++;
   }
 
   private void validationUser(Long userNo) {

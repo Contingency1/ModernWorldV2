@@ -11,6 +11,11 @@ public enum BusinessErrorCode {
 
   POST_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no post."),
   POST_USER_NOT_HAVE(HttpStatus.FORBIDDEN, "This present is not user's"),
+  ACHIEVEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no achievement."),
+
+  USER_ACHIEVEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "User doesn't have that achievement."),
+
+  LEGEND_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no legend."),
 
   NO_SUCH_CHARACTER(HttpStatus.NOT_FOUND, "There is no character."),
 

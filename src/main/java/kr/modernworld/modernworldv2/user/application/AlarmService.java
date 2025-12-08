@@ -4,6 +4,7 @@ import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.user.domain.alarm.Alarm;
+import kr.modernworld.modernworldv2.user.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.user.domain.port.alarm.AlarmQueryRepository;
 import kr.modernworld.modernworldv2.user.domain.port.alarm.AlarmRepository;
 import kr.modernworld.modernworldv2.user.presentation.alarm.dto.req.AlarmRequestDTO;
@@ -18,6 +19,13 @@ public class AlarmService {
 
   private final AlarmQueryRepository alarmQueryRepository;
   private final AlarmRepository alarmRepository;
+
+  @Transactional
+  public void create(Long userNo, AlarmTitle title, String message) {
+    Alarm alarm = Alarm.init(userNo, title, message);
+
+    alarmRepository.save(alarm);
+  }
 
   @Transactional(readOnly = true)
   public PageResponseDTO<AlarmResponseDTO> getAllAlarms(Long userNo, AlarmRequestDTO query) {

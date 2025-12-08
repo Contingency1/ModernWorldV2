@@ -15,8 +15,8 @@ public class ItemApiImpl implements ItemApi {
 
   @Override
   @Transactional(readOnly = true)
-  public Long getPrice(Long itemNo) {
-    return itemQueryRepository.getPrice(itemNo).orElseThrow(
+  public ItemNameAndPriceDTO getNameAndPrice(Long itemNo) {
+    return itemQueryRepository.findNameAndPrice(itemNo).orElseThrow(
         () -> new BusinessException(BusinessErrorCode.ITEM_NOT_FOUND, " itemNo: " + itemNo));
   }
 }
