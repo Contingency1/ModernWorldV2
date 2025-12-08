@@ -1,6 +1,7 @@
 package kr.modernworld.modernworldv2.user.application.shop;
 
 import kr.modernworld.modernworldv2.admin.application.api.ItemApi;
+import kr.modernworld.modernworldv2.admin.application.api.ItemNameAndPriceDTO;
 import kr.modernworld.modernworldv2.user.application.InventoryService;
 import kr.modernworld.modernworldv2.user.application.UserPointService;
 import kr.modernworld.modernworldv2.user.domain.Inventory;
@@ -20,9 +21,9 @@ public class ItemShopService {
   public Inventory buyOneItem(Long userNo, Long itemNo) {
     inventoryService.validateItemNotExists(userNo, itemNo);
 
-    Long itemPrice = itemApi.getPrice(itemNo);
+    ItemNameAndPriceDTO itemInfo = itemApi.getNameAndPrice(itemNo);
 
-    userPointService.decreaseCurrentPoint(userNo, itemPrice);
+    userPointService.decreaseCurrentPoint(userNo, itemInfo.price());
 
     return inventoryService.addOneItemInInventory(userNo, itemNo);
   }

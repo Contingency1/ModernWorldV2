@@ -4,6 +4,8 @@ import java.util.List;
 import kr.modernworld.modernworldv2.admin.domain.ItemType;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
+import kr.modernworld.modernworldv2.user.application.event.UpdateLegendCheckAchievementEvent;
+import kr.modernworld.modernworldv2.user.application.userachievement.LegendField;
 import kr.modernworld.modernworldv2.user.domain.Inventory;
 import kr.modernworld.modernworldv2.user.domain.InventoryCollection;
 import kr.modernworld.modernworldv2.user.domain.port.inventory.InventoryQueryRepository;
@@ -11,6 +13,7 @@ import kr.modernworld.modernworldv2.user.domain.port.inventory.InventoryReposito
 import kr.modernworld.modernworldv2.user.presentation.inventory.dto.request.GetInventoryRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.inventory.dto.response.GetInventoryResponseDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class InventoryService {
 
   private final InventoryRepository inventoryRepository;
-
   private final InventoryQueryRepository inventoryQueryRepository;
+  private final ApplicationEventPublisher applicationEventPublisher;
 
   public List<GetInventoryResponseDTO> getAllItems(Long userNo,
       GetInventoryRequestDTO query) {
@@ -30,6 +33,9 @@ public class InventoryService {
 
   @Transactional
   public Inventory addOneItemInInventory(Long userNo, Long itemNo) {
+    applicationEventPublisher.publishEvent(
+        new UpdateLegendCheckAchievementEvent(this, userNo, LegendField.ITEM_COUNT));
+    
     return inventoryRepository.save(Inventory.create(userNo, itemNo));
   }
 
