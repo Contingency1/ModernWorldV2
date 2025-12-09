@@ -38,10 +38,12 @@ public class PostService {
       post.makeCheckTrue(userNo);
       postRepository.save(post);
 
-      return postQueryRepository.findOne(postNo);
+      return postQueryRepository.findOne(userNo, postNo)
+          .orElseThrow(() -> new BusinessException(BusinessErrorCode.POST_NOT_FOUND));
     }
 
-    return postQueryRepository.findOne(postNo);
+    return postQueryRepository.findOne(userNo, postNo)
+        .orElseThrow(() -> new BusinessException(BusinessErrorCode.POST_NOT_FOUND));
   }
 
   @Transactional
@@ -59,9 +61,12 @@ public class PostService {
 
     Post save = postRepository.save(post);
 
-    eventPublisher.publishEvent(new AlarmEvent(this, receiverNo, content, AlarmTitle.POST));
-
-    return postQueryRepository.findOne(save.getNo());
+    // ===================================== 나중에 익명 고칠것 ==============================
+    String alarmMessage = String.format("%s님이 쪽지를 보내셨습니다.", "익명");
+    // ===================================== 나중에 익명 고칠것 ==============================
+    eventPublisher.publishEvent(new AlarmEvent(this, receiverNo, alarmMessage, AlarmTitle.POST));
+    return postQueryRepository.findOne(senderNo, save.getNo())
+        .orElseThrow(() -> new BusinessException(BusinessErrorCode.POST_NOT_FOUND));
   }
 
   @Transactional
