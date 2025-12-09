@@ -2,18 +2,18 @@ package kr.modernworld.modernworldv2.user.application;
 
 import java.util.List;
 import kr.modernworld.modernworldv2.admin.application.api.ItemApi;
-import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.admin.application.api.ItemNameAndPriceDTO;
+import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.user.application.event.AlarmEvent;
 import kr.modernworld.modernworldv2.user.application.event.UpdateLegendCheckAchievementEvent;
+import kr.modernworld.modernworldv2.user.application.user.UserService;
 import kr.modernworld.modernworldv2.user.application.userachievement.LegendField;
 import kr.modernworld.modernworldv2.user.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.user.domain.port.inventory.InventoryQueryRepository;
 import kr.modernworld.modernworldv2.user.domain.port.present.PresentQueryRepository;
 import kr.modernworld.modernworldv2.user.domain.port.present.PresentRepository;
-import kr.modernworld.modernworldv2.user.domain.port.user.UserQueryRepository;
 import kr.modernworld.modernworldv2.user.domain.present.Present;
 import kr.modernworld.modernworldv2.user.presentation.present.HandlePresentStatus;
 import kr.modernworld.modernworldv2.user.presentation.present.dto.res.GetPresentResponseDTO;
@@ -30,14 +30,13 @@ public class PresentService {
   private final PresentRepository presentRepository;
   private final InventoryQueryRepository inventoryQueryRepository;
   private final ItemApi itemApi;
-  private final UserQueryRepository userQueryRepository;
   private final InventoryService inventoryService;
-  private final UserPointService userPointService;
+  private final UserService userService;
   private final ApplicationEventPublisher applicationEventPublisher;
 
   @Transactional
   public GetPresentResponseDTO getOnePresent(Long userNo, Long presentNo) {
-    Present present = presentRepository.findByNoForUpdate(presentNo)
+    Present present = presentRepository.findByNoForUpdate(userNo, presentNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.PRESENT_NOT_FOUND));
 
     boolean isStatusChanged;
@@ -64,16 +63,14 @@ public class PresentService {
 
   @Transactional
   public Present createOnePresent(Long senderNo, Long receiverNo, Long itemNo) {
-    if (!userQueryRepository.exists(receiverNo)) {
-      throw new BusinessException(BusinessErrorCode.USER_NOT_FOUND, " receiverNo: " + receiverNo);
-    }
+    userService.isPresent(receiverNo);
 
     Present present;
 
     try {
-      present = Present.create(itemNo, senderNo, receiverNo);
+      present = Present.init(itemNo, senderNo, receiverNo);
     } catch (IllegalArgumentException e) {
-      throw new BusinessException(BusinessErrorCode.PRESENT_INVALID_STATE,
+      throw new BusinessException(BusinessErrorCode.PRESENT_CANNOT_PRESENT_TO_YOURSELF,
           " reason: " + e.getMessage());
     }
 
@@ -90,13 +87,13 @@ public class PresentService {
     applicationEventPublisher.publishEvent(
         new AlarmEvent(this, receiverNo, eventMessage, AlarmTitle.PRESENT));
 
-    userPointService.decreaseCurrentPoint(senderNo, itemPrice);
+    userService.decreaseCurrentPoint(senderNo, itemPrice);
     return presentRepository.save(present);
   }
 
   @Transactional
   public void deleteOnePresent(Long userNo, Long presentNo) {
-    Present present = presentRepository.findByNoForUpdate(presentNo)
+    Present present = presentRepository.findByNoForUpdate(userNo, presentNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.PRESENT_NOT_FOUND));
 
     try {
@@ -111,7 +108,7 @@ public class PresentService {
 
   @Transactional
   public Present acceptOrReject(Long userNo, Long presentNo, HandlePresentStatus status) {
-    Present present = presentRepository.findByNoForUpdate(presentNo)
+    Present present = presentRepository.findByNoForUpdate(userNo, presentNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.PRESENT_NOT_FOUND,
             " presentNo: " + presentNo));
 
@@ -148,7 +145,7 @@ public class PresentService {
       applicationEventPublisher.publishEvent(
           new AlarmEvent(this, userNo, evenetMessage, AlarmTitle.PRESENT));
 
-      userPointService.increaseCurrentAccumulationPoint(userNo, itemHalfPrice);
+      userService.increaseCurrentAccumulationPoint(userNo, itemHalfPrice);
 
       return presentRepository.save(present);
     }
