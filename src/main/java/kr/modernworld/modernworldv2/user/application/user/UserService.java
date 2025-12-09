@@ -49,6 +49,13 @@ public class UserService {
   }
 
   @Transactional
+  public void isPresent(Long userNo) {
+    if (!userQueryRepository.exists(userNo)) {
+      throw new BusinessException(BusinessErrorCode.USER_NOT_FOUND, " userNo: " + userNo);
+    }
+  }
+
+  @Transactional
   public void decreaseCurrentPoint(Long userNo, Long price) {
     User user = userRepository.findUserByUserNoForUpdate(userNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND));
