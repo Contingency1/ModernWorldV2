@@ -2,11 +2,11 @@ package kr.modernworld.modernworldv2.user.presentation.present;
 
 import jakarta.validation.Valid;
 import java.util.List;
+import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.user.application.PresentService;
 import kr.modernworld.modernworldv2.user.domain.present.Present;
 import kr.modernworld.modernworldv2.user.infrastructure.repository.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.presentation.present.dto.req.ItemNoRequestDTO;
-import kr.modernworld.modernworldv2.user.presentation.present.dto.req.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.user.presentation.present.dto.res.GetPresentResponseDTO;
 import kr.modernworld.modernworldv2.user.presentation.present.dto.res.PresentResponseDTO;
 import lombok.RequiredArgsConstructor;

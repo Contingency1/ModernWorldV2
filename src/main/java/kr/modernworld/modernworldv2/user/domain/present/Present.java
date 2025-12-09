@@ -36,7 +36,7 @@ public class Present {
     this.receiverDelete = receiverDelete;
   }
 
-  public static Present create(Long itemNo, Long senderNo, Long receiverNo) {
+  public static Present init(Long itemNo, Long senderNo, Long receiverNo) {
     if (senderNo.equals(receiverNo)) {
       throw new IllegalArgumentException("User can't send present to user self");
     }
@@ -68,23 +68,14 @@ public class Present {
 
   public Boolean read(Long userNo) {
     if (userNo.equals(this.receiverNo)) {
-      if (this.receiverDelete) {
-        throw new IllegalStateException("Present was deleted");
-      }
-
       if (status.equals(PresentStatus.UNREAD)) {
         this.status = PresentStatus.READ;
         return true;
       }
-
       return false;
     }
 
     if (userNo.equals(this.senderNo)) {
-      if (this.senderDelete) {
-        throw new IllegalStateException("Present was deleted");
-      }
-
       return false;
     }
 

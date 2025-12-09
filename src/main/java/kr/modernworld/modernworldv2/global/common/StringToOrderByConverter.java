@@ -8,6 +8,6 @@ public class StringToOrderByConverter implements Converter<String, OrderBy> {
 
   @Override
   public OrderBy convert(String source) {
-    return OrderBy.stringToOrderBy(source);
+    return OrderBy.stringToEnum(source);
   }
 }

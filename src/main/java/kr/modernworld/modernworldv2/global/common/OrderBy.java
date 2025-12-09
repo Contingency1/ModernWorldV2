@@ -12,7 +12,7 @@ public enum OrderBy {
   }
 
   @JsonCreator
-  public static OrderBy stringToOrderBy(String str) {
+  public static OrderBy stringToEnum(String str) {
     for (OrderBy o : OrderBy.values()) {
       if (o.str.equals(str)) {
         return o;

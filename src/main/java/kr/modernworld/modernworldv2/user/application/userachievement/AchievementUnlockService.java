@@ -2,8 +2,8 @@ package kr.modernworld.modernworldv2.user.application.userachievement;
 
 import kr.modernworld.modernworldv2.admin.application.api.AchievementApi;
 import kr.modernworld.modernworldv2.admin.application.api.AchievementInfoDTO;
-import kr.modernworld.modernworldv2.user.application.UserPointService;
 import kr.modernworld.modernworldv2.user.application.event.AlarmEvent;
+import kr.modernworld.modernworldv2.user.application.user.UserService;
 import kr.modernworld.modernworldv2.user.domain.Legend;
 import kr.modernworld.modernworldv2.user.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.user.domain.port.userachievement.UserAchievementQueryRepository;
@@ -19,7 +19,7 @@ public class AchievementUnlockService {
   private final UserAchievementService userAchievementService;
   private final UserAchievementQueryRepository userAchievementQueryRepository;
   private final AchievementApi achievementApi;
-  private final UserPointService userPointService;
+  private final UserService userService;
   private final ApplicationEventPublisher applicationEventPublisher;
 
   @Transactional
@@ -48,7 +48,7 @@ public class AchievementUnlockService {
       AchievementInfoDTO achievementInfo = achievementApi.getAchievementInfo(achievementName);
 
       userAchievementService.createUserAchievement(userNo, achievementInfo.no());
-      userPointService.increaseCurrentAccumulationPoint(userNo, achievementInfo.point());
+      userService.increaseCurrentAccumulationPoint(userNo, achievementInfo.point());
 
       applicationEventPublisher.publishEvent(
           new AlarmEvent(this, userNo,

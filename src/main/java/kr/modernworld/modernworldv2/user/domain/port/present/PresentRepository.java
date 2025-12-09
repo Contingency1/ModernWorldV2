@@ -7,6 +7,6 @@ public interface PresentRepository {
 
   Present save(Present present);
 
-  Optional<Present> findByNoForUpdate(Long presentNo);
+  Optional<Present> findByNoForUpdate(Long userNo, Long presentNo);
 
 }
