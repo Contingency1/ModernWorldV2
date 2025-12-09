@@ -7,15 +7,15 @@ import lombok.Getter;
 @Getter
 public class UserAchievement {
 
-  private Long no;
+  private final Long no;
 
-  private Long userNo;
+  private final Long userNo;
 
-  private Long achievementNo;
+  private final Long achievementNo;
 
   private Boolean status;
 
-  private Instant createdAt;
+  private final Instant createdAt;
 
   public void validationUserNo(Long userNo) {
     if (!userNo.equals(this.userNo)) {

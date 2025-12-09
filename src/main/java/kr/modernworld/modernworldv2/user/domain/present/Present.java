@@ -7,15 +7,15 @@ import lombok.Getter;
 @Getter
 public class Present {
 
-  private Long no;
+  private final Long no;
 
-  private Long itemNo;
+  private final Long itemNo;
 
-  private Long senderNo;
+  private final Long senderNo;
 
-  private Long receiverNo;
+  private final Long receiverNo;
 
-  private Instant createdAt;
+  private final Instant createdAt;
 
   private PresentStatus status;
 
