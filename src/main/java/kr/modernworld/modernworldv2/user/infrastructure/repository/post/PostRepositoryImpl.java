@@ -33,6 +33,8 @@ public class PostRepositoryImpl implements PostRepository {
   public Optional<Post> findOneByUserNoAndPostNoForUpdate(Long userNo, Long postNo) {
     PostJPAEntity entity = queryFactory
         .selectFrom(postJPAEntity)
+        .leftJoin(postJPAEntity.receiver)
+        .leftJoin(postJPAEntity.sender)
         .where(postJPAEntity.no.eq(postNo), filterPosts(userNo))
         .setLockMode(LockModeType.PESSIMISTIC_WRITE)
         .fetchOne();
@@ -47,7 +49,7 @@ public class PostRepositoryImpl implements PostRepository {
   private Predicate filterPosts(Long userNo) {
     BooleanExpression isSender = postJPAEntity.sender.no.eq(userNo)
         .and(postJPAEntity.senderDelete.isFalse());
-    
+
     BooleanExpression isReceiver = postJPAEntity.receiver.no.eq(userNo)
         .and(postJPAEntity.receiverDelete.isFalse());
 
