@@ -3,7 +3,7 @@ package kr.modernworld.modernworldv2.user.presentation.post;
 import jakarta.validation.Valid;
 import java.util.List;
 import kr.modernworld.modernworldv2.user.application.post.PostService;
-import kr.modernworld.modernworldv2.user.infrastructure.repository.jwt.TokenUserInfoDTO;
+import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.presentation.post.dto.req.CreateOnePostRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.post.dto.req.GetAllPostsRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.post.dto.res.PostResponseDTO;

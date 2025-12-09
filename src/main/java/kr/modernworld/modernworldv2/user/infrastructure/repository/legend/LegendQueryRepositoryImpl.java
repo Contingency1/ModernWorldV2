@@ -4,8 +4,8 @@ import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entit
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
-import kr.modernworld.modernworldv2.user.domain.Legend;
-import kr.modernworld.modernworldv2.user.domain.port.legend.LegendQueryRepository;
+import kr.modernworld.modernworldv2.user.domain.legend.Legend;
+import kr.modernworld.modernworldv2.user.domain.legend.port.LegendQueryRepository;
 import kr.modernworld.modernworldv2.user.infrastructure.mapper.LegendMapper;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.LegendJPAEntity;
 import lombok.RequiredArgsConstructor;

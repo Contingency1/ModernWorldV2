@@ -11,7 +11,7 @@ import kr.modernworld.modernworldv2.global.common.OrderBy;
 import kr.modernworld.modernworldv2.global.common.dto.PageMetaDTO;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
 import kr.modernworld.modernworldv2.user.domain.alarm.Alarm;
-import kr.modernworld.modernworldv2.user.domain.port.alarm.AlarmQueryRepository;
+import kr.modernworld.modernworldv2.user.domain.alarm.port.AlarmQueryRepository;
 import kr.modernworld.modernworldv2.user.infrastructure.mapper.AlarmMapper;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.AlarmJPAEntity;
 import kr.modernworld.modernworldv2.user.presentation.alarm.dto.res.AlarmResponseDTO;

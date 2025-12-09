@@ -5,8 +5,8 @@ import static kr.modernworld.modernworldv2.admin.infrastructure.persistence.enti
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
-import kr.modernworld.modernworldv2.admin.application.api.AchievementInfoDTO;
-import kr.modernworld.modernworldv2.admin.domain.port.achievement.AchievementQueryRepository;
+import kr.modernworld.modernworldv2.admin.application.achievement.api.AchievementInfoDTO;
+import kr.modernworld.modernworldv2.admin.domain.achievement.port.AchievementQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

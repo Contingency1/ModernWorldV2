@@ -7,7 +7,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.LockModeType;
 import java.util.Optional;
-import kr.modernworld.modernworldv2.user.domain.port.post.PostRepository;
+import kr.modernworld.modernworldv2.user.domain.post.port.PostRepository;
 import kr.modernworld.modernworldv2.user.domain.post.Post;
 import kr.modernworld.modernworldv2.user.infrastructure.mapper.PostMapper;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.PostJPAEntity;

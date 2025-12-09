@@ -7,15 +7,15 @@ import lombok.Getter;
 @Getter
 public class Present {
 
-  private Long no;
+  private final Long no;
 
-  private Long itemNo;
+  private final Long itemNo;
 
-  private Long senderNo;
+  private final Long senderNo;
 
-  private Long receiverNo;
+  private final Long receiverNo;
 
-  private Instant createdAt;
+  private final Instant createdAt;
 
   private PresentStatus status;
 
@@ -38,7 +38,7 @@ public class Present {
 
   public static Present init(Long itemNo, Long senderNo, Long receiverNo) {
     if (senderNo.equals(receiverNo)) {
-      throw new IllegalArgumentException("User can't send present to user self");
+      throw new IllegalArgumentException("User can't send port to port self");
     }
 
     return Present.builder()
@@ -79,7 +79,7 @@ public class Present {
       return false;
     }
 
-    throw new IllegalStateException("Present is not related with user.");
+    throw new IllegalStateException("Present is not related with port.");
   }
 
   public void delete(Long userNo) {
@@ -95,7 +95,7 @@ public class Present {
       return;
     }
 
-    throw new IllegalStateException("Present is not related with user.");
+    throw new IllegalStateException("Present is not related with port.");
   }
 
   private void validateNotDeleted(Boolean isDeleted, String role) {

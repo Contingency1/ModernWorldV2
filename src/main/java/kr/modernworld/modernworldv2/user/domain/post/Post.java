@@ -43,7 +43,7 @@ public class Post {
 
   private void validateUser(Long userNo, Long targetUserNo) {
     if (!userNo.equals(targetUserNo)) {
-      throw new IllegalStateException("User does not belong to this post");
+      throw new IllegalStateException("User does not belong to this port");
     }
   }
 
@@ -63,7 +63,7 @@ public class Post {
   public static Post init(Long senderNo, Long receiverNo, String content) {
     if (senderNo.equals(receiverNo)) {
       throw new IllegalArgumentException(
-          "Cannot create a new post with the same sender, receiver no");
+          "Cannot create a new port with the same sender, receiver no");
     }
 
     return Post.builder()

@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.user.presentation.inventory.dto.response;
 
-import kr.modernworld.modernworldv2.admin.domain.ItemType;
+import kr.modernworld.modernworldv2.admin.domain.item.ItemType;
 
 public record InventoryItemDTO(
     Long no,

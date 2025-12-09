@@ -2,7 +2,7 @@ package kr.modernworld.modernworldv2.user.infrastructure.repository.characterloc
 
 import kr.modernworld.modernworldv2.user.domain.characterlocker.CharacterLocker;
 import kr.modernworld.modernworldv2.user.domain.characterlocker.CharacterLockerCollection;
-import kr.modernworld.modernworldv2.user.domain.port.CharacterLockerRepository;
+import kr.modernworld.modernworldv2.user.domain.characterlocker.port.CharacterLockerRepository;
 import kr.modernworld.modernworldv2.user.infrastructure.mapper.CharacterLockerMapper;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.CharacterLockerJPAEntity;
 import lombok.RequiredArgsConstructor;

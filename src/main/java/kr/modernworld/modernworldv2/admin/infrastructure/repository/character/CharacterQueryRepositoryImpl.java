@@ -5,7 +5,7 @@ import static kr.modernworld.modernworldv2.admin.infrastructure.persistence.enti
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
-import kr.modernworld.modernworldv2.admin.domain.port.character.CharacterQueryRepository;
+import kr.modernworld.modernworldv2.admin.domain.character.port.CharacterQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -26,7 +26,7 @@ public class CharacterQueryRepositoryImpl implements CharacterQueryRepository {
     if (price == null) {
       return Optional.empty();
     }
-    
+
     return Optional.of(price);
   }
 }

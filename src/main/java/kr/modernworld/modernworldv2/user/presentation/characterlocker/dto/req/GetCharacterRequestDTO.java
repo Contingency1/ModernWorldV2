@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.user.presentation.characterlocker.dto.req;
 
-import kr.modernworld.modernworldv2.admin.domain.CharacterSpecies;
+import kr.modernworld.modernworldv2.admin.domain.character.CharacterSpecies;
 
 public record GetCharacterRequestDTO(
     Boolean status,

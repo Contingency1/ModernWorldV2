@@ -1,10 +1,10 @@
 package kr.modernworld.modernworldv2.user.application.shop;
 
-import kr.modernworld.modernworldv2.admin.application.api.ItemApi;
-import kr.modernworld.modernworldv2.admin.application.api.ItemNameAndPriceDTO;
-import kr.modernworld.modernworldv2.user.application.InventoryService;
+import kr.modernworld.modernworldv2.admin.domain.item.port.ItemApi;
+import kr.modernworld.modernworldv2.admin.application.item.api.ItemNameAndPriceDTO;
+import kr.modernworld.modernworldv2.user.application.inventory.InventoryService;
 import kr.modernworld.modernworldv2.user.application.user.UserService;
-import kr.modernworld.modernworldv2.user.domain.Inventory;
+import kr.modernworld.modernworldv2.user.domain.inventory.Inventory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,7 +1,7 @@
 package kr.modernworld.modernworldv2.user.infrastructure.repository.alarm;
 
 import kr.modernworld.modernworldv2.user.domain.alarm.Alarm;
-import kr.modernworld.modernworldv2.user.domain.port.alarm.AlarmRepository;
+import kr.modernworld.modernworldv2.user.domain.alarm.port.AlarmRepository;
 import kr.modernworld.modernworldv2.user.infrastructure.mapper.AlarmMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

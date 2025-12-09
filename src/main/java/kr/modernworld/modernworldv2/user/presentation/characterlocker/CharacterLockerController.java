@@ -4,7 +4,7 @@ import java.util.List;
 import kr.modernworld.modernworldv2.user.application.characterlocker.CharacterLockerService;
 import kr.modernworld.modernworldv2.user.application.shop.CharacterShopService;
 import kr.modernworld.modernworldv2.user.domain.characterlocker.CharacterLocker;
-import kr.modernworld.modernworldv2.user.infrastructure.repository.jwt.TokenUserInfoDTO;
+import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.presentation.characterlocker.dto.req.CharacterNoRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.characterlocker.dto.req.GetCharacterRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.characterlocker.dto.res.CharacterLockerResponseDTO;

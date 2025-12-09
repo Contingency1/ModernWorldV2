@@ -8,7 +8,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
-import kr.modernworld.modernworldv2.user.domain.port.userachievement.UserAchievementQueryRepository;
+import kr.modernworld.modernworldv2.user.domain.userachievement.port.UserAchievementQueryRepository;
 import kr.modernworld.modernworldv2.user.presentation.userachievement.dto.res.AchievementDetail;
 import kr.modernworld.modernworldv2.user.presentation.userachievement.dto.res.UserAchievementResponseDTO;
 import lombok.RequiredArgsConstructor;

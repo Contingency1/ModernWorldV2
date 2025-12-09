@@ -2,7 +2,7 @@ package kr.modernworld.modernworldv2.admin.infrastructure.persistence.entity;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import kr.modernworld.modernworldv2.admin.domain.ItemType;
+import kr.modernworld.modernworldv2.admin.domain.item.ItemType;
 
 @Converter(autoApply = true)
 public class ItemTypeConverter implements AttributeConverter<ItemType, String> {

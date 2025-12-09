@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import kr.modernworld.modernworldv2.global.common.OrderBy;
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
-import kr.modernworld.modernworldv2.user.domain.port.post.PostQueryRepository;
+import kr.modernworld.modernworldv2.user.domain.post.port.PostQueryRepository;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QUserJPAEntity;
 import kr.modernworld.modernworldv2.user.presentation.post.dto.res.PostResponseDTO;
 import kr.modernworld.modernworldv2.user.presentation.post.dto.res.PostUserInfoDTO;

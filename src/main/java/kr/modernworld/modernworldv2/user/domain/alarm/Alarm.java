@@ -48,7 +48,7 @@ public class Alarm {
 
   public void validationUser(Long userNo) {
     if (!this.userNo.equals(userNo)) {
-      throw new IllegalStateException("This alarm is not user's.");
+      throw new IllegalStateException("This port is not port's.");
     }
   }
 

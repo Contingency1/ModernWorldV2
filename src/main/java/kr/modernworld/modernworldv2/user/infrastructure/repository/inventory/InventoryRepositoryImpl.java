@@ -1,8 +1,8 @@
 package kr.modernworld.modernworldv2.user.infrastructure.repository.inventory;
 
-import kr.modernworld.modernworldv2.user.domain.Inventory;
-import kr.modernworld.modernworldv2.user.domain.InventoryCollection;
-import kr.modernworld.modernworldv2.user.domain.port.inventory.InventoryRepository;
+import kr.modernworld.modernworldv2.user.domain.inventory.Inventory;
+import kr.modernworld.modernworldv2.user.domain.inventory.InventoryCollection;
+import kr.modernworld.modernworldv2.user.domain.inventory.port.InventoryRepository;
 import kr.modernworld.modernworldv2.user.infrastructure.mapper.InventoryMapper;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.InventoryJPAEntity;
 import lombok.RequiredArgsConstructor;
