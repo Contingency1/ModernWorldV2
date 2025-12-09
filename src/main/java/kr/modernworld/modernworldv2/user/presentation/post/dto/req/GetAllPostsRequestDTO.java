@@ -8,5 +8,4 @@ public record GetAllPostsRequestDTO(
     OrderBy orderBy
 ) {
 
-
 }

@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import kr.modernworld.modernworldv2.user.application.post.PostService;
 import kr.modernworld.modernworldv2.user.infrastructure.repository.jwt.TokenUserInfoDTO;
+import kr.modernworld.modernworldv2.user.presentation.post.dto.req.CreateOnePostRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.post.dto.req.GetAllPostsRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.post.dto.res.PostResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -44,8 +45,8 @@ public class PostController {
 
   @PostMapping("/{userNo}/posts")
   public ResponseEntity<PostResponseDTO> create(@AuthenticationPrincipal TokenUserInfoDTO user,
-      @PathVariable("userNo") Long receiverNo) {
-    PostResponseDTO response = postService.create(user.userNo(), receiverNo, "asdasd");
+      @PathVariable("userNo") Long receiverNo, @Valid CreateOnePostRequestDTO body) {
+    PostResponseDTO response = postService.create(user.userNo(), receiverNo, body.content());
 
     return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
@@ -54,7 +55,7 @@ public class PostController {
   public ResponseEntity<Void> delete(@AuthenticationPrincipal TokenUserInfoDTO user,
       @PathVariable Long postNo) {
     postService.deleteByNo(user.userNo(), postNo);
-    
+
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
