@@ -48,11 +48,11 @@ public class Post {
   }
 
   @Builder
-  public Post(Long receiverNo, Long no, Long senderNo, String content, Instant createdAt,
+  private Post(Long no, Long senderNo, Long receiverNo, String content, Instant createdAt,
       Boolean check, Boolean senderDelete, Boolean receiverDelete) {
-    this.receiverNo = receiverNo;
     this.no = no;
     this.senderNo = senderNo;
+    this.receiverNo = receiverNo;
     this.content = content;
     this.createdAt = createdAt;
     this.check = check;
