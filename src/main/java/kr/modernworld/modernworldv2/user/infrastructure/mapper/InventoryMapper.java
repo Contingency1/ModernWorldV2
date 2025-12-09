@@ -1,7 +1,7 @@
 package kr.modernworld.modernworldv2.user.infrastructure.mapper;
 
 import kr.modernworld.modernworldv2.global.mapper.TimeMapper;
-import kr.modernworld.modernworldv2.user.domain.Inventory;
+import kr.modernworld.modernworldv2.user.domain.inventory.Inventory;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.InventoryJPAEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

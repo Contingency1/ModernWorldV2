@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.user.infrastructure.mapper;
 
-import kr.modernworld.modernworldv2.user.domain.UserAchievement;
+import kr.modernworld.modernworldv2.user.domain.userachievement.UserAchievement;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.UserAchievementJPAEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

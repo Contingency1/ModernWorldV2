@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import kr.modernworld.modernworldv2.global.error.ErrorResponseDTO;
-import kr.modernworld.modernworldv2.user.infrastructure.repository.jwt.JwtValidationCustomException;
+import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.JwtValidationCustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

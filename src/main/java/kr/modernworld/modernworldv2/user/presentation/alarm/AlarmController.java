@@ -2,8 +2,8 @@ package kr.modernworld.modernworldv2.user.presentation.alarm;
 
 import jakarta.validation.Valid;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
-import kr.modernworld.modernworldv2.user.application.AlarmService;
-import kr.modernworld.modernworldv2.user.infrastructure.repository.jwt.TokenUserInfoDTO;
+import kr.modernworld.modernworldv2.user.application.alarm.AlarmService;
+import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.presentation.alarm.dto.req.AlarmRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.alarm.dto.res.AlarmResponseDTO;
 import lombok.RequiredArgsConstructor;

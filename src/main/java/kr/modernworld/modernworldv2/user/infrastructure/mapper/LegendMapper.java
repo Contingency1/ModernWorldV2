@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.user.infrastructure.mapper;
 
-import kr.modernworld.modernworldv2.user.domain.Legend;
+import kr.modernworld.modernworldv2.user.domain.legend.Legend;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.LegendJPAEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -5,8 +5,8 @@ import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entit
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.LockModeType;
 import java.util.Optional;
-import kr.modernworld.modernworldv2.user.domain.UserAchievement;
-import kr.modernworld.modernworldv2.user.domain.port.userachievement.UserAchievementRepository;
+import kr.modernworld.modernworldv2.user.domain.userachievement.UserAchievement;
+import kr.modernworld.modernworldv2.user.domain.userachievement.port.UserAchievementRepository;
 import kr.modernworld.modernworldv2.user.infrastructure.mapper.UserAchievementMapper;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.UserAchievementJPAEntity;
 import lombok.RequiredArgsConstructor;

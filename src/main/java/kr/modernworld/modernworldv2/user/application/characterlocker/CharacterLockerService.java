@@ -1,13 +1,13 @@
 package kr.modernworld.modernworldv2.user.application.characterlocker;
 
 import java.util.List;
-import kr.modernworld.modernworldv2.admin.domain.CharacterSpecies;
+import kr.modernworld.modernworldv2.admin.domain.character.CharacterSpecies;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.user.domain.characterlocker.CharacterLocker;
 import kr.modernworld.modernworldv2.user.domain.characterlocker.CharacterLockerCollection;
-import kr.modernworld.modernworldv2.user.domain.port.CharacterLockerQueryRepository;
-import kr.modernworld.modernworldv2.user.domain.port.CharacterLockerRepository;
+import kr.modernworld.modernworldv2.user.domain.characterlocker.port.CharacterLockerQueryRepository;
+import kr.modernworld.modernworldv2.user.domain.characterlocker.port.CharacterLockerRepository;
 import kr.modernworld.modernworldv2.user.presentation.characterlocker.dto.res.GetCharacterLockerResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

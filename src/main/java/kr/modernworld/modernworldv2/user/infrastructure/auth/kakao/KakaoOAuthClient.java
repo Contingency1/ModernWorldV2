@@ -1,9 +1,9 @@
 package kr.modernworld.modernworldv2.user.infrastructure.auth.kakao;
 
 import kr.modernworld.modernworldv2.global.exception.OAuthException;
-import kr.modernworld.modernworldv2.user.application.oauth.OAuthTokenDTO;
-import kr.modernworld.modernworldv2.user.application.oauth.SocialUserInfoDTO;
-import kr.modernworld.modernworldv2.user.domain.port.OAuthClient;
+import kr.modernworld.modernworldv2.user.application.auth.OAuthTokenDTO;
+import kr.modernworld.modernworldv2.user.application.auth.SocialUserInfoDTO;
+import kr.modernworld.modernworldv2.user.domain.auth.port.OAuthClient;
 import kr.modernworld.modernworldv2.user.domain.user.UserDomain;
 import kr.modernworld.modernworldv2.user.infrastructure.auth.kakao.dto.KakaoAPIErrorDTO;
 import kr.modernworld.modernworldv2.user.infrastructure.auth.kakao.dto.KakaoTokenFailDTO;
@@ -53,7 +53,7 @@ public class KakaoOAuthClient implements OAuthClient {
 
     return UriComponentsBuilder
         .fromUriString("https://kauth.kakao.com")
-        .path("/oauth/authorize")
+        .path("/auth/authorize")
         .queryParam("response_type", "code")
         .queryParam("client_id", properties.id())
         .queryParam("redirect_uri", properties.callbackUrl())
@@ -64,7 +64,7 @@ public class KakaoOAuthClient implements OAuthClient {
 
   @Override
   public OAuthTokenDTO getSocialToken(String state, String authCode) {
-    String path = "/oauth/token";
+    String path = "/auth/token";
 
     KakaoTokenSuccessDTO response = getKakaoToken(authCode, path);
 
@@ -114,7 +114,7 @@ public class KakaoOAuthClient implements OAuthClient {
   }
 
   private KakaoUserInfoDTO getKakaoUserInfo(String socialAccessToken) {
-    String uri = "/v2/user/me";
+    String uri = "/v2/port/me";
     String secure = "?secure_resource=true";
 
     return apiWebClient.get()

@@ -22,7 +22,7 @@ public enum AlarmTitle {
       }
     }
 
-    throw new IllegalArgumentException("Invalid alarm title: " + title);
+    throw new IllegalArgumentException("Invalid port title: " + title);
   }
 
   public String toString() {

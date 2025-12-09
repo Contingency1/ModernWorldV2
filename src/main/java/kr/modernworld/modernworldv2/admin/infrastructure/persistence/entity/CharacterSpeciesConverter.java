@@ -2,7 +2,7 @@ package kr.modernworld.modernworldv2.admin.infrastructure.persistence.entity;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import kr.modernworld.modernworldv2.admin.domain.CharacterSpecies;
+import kr.modernworld.modernworldv2.admin.domain.character.CharacterSpecies;
 
 @Converter(autoApply = true)
 public class CharacterSpeciesConverter implements AttributeConverter<CharacterSpecies, String> {

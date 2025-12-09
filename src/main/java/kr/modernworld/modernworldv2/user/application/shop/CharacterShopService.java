@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.user.application.shop;
 
-import kr.modernworld.modernworldv2.admin.application.api.CharacterApi;
+import kr.modernworld.modernworldv2.admin.domain.character.port.CharacterApi;
 import kr.modernworld.modernworldv2.user.application.characterlocker.CharacterLockerService;
 import kr.modernworld.modernworldv2.user.application.user.UserService;
 import kr.modernworld.modernworldv2.user.domain.characterlocker.CharacterLocker;

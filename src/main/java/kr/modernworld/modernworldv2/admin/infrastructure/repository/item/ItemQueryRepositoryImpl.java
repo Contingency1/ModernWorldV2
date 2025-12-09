@@ -5,8 +5,8 @@ import static kr.modernworld.modernworldv2.admin.infrastructure.persistence.enti
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
-import kr.modernworld.modernworldv2.admin.application.api.ItemNameAndPriceDTO;
-import kr.modernworld.modernworldv2.admin.domain.port.item.ItemQueryRepository;
+import kr.modernworld.modernworldv2.admin.application.item.api.ItemNameAndPriceDTO;
+import kr.modernworld.modernworldv2.admin.domain.item.port.ItemQueryRepository;
 import kr.modernworld.modernworldv2.admin.infrastructure.persistence.entity.ItemJPAEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

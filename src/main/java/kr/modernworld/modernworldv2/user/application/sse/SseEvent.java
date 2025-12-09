@@ -5,5 +5,4 @@ public record SseEvent(
     String content
 ) {
 
-
 }

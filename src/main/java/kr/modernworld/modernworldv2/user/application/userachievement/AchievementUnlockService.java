@@ -1,12 +1,12 @@
 package kr.modernworld.modernworldv2.user.application.userachievement;
 
-import kr.modernworld.modernworldv2.admin.application.api.AchievementApi;
-import kr.modernworld.modernworldv2.admin.application.api.AchievementInfoDTO;
-import kr.modernworld.modernworldv2.user.application.event.AlarmEvent;
+import kr.modernworld.modernworldv2.admin.domain.achievement.port.AchievementApi;
+import kr.modernworld.modernworldv2.admin.application.achievement.api.AchievementInfoDTO;
+import kr.modernworld.modernworldv2.user.application.alarm.event.AlarmEvent;
 import kr.modernworld.modernworldv2.user.application.user.UserService;
-import kr.modernworld.modernworldv2.user.domain.Legend;
 import kr.modernworld.modernworldv2.user.domain.alarm.AlarmTitle;
-import kr.modernworld.modernworldv2.user.domain.port.userachievement.UserAchievementQueryRepository;
+import kr.modernworld.modernworldv2.user.domain.legend.Legend;
+import kr.modernworld.modernworldv2.user.domain.userachievement.port.UserAchievementQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

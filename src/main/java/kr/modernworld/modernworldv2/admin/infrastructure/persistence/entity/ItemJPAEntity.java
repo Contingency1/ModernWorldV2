@@ -13,7 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
-import kr.modernworld.modernworldv2.admin.domain.ItemType;
+import kr.modernworld.modernworldv2.admin.domain.item.ItemType;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.InventoryJPAEntity;
 import lombok.Getter;
 import lombok.Setter;
