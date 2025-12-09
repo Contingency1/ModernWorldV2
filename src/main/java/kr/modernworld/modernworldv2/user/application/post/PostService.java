@@ -3,12 +3,16 @@ package kr.modernworld.modernworldv2.user.application.post;
 import java.util.List;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
+import kr.modernworld.modernworldv2.user.application.event.AlarmEvent;
+import kr.modernworld.modernworldv2.user.application.user.UserService;
+import kr.modernworld.modernworldv2.user.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.user.domain.port.post.PostQueryRepository;
 import kr.modernworld.modernworldv2.user.domain.port.post.PostRepository;
 import kr.modernworld.modernworldv2.user.domain.post.Post;
 import kr.modernworld.modernworldv2.user.presentation.post.dto.req.GetAllPostsRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.post.dto.res.PostResponseDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +22,8 @@ public class PostService {
 
   private final PostQueryRepository postQueryRepository;
   private final PostRepository postRepository;
+  private final UserService userService;
+  private final ApplicationEventPublisher eventPublisher;
 
   public List<PostResponseDTO> getAll(Long userNo, GetAllPostsRequestDTO query) {
     return postQueryRepository.findAll(userNo, query.senderReceiverNoField(), query.orderBy());
@@ -40,8 +46,20 @@ public class PostService {
 
   @Transactional
   public PostResponseDTO create(Long senderNo, Long receiverNo, String content) {
-    Post save = postRepository.save(Post.init(senderNo, receiverNo, content));
-    // ======================== 알람 추가 =============================================
+    userService.isPresent(receiverNo);
+
+    Post post;
+
+    try {
+      post = Post.init(senderNo, receiverNo, content);
+    } catch (IllegalArgumentException e) {
+      throw new BusinessException(
+          BusinessErrorCode.POST_CANNOT_POST_TO_YOURSELF, ", reason: " + e.getMessage());
+    }
+
+    Post save = postRepository.save(post);
+
+    eventPublisher.publishEvent(new AlarmEvent(this, receiverNo, content, AlarmTitle.POST));
 
     return postQueryRepository.findOne(save.getNo());
   }

@@ -61,6 +61,11 @@ public class Post {
   }
 
   public static Post init(Long senderNo, Long receiverNo, String content) {
+    if (senderNo.equals(receiverNo)) {
+      throw new IllegalArgumentException(
+          "Cannot create a new post with the same sender, receiver no");
+    }
+
     return Post.builder()
         .senderNo(senderNo)
         .receiverNo(receiverNo)
