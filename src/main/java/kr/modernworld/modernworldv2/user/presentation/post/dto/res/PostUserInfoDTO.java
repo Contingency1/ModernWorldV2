@@ -5,4 +5,13 @@ public record PostUserInfoDTO(
     String nickname
 ) {
 
+  public PostUserInfoDTO {
+    if (nickname == null) {
+      nickname = "Deleted User";
+    }
+
+    if (no == null) {
+      no = 0L;
+    }
+  }
 }
