@@ -30,6 +30,7 @@ spring:
     properties:
       hibernate:
         format_sql: true # 출력되는 SQL 쿼리를 가독성 좋게 포맷
+        default_batch_fetch_size: 100
 
   devtools:
     restart:
