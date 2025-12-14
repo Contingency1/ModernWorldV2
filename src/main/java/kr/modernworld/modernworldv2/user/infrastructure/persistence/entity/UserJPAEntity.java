@@ -10,8 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
@@ -125,12 +123,6 @@ public class UserJPAEntity {
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<UserAchievementJPAEntity> userAchievements = new ArrayList<>();
 
-  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-  private LegendJPAEntity legend;
-
-  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-  private TokenJPAEntity token;
-
   // User가 삭제되어도 다른 User는 남아있어야 하는 관계
   @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
   private List<CommentJPAEntity> sentComments = new ArrayList<>();
@@ -170,26 +162,4 @@ public class UserJPAEntity {
 
   @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
   private List<ReportJPAEntity> receivedReports = new ArrayList<>();
-
-  public void setToken(TokenJPAEntity token) {
-    this.token = token;
-    if (token != null) {
-      token.setUser(this);
-    }
-  }
-
-  public void setLegend(LegendJPAEntity legend) {
-    this.legend = legend;
-    if (legend != null) {
-      legend.setUser(this);
-    }
-  }
-
-  @PrePersist
-  public void setRelation() {
-    if (this.token != null && this.token.getUser() == null) {
-      this.token.setUser(this);
-    }
-  }
-
 }
