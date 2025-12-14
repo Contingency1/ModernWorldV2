@@ -14,6 +14,13 @@ public enum BusinessErrorCode {
   POST_CANNOT_POST_TO_YOURSELF(HttpStatus.FORBIDDEN,
       "You cannot send a Post to yourself."),
 
+  NEIGHBOR_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no neighbor."),
+  NEIGHBOR_ALREADY_NEIGHBOR(HttpStatus.CONFLICT, "Already neighbor."),
+  NEIGHBOR_CANNOT_DELETE(HttpStatus.FORBIDDEN, "This neighbor is not user's."),
+  NEIGHBOR_CANNOT_INVITE_TO_YOURSELF(HttpStatus.FORBIDDEN, "You cannot invite yourself."),
+  NEIGHBOR_ALREADY_REQUESTED(HttpStatus.CONFLICT, "Already requested."),
+  NEIGHBOR_ALREADY_RECEIVED(HttpStatus.CONFLICT, "Already received."),
+
   ACHIEVEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no achievement."),
 
   USER_ACHIEVEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "User doesn't have that achievement."),
