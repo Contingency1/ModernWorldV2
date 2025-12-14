@@ -53,7 +53,7 @@ public class KakaoOAuthClient implements OAuthClient {
 
     return UriComponentsBuilder
         .fromUriString("https://kauth.kakao.com")
-        .path("/auth/authorize")
+        .path("/oauth/authorize")
         .queryParam("response_type", "code")
         .queryParam("client_id", properties.id())
         .queryParam("redirect_uri", properties.callbackUrl())
@@ -64,7 +64,7 @@ public class KakaoOAuthClient implements OAuthClient {
 
   @Override
   public OAuthTokenDTO getSocialToken(String state, String authCode) {
-    String path = "/auth/token";
+    String path = "/oauth/token";
 
     KakaoTokenSuccessDTO response = getKakaoToken(authCode, path);
 
@@ -114,7 +114,7 @@ public class KakaoOAuthClient implements OAuthClient {
   }
 
   private KakaoUserInfoDTO getKakaoUserInfo(String socialAccessToken) {
-    String uri = "/v2/port/me";
+    String uri = "/v2/user/me";
     String secure = "?secure_resource=true";
 
     return apiWebClient.get()
