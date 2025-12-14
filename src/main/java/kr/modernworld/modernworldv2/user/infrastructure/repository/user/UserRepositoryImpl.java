@@ -3,7 +3,6 @@ package kr.modernworld.modernworldv2.user.infrastructure.repository.user;
 import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QUserJPAEntity.userJPAEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.LockModeType;
 import java.util.Optional;
 import kr.modernworld.modernworldv2.user.domain.user.User;
@@ -25,22 +24,9 @@ public class UserRepositoryImpl implements UserRepository {
 
   @Override
   public User save(User user) {
-    if (user.getNo() == null) {
-      UserJPAEntity entity = userMapper.toEntity(user);
+    UserJPAEntity entity = userMapper.toEntity(user);
 
-      if (entity.getToken() != null) {
-        entity.getToken().setUser(entity);
-      }
-
-      return userMapper.toDomain(userJPARepository.save(entity));
-    }
-
-    UserJPAEntity entity = userJPARepository.findById(user.getNo())
-        .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + user.getNo()));
-
-    userMapper.updateUserEntityFromDomain(user, entity);
-
-    return userMapper.toDomain(entity);
+    return userMapper.toDomain(userJPARepository.save(entity));
   }
 
   @Override
