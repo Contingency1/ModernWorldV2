@@ -9,6 +9,9 @@ public enum BusinessErrorCode {
   NO_SUCH_ALARM(HttpStatus.NOT_FOUND, "No such port"),
   ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "User doesn't have that port."),
 
+  COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no comment."),
+  COMMENT_NOT_A_SENDER(HttpStatus.FORBIDDEN, "User is not a sender."),
+
   POST_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no port."),
   POST_USER_NOT_HAVE(HttpStatus.FORBIDDEN, "This port is not port's"),
   POST_CANNOT_POST_TO_YOURSELF(HttpStatus.FORBIDDEN,
