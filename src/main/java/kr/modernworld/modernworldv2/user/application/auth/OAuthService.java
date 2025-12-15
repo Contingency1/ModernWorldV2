@@ -57,7 +57,7 @@ public class OAuthService {
 
     //--------------------------------------------------------------------------------------
 
-    User savedUser = userService.toPersistentedUser(socialUserInfo, client,
+    User savedUser = userService.save(socialUserInfo, client,
         socialToken);
 
     Long now = System.currentTimeMillis();

@@ -11,7 +11,7 @@ import lombok.Getter;
 @Getter
 public class User {
 
-  private Long no;
+  private final Long no;
 
   private String nickname;
 
@@ -25,13 +25,13 @@ public class User {
 
   private Boolean status;
 
-  private LocalDateTime createdAt;
+  private final LocalDateTime createdAt;
 
   private LocalDateTime deletedAt;
 
   private Boolean admin;
 
-  private String uniqueIdentifier;
+  private final String uniqueIdentifier;
 
   private String socialName;
 
@@ -41,14 +41,14 @@ public class User {
 
   private Long chance;
 
-  private UserToken token;
+  private UserSocialToken token;
 
   @Builder
   private User(Long no, String nickname, Long currentPoint, Long accumulationPoint,
       String description, Map<String, List<Integer>> attendance, Boolean status,
       LocalDateTime createdAt, LocalDateTime deletedAt, Boolean admin,
       String uniqueIdentifier, String socialName, String image,
-      UserDomain domain, Long chance, UserToken token) {
+      UserDomain domain, Long chance, UserSocialToken token) {
     this.no = no;
     this.nickname = nickname;
     this.currentPoint = currentPoint;
@@ -106,12 +106,7 @@ public class User {
   }
 
   public void updateToken(String accessToken, String refreshToken) {
-    if (this.token == null) {
-      this.token = new UserToken(no, accessToken, refreshToken);
-      return;
-    }
-
-    this.token.update(accessToken, refreshToken);
+    this.token = new UserSocialToken(this.no, accessToken, refreshToken);
   }
 
   private static Map<String, List<Integer>> createInitialAttendance() {
