@@ -4,7 +4,7 @@ import kr.modernworld.modernworldv2.user.domain.alarm.Alarm;
 
 public interface AlarmRepository {
 
-  void save(Alarm alarm);
+  Alarm save(Alarm alarm);
 
   void delete(Alarm alarm);
 
