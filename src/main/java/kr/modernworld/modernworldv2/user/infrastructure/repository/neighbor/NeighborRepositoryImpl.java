@@ -29,12 +29,17 @@ public class NeighborRepositoryImpl implements NeighborRepository {
 
   @Override
   public Long delete(Long neighborNo, Long userNo) {
-    return queryFactory
+    Long count = queryFactory
         .delete(neighborJPAEntity)
-        .where(neighborJPAEntity.no.eq(neighborNo),
+        .where(
+            neighborJPAEntity.no.eq(neighborNo),
             neighborJPAEntity.sender.no.eq(userNo)
-                .or(neighborJPAEntity.receiver.no.eq(neighborNo)))
+                .or(neighborJPAEntity.receiver.no.eq(userNo)))
         .execute();
+
+    entityManager.clear();
+
+    return count;
   }
 
   @Override
