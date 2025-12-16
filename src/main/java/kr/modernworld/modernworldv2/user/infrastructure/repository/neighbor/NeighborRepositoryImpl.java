@@ -3,8 +3,11 @@ package kr.modernworld.modernworldv2.user.infrastructure.repository.neighbor;
 import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QNeighborJPAEntity.neighborJPAEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import java.util.Optional;
+import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
+import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.user.domain.neighbor.Neighbor;
 import kr.modernworld.modernworldv2.user.domain.neighbor.port.NeighborRepository;
 import kr.modernworld.modernworldv2.user.infrastructure.mapper.NeighborMapper;
@@ -19,11 +22,19 @@ public class NeighborRepositoryImpl implements NeighborRepository {
   private final NeighborJPARepository neighborJPARepository;
   private final JPAQueryFactory queryFactory;
   private final NeighborMapper neighborMapper;
+  private final EntityManager entityManager;
 
   @Override
   public Neighbor save(Neighbor neighbor) {
-    NeighborJPAEntity entity = neighborJPARepository.save(neighborMapper.toEntity(neighbor));
+    if (neighbor.getNo() == null) {
+      NeighborJPAEntity entity = neighborJPARepository.save(neighborMapper.toEntity(neighbor));
+      return neighborMapper.toDomain(entity);
+    }
 
+    NeighborJPAEntity entity = neighborJPARepository.findById(neighbor.getNo())
+        .orElseThrow(() -> new BusinessException(BusinessErrorCode.NEIGHBOR_NOT_FOUND));
+
+    neighborMapper.updateEntityFromDomain(neighbor, entity);
     return neighborMapper.toDomain(entity);
   }
 
