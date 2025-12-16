@@ -1,5 +1,7 @@
 package kr.modernworld.modernworldv2.user.infrastructure.repository.inventory;
 
+import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
+import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.user.domain.inventory.Inventory;
 import kr.modernworld.modernworldv2.user.domain.inventory.InventoryCollection;
 import kr.modernworld.modernworldv2.user.domain.inventory.port.InventoryRepository;
@@ -19,9 +21,18 @@ public class InventoryRepositoryImpl implements InventoryRepository {
 
   @Override
   public Inventory save(Inventory inventory) {
-    InventoryJPAEntity save = inventoryJPARepository.save(inventoryMapper.toJPAEntity(inventory));
+    if (inventory.getNo() == null) {
+      InventoryJPAEntity save = inventoryJPARepository.save(inventoryMapper.toJPAEntity(inventory));
 
-    return inventoryMapper.toDomain(save);
+      return inventoryMapper.toDomain(save);
+    }
+
+    InventoryJPAEntity entity = inventoryJPARepository.findById(inventory.getNo())
+        .orElseThrow(() -> new BusinessException(
+            BusinessErrorCode.ITEM_NOT_FOUND_IN_INVENTORY));
+
+    inventoryMapper.updateEntityFromDomain(inventory, entity);
+    return inventoryMapper.toDomain(entity);
   }
 
   @Override

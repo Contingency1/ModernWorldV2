@@ -5,6 +5,8 @@ import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entit
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.LockModeType;
 import java.util.Optional;
+import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
+import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.user.domain.userachievement.UserAchievement;
 import kr.modernworld.modernworldv2.user.domain.userachievement.port.UserAchievementRepository;
 import kr.modernworld.modernworldv2.user.infrastructure.mapper.UserAchievementMapper;
@@ -22,9 +24,17 @@ public class UserAchievementRepositoryImpl implements UserAchievementRepository 
 
   @Override
   public UserAchievement save(UserAchievement userAchievement) {
-    UserAchievementJPAEntity entity = userAchievementJPARepository.save(
-        userAchievementMapper.toEntity(userAchievement));
+    if (userAchievement.getNo() == null) {
+      UserAchievementJPAEntity entity = userAchievementJPARepository.save(
+          userAchievementMapper.toEntity(userAchievement));
 
+      return userAchievementMapper.toDomain(entity);
+    }
+
+    UserAchievementJPAEntity entity = userAchievementJPARepository.findById(userAchievement.getNo())
+        .orElseThrow(() -> new BusinessException(BusinessErrorCode.USER_ACHIEVEMENT_NOT_FOUND));
+
+    userAchievementMapper.updateEntityFromDomain(userAchievement, entity);
     return userAchievementMapper.toDomain(entity);
   }
 

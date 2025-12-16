@@ -1,5 +1,7 @@
 package kr.modernworld.modernworldv2.user.infrastructure.repository.characterlocker;
 
+import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
+import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.user.domain.characterlocker.CharacterLocker;
 import kr.modernworld.modernworldv2.user.domain.characterlocker.CharacterLockerCollection;
 import kr.modernworld.modernworldv2.user.domain.characterlocker.port.CharacterLockerRepository;
@@ -19,11 +21,20 @@ public class CharacterLockerRepositoryImpl implements CharacterLockerRepository 
 
   @Override
   public CharacterLocker save(CharacterLocker characterLocker) {
+    if (characterLocker.getNo() == null) {
+      CharacterLockerJPAEntity save = characterLockerJPARepository.save(
+          characterLockerMapper.toJPAEntity(characterLocker));
 
-    CharacterLockerJPAEntity save = characterLockerJPARepository.save(
-        characterLockerMapper.toJPAEntity(characterLocker));
+      return characterLockerMapper.toDomain(save);
+    }
 
-    return characterLockerMapper.toDomain(save);
+    CharacterLockerJPAEntity entity = characterLockerJPARepository.findById(
+        characterLocker.getNo()).orElseThrow(() -> new BusinessException(
+        BusinessErrorCode.CHARACTER_NOT_FOUND_IN_CHARACTER_LOCKER));
+
+    characterLockerMapper.updateEntityFromDomain(characterLocker, entity);
+
+    return characterLockerMapper.toDomain(entity);
   }
 
   @Override

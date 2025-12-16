@@ -5,6 +5,7 @@ import kr.modernworld.modernworldv2.user.domain.inventory.Inventory;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.InventoryJPAEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring", uses = {TimeMapper.class})
 public interface InventoryMapper {
@@ -17,5 +18,11 @@ public interface InventoryMapper {
   @Mapping(target = "user.no", source = "userNo")
   @Mapping(target = "item.no", source = "itemNo")
   InventoryJPAEntity toJPAEntity(Inventory inventory);
+
+  @Mapping(target = "no", ignore = true)
+  @Mapping(target = "user.no", source = "userNo")
+  @Mapping(target = "item.no", source = "itemNo")
+  void updateEntityFromDomain(Inventory inventory,
+      @MappingTarget InventoryJPAEntity inventoryJPAEntity);
 
 }
