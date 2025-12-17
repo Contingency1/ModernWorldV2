@@ -122,44 +122,4 @@ public class UserJPAEntity {
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<UserAchievementJPAEntity> userAchievements = new ArrayList<>();
-
-  // User가 삭제되어도 다른 User는 남아있어야 하는 관계
-  @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
-  private List<CommentJPAEntity> sentComments = new ArrayList<>();
-
-  @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
-  private List<CommentJPAEntity> receivedComments = new ArrayList<>();
-
-  @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
-  private List<LikeJPAEntity> sentLikes = new ArrayList<>();
-
-  @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
-  private List<LikeJPAEntity> receivedLikes = new ArrayList<>();
-
-  @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
-  private List<NeighborJPAEntity> sentNeighbors = new ArrayList<>();
-
-  @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
-  private List<NeighborJPAEntity> receivedNeighbors = new ArrayList<>();
-
-  @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
-  private List<PostJPAEntity> sentPosts = new ArrayList<>();
-
-  @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
-  private List<PostJPAEntity> receivedPosts = new ArrayList<>();
-
-  @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
-  private List<PresentJPAEntity> sentPresents = new ArrayList<>();
-
-  @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
-  private List<PresentJPAEntity> receivedPresents = new ArrayList<>();
-
-  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-  private List<ReplyJPAEntity> replies = new ArrayList<>();
-
-  @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
-  private List<ReportJPAEntity> sentReports = new ArrayList<>();
-
-  @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
-  private List<ReportJPAEntity> receivedReports = new ArrayList<>();
 }

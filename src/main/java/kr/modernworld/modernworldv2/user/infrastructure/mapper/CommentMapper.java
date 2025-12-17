@@ -1,28 +1,26 @@
 package kr.modernworld.modernworldv2.user.infrastructure.mapper;
 
-import kr.modernworld.modernworldv2.user.domain.present.Present;
-import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.PresentJPAEntity;
+import kr.modernworld.modernworldv2.user.domain.comment.Comment;
+import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.CommentJPAEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
-public interface PresentMapper {
+public interface CommentMapper {
 
   @Mapping(target = "senderNo", source = "sender.no")
   @Mapping(target = "receiverNo", source = "receiver.no")
-  @Mapping(target = "itemNo", source = "item.no")
-  Present toDomain(PresentJPAEntity entity);
+  Comment toDomain(CommentJPAEntity entity);
 
+  @Mapping(target = "replies", ignore = true)
   @Mapping(target = "sender.no", source = "senderNo")
   @Mapping(target = "receiver.no", source = "receiverNo")
-  @Mapping(target = "item.no", source = "itemNo")
-  PresentJPAEntity toEntity(Present domain);
+  CommentJPAEntity toEntity(Comment domain);
 
   @Mapping(target = "no", ignore = true)
-  @Mapping(target = "item.no", source = "itemNo")
+  @Mapping(target = "replies", ignore = true)
   @Mapping(target = "sender.no", source = "senderNo")
   @Mapping(target = "receiver.no", source = "receiverNo")
-  void updateEntityFromDomain(Present domain, @MappingTarget PresentJPAEntity entity);
-
+  void updateEntityFromDomain(Comment domain, @MappingTarget CommentJPAEntity entity);
 }

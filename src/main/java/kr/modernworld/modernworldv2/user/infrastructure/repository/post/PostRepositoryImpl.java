@@ -7,8 +7,10 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.LockModeType;
 import java.util.Optional;
-import kr.modernworld.modernworldv2.user.domain.post.port.PostRepository;
+import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
+import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.user.domain.post.Post;
+import kr.modernworld.modernworldv2.user.domain.post.port.PostRepository;
 import kr.modernworld.modernworldv2.user.infrastructure.mapper.PostMapper;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.PostJPAEntity;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +26,17 @@ public class PostRepositoryImpl implements PostRepository {
 
   @Override
   public Post save(Post post) {
-    PostJPAEntity entity = postJPARepository.save(postMapper.toEntity(post));
+    if (post.getNo() == null) {
+      PostJPAEntity entity = postJPARepository.save(postMapper.toEntity(post));
+
+      return postMapper.toDomain(entity);
+    }
+
+    PostJPAEntity entity = postJPARepository.findById(post.getNo())
+        .orElseThrow(() -> new BusinessException(
+            BusinessErrorCode.POST_NOT_FOUND));
+
+    postMapper.updateEntityFromDomain(post, entity);
 
     return postMapper.toDomain(entity);
   }

@@ -30,8 +30,7 @@ public class SocialTokenRepositoryImpl implements SocialTokenRepository {
 
       entity.setUser(userRef);
     } else {
-      entity.setSocialAccess(token.getSocialAccessToken());
-      entity.setSocialRefresh(token.getSocialRefreshToken());
+      socialTokenMapper.updateEntityFromDomain(token, entity);
     }
 
     TokenJPAEntity saved = socialTokenJPARepository.save(entity);

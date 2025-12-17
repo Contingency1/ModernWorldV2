@@ -6,8 +6,10 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.LockModeType;
 import java.util.Optional;
-import kr.modernworld.modernworldv2.user.domain.present.port.PresentRepository;
+import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
+import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.user.domain.present.Present;
+import kr.modernworld.modernworldv2.user.domain.present.port.PresentRepository;
 import kr.modernworld.modernworldv2.user.infrastructure.mapper.PresentMapper;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.PresentJPAEntity;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +25,17 @@ public class PresentRepositoryImpl implements PresentRepository {
 
   @Override
   public Present save(Present present) {
-    PresentJPAEntity save = presentJPARepository.save(presentMapper.toEntity(present));
+    if (present.getNo() == null) {
+      PresentJPAEntity save = presentJPARepository.save(presentMapper.toEntity(present));
 
-    return presentMapper.toDomain(save);
+      return presentMapper.toDomain(save);
+    }
+
+    PresentJPAEntity entity = presentJPARepository.findById(present.getNo())
+        .orElseThrow(() -> new BusinessException(BusinessErrorCode.PRESENT_NOT_FOUND));
+
+    presentMapper.updateEntityFromDomain(present, entity);
+    return presentMapper.toDomain(entity);
   }
 
   @Override

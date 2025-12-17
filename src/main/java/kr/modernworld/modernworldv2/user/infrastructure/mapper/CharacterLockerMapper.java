@@ -4,6 +4,7 @@ import kr.modernworld.modernworldv2.user.domain.characterlocker.CharacterLocker;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.CharacterLockerJPAEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface CharacterLockerMapper {
@@ -15,4 +16,10 @@ public interface CharacterLockerMapper {
   @Mapping(target = "user.no", source = "userNo")
   @Mapping(target = "character.no", source = "characterNo")
   CharacterLockerJPAEntity toJPAEntity(CharacterLocker domain);
+
+  @Mapping(target = "no", ignore = true)
+  @Mapping(target = "user.no", source = "userNo")
+  @Mapping(target = "character.no", source = "characterNo")
+  void updateEntityFromDomain(CharacterLocker domain,
+      @MappingTarget CharacterLockerJPAEntity entity);
 }

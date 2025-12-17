@@ -37,9 +37,7 @@ public class LegendRepositoryImpl implements LegendRepository {
 
     LegendJPAEntity newEntity = legendMapper.toEntity(legend);
 
-    if (legend.getUserNo() != null) {
-      newEntity.setUser(entityManager.getReference(UserJPAEntity.class, legend.getUserNo()));
-    }
+    newEntity.setUser(entityManager.getReference(UserJPAEntity.class, legend.getUserNo()));
 
     return legendMapper.toDomain(legendJPARepository.save(newEntity));
   }
