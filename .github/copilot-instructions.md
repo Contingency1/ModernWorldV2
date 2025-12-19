@@ -1,3 +1,5 @@
+답변할때는 반드시 한국어를 통해 답변을 하도록합니다.
+
 GitHub Copilot Instructions: modernworldv2
 
 이 프로젝트는 NestJS/Prisma에서 Spring Boot/JPA로 마이그레이션 중인 프로젝트이며, DDD(Domain-Driven Design) 및 헥사고날 아키텍처를 지향합니다. 모든 코드 제안은 아래의 원칙을 반드시 준수해야 합니다.
