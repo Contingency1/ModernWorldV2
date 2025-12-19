@@ -1,3 +1,7 @@
+GitHub Copilot Instructions: modernworldv2
+
+이 프로젝트는 NestJS/Prisma에서 Spring Boot/JPA로 마이그레이션 중인 프로젝트이며, DDD(Domain-Driven Design) 및 헥사고날 아키텍처를 지향합니다. 모든 코드 제안은 아래의 원칙을 반드시 준수해야 합니다.
+
 1. 아키텍처 원칙 (Architecture Principles)
 
     계층 분리: 도메인 계층(Domain)과 인프라 계층(Infrastructure)을 엄격히 분리한다.
@@ -38,4 +42,6 @@
 
     @OneToMany 주의: 부모 엔티티에 리스트 필드를 추가할 때는 정말로 생명주기를 같이 하는지(Composition 관계인지) 확인하고, 그렇지 않다면 리스트 필드 없이 해당 자식 Repository에서 직접 조회한다.
 
-    Redis 구현: RefreshTokenRepository 구현 시 Redis의 조회(get) 및 삭제(delete) 로직이 누락되지 않았는지 항상 확인한다.
+
+
+   이외의 최적화 방안이나 좋은 방식이 있으면 사용자에게 알려주어도 좋습니다.
