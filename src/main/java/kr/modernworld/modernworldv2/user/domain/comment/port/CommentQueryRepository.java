@@ -17,4 +17,6 @@ public interface CommentQueryRepository {
       SenderReceiverNoField type);
 
   Long countByUserNo(Long userNo, SenderReceiverNoField type);
+
+  Boolean exists(Long commentNo);
 }

@@ -6,14 +6,17 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum BusinessErrorCode {
   ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no item."),
-  NO_SUCH_ALARM(HttpStatus.NOT_FOUND, "No such port"),
-  ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "User doesn't have that port."),
+  NO_SUCH_ALARM(HttpStatus.NOT_FOUND, "No such alarm"),
+  ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "User doesn't have that alarm."),
 
   COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no comment."),
   COMMENT_NOT_A_SENDER(HttpStatus.FORBIDDEN, "User is not a sender."),
 
-  POST_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no port."),
-  POST_USER_NOT_HAVE(HttpStatus.FORBIDDEN, "This port is not port's"),
+  REPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no reply."),
+  REPLY_USER_NOT_HAVE(HttpStatus.FORBIDDEN, "This reply is not user's."),
+
+  POST_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no post."),
+  POST_USER_NOT_HAVE(HttpStatus.FORBIDDEN, "This post is not user's"),
   POST_CANNOT_POST_TO_YOURSELF(HttpStatus.FORBIDDEN,
       "You cannot send a Post to yourself."),
 
@@ -28,7 +31,7 @@ public enum BusinessErrorCode {
 
   USER_ACHIEVEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "User doesn't have that achievement."),
 
-  LEGEND_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no port."),
+  LEGEND_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no legend."),
 
   NO_SUCH_CHARACTER(HttpStatus.NOT_FOUND, "There is no character."),
 
@@ -43,7 +46,7 @@ public enum BusinessErrorCode {
   USER_NOT_HAS_ENOUGH_POINT(HttpStatus.FORBIDDEN, "User does not have enough point."),
   USER_NOT_FOUND(HttpStatus.FORBIDDEN, "User not found."),
 
-  PRESENT_CANNOT_PRESENT_TO_YOURSELF(HttpStatus.FORBIDDEN, "You cannot send a Post to yourself."),
+  PRESENT_CANNOT_PRESENT_TO_YOURSELF(HttpStatus.FORBIDDEN, "You cannot send a post to yourself."),
   PRESENT_INVALID_STATE(HttpStatus.FORBIDDEN, "Present is not a valid state."),
   PRESENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Present not found."),
   PRESENT_ACCESS_DENIED(HttpStatus.FORBIDDEN, "Present access denied.");
