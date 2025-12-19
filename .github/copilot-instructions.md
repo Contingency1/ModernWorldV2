@@ -1,114 +1,41 @@
-# Project Context: Sift (Macroeconomics AI Service)
+1. 아키텍처 원칙 (Architecture Principles)
 
-당신은 'Sift'라는 프로젝트의 수석 백엔드 개발자입니다. 이 프로젝트는 투자 입문자가 거시경제를 쉽게 이해하고 분석할 수 있도록 돕는 서비스입니다.
-아래의 기술 스택과 코딩 규칙을 엄격히 준수하여 코드를 제안하세요.
+    계층 분리: 도메인 계층(Domain)과 인프라 계층(Infrastructure)을 엄격히 분리한다.
 
-## 1. Tech Stack & Tools
-- **Framework:** NestJS (Node.js)
-- **Language:** TypeScript
-- **Database:** PostgreSQL
-- **ORM:** Prisma
-- **Caching:** Redis
-- **AI Integration:** Google Gemini AI API
-- **Real-time:** WebSockets (NestJS Gateways)
-- **Testing:** Jest
+    의존성 역전(DIP): 도메인 계층은 인프라 계층의 구현체에 의존하지 않는다. 항상 port 인터페이스를 통해 소통한다.
 
-## 2. Architecture & Design Patterns
-- **Base Architecture:** Layered Architecture를 기반으로 하며, 도메인 주도 설계(DDD)의 개념을 차용합니다.
-- **Project Structure:** 기능별 모듈(Module) 단위로 구성하며, Controller, Service, Repository(Prisma) 계층을 명확히 분리합니다.
-- **Dependency Injection (DI):**
-  - Service는 절대로 PrismaClient(`PrismaService`)를 직접 의존하지 않습니다.
-  - 반드시 **Repository Interface**를 정의하고, 이를 구현(Implements)한 Repository Class를 사용합니다.
-  - 모듈 설정(`providers`)에서 `useClass`를 사용하여 의존성을 주입합니다.
-- **Data Validation:** `class-validator`와 `class-transformer`를 사용하여 DTO(Data Transfer Object)에서 엄격하게 데이터를 검증합니다.
-- **Error Handling:** Global Exception Filter를 사용하여 일관된 에러 응답 포맷을 유지합니다.
+    객체 구분: DB와 매핑되는 객체는 *JPAEntity로 명명하고, 비즈니스 로직에서 사용하는 객체는 순수 도메인 객체(예: User)를 사용한다.
 
-## 3. Domain Model (Bounded Contexts)
-아래 정의된 도메인 컨텍스트와 애그리거트(Aggregate) 구조를 기반으로 데이터베이스 스키마와 클래스를 설계하세요.
+2. JPA 및 데이터 저장 규칙 (Safe Save Pattern)
 
-### 3.1. Member Context (사용자 관리)
-- **User (Aggregate Root):**
-  - Fields: id, email, nickname, profileImageUrl, socialProvider(ENUM: LOCAL, GOOGLE, NAVER), role(ENUM: USER, ADMIN), password.
-  - Value Objects: UserId, Email, Nickname, Password.
+    단순 save 금지: 기존 데이터를 수정할 때 엔티티를 새로 생성해서 repository.save()에 집어넣는 방식을 금지한다.
 
-### 3.2. Market Context (시장 데이터)
-- **StockMeta (Aggregate):**
-  - **Stock:** ticker, name, exchange.
-- **Watchlist (Aggregate):**
-  - **Watchlist:** id, userId (Member Context 참조).
-  - **WatchlistItem:** ticker, createdAt.
+    조회 후 변경 감지(Dirty Checking): 수정을 위해서는 반드시 findById 혹은 비관적 락(LockModeType.PESSIMISTIC_WRITE)으로 영속 상태의 엔티티를 조회한 후, 도메인 객체의 변경 사항을 엔티티에 반영하는 방식을 사용한다.
 
-### 3.3. Wallet Context (포인트 및 지갑)
-- **Wallet (Aggregate Root):**
-  - Fields: id, userId, balance(Point).
-  - **PointTransaction (Entity):** id, amount, transactionType(ENUM: EARN, USE), referenceId, createdAt.
+    ID 기반 분기: Repository 구현체(*RepositoryImpl)의 save 메서드는 항상 id == null 인지 확인하여 신규 저장과 수정을 명확히 분리한다.
 
-### 3.4. Content Context (뉴스 및 상호작용)
-- **News (Aggregate):** id, title, body, sourceUrl, createdAt.
-- **Interaction (Aggregate):**
-  - **Comment:** id, targetId, targetType(ENUM: NEWS, STOCK), writerId, content.
-  - **Like:** id, targetId, targetType(ENUM: NEWS, STOCK), likerId.
+3. MapStruct 매퍼 설정 (Mapping Rules)
 
-### 3.5. Intelligence Context (AI 기능)
-- **AISummary (Aggregate):**
-  - **Summary:** id, targetIdentifier, targetType(ENUM: HOME, STOCK), content, createdAt.
-- **AIChat (Aggregate):**
-  - **ChatSession:** id, userId.
-  - **Exchange (Entity):** question, answer, cost(Point).
+    컬렉션 보호: @MappingTarget을 사용하는 업데이트 매퍼 메서드에서, 자식 테이블(Collection) 필드는 반드시 ignore = true 처리하여 JPA의 orphanRemoval로 인한 원치 않는 삭제를 방지한다.
 
-### 3.6. Realtime Context (채팅 및 소켓)
-- **ChatRoom (Aggregate):** id, name, type(ENUM: GLOBAL, STOCK).
-- **ChatMessage (Aggregate):** id, roomId, senderId, content, createdAt.
+    불변 필드 보호: 기본키(no), 외래키 참조 필드(user, comment 등)는 업데이트 시 매핑 대상에서 제외(ignore = true)한다.
 
-## 4. Coding Standards & Naming
-- **Naming Convention:** 변수와 함수명은 그 자체로 설명이 되도록(Self-explanatory) 작성하세요. 모호한 이름(e.g., `data`, `info`)은 피하고 구체적인 이름(e.g., `economicNewsSummary`)을 사용하세요.
-- **Comments:**
-  - 코드가 명확하다면 불필요한 주석은 달지 않습니다.
-  - 복잡한 비즈니스 로직이나 헷갈릴 수 있는 부분에만 주석을 작성합니다.
-  - **모든 주석과 Swagger(@ApiProperty 등) 설명은 '한국어'로 작성합니다.**
-- **Async/Await:** Promise 체이닝(.then) 대신 항상 `async/await`를 사용하세요.
+4. QueryDSL 및 벌크 연산 (Bulk Operations)
 
-## 5. Key Features Implementation Guide
-- **AI Features:** Google Gemini API를 연동하여 경제 뉴스 요약 및 사용자 Q&A 기능을 구현합니다. 프롬프트 엔지니어링 로직은 별도의 Service로 분리하세요.
-- **Real-time Chat:** NestJS Gateway를 사용하며, 채팅 데이터는 추후 분석을 위해 DB에 저장하되 빈번한 읽기/쓰기를 고려하여 Redis 캐싱 전략을 제안하세요.
-- **Notifications:** 중요 뉴스 알림은 WebSocket 및 이메일 전송 로직을 포함해야 합니다.
+    영속성 컨텍스트 동기화: QueryDSL의 .delete() 또는 .update()와 같은 벌크 연산을 수행한 직후에는 반드시 entityManager.clear()를 호출하여 영속성 컨텍스트와 DB 간의 데이터 불일치(유령 데이터) 문제를 방지한다.
 
-## 6. Testing Guidelines
-- **Unit Testing:** Service 로직을 테스트할 때, 실제 DB 연결을 피하고 **Repository Interface를 Mocking** 하여 테스트 코드를 작성하세요.
-- **E2E Testing:** 주요 API 엔드포인트에 대한 E2E 테스트를 작성하세요.
+    권한 포함 삭제: 삭제 시에는 단순히 ID로만 삭제하지 않고, where 절에 요청자의 ID(userNo)를 포함하여 권한 검증을 쿼리 수준에서 처리한다.
 
-## 7. Response Guidelines
-- 코드를 제안할 때는 항상 **NestJS의 Best Practice(의존성 주입 등)**를 따르십시오.
-- 새로운 라이브러리가 필요할 경우, `npm install` 명령어도 함께 제공하세요.
-- 설명은 한국어로, 간결하고 명확하게 해주세요.
+5. 비즈니스 로직 및 이벤트 (Business Logic & Events)
 
-## 8. Code Implementation Examples
-Repository Pattern을 구현할 때는 아래 패턴을 따르세요:
+    관심사 분리: 알림 생성, 업적 카운트 증가와 같은 부가 로직은 ApplicationEventPublisher를 통한 이벤트 기반으로 처리한다.
 
-```typescript
-// 1. Interface 정의 (domain/repositories/user.repository.interface.ts)
-export interface IUserRepository {
-  findAll(): Promise<User[]>;
-}
+    트랜잭션 관리: 트랜잭션은 Service 레이어에서 시작한다. 읽기 전용 작업은 @Transactional(readOnly = true)를 명시한다.
 
-// 2. 구현체 작성 (infrastructure/repositories/prisma-user.repository.ts)
-@Injectable()
-export class PrismaUserRepository implements IUserRepository {
-  constructor(private readonly prisma: PrismaService) {}
-  
-  async findAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
-  }
-}
+    도메인 예외: 도메인 모델 내에서 발생하는 예외는 IllegalStateException 등을 던지고, Service 계층에서 이를 캐치하여 정의된 BusinessException으로 변환한다.
 
-// 3. DI 토큰 선언 (domain/repositories/tokens.ts)
-export const IUserRepositoryToken = 'IUserRepository';
+6. 자주 실수하는 내용 (Common Pitfalls)
 
-// 4. 모듈 등록 (user.module.ts)
-@Module({
-  providers: [
-    { provide: IUserRepositoryToken, useClass: PrismaUserRepository }, // Token 기반 주입 권장
-    UserService,
-  ],
-})
-export class UserModule {}
+    @OneToMany 주의: 부모 엔티티에 리스트 필드를 추가할 때는 정말로 생명주기를 같이 하는지(Composition 관계인지) 확인하고, 그렇지 않다면 리스트 필드 없이 해당 자식 Repository에서 직접 조회한다.
+
+    Redis 구현: RefreshTokenRepository 구현 시 Redis의 조회(get) 및 삭제(delete) 로직이 누락되지 않았는지 항상 확인한다.
