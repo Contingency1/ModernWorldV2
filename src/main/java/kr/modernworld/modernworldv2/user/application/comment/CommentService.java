@@ -104,4 +104,10 @@ public class CommentService {
     return commentQueryRepository.findByNoWithReplyCount(commentNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.COMMENT_NOT_FOUND));
   }
+
+  public void isPresent(Long commentNo) {
+    if (!commentQueryRepository.exists(commentNo)) {
+      throw new BusinessException(BusinessErrorCode.COMMENT_NOT_FOUND);
+    }
+  }
 }

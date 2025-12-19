@@ -167,4 +167,17 @@ public class CommentQueryRepositoryImpl implements CommentQueryRepository {
 
     return sender.or(receiver);
   }
+
+  @Override
+  public Boolean exists(Long commentNo) {
+    Integer one = queryFactory
+        .selectOne()
+        .from(commentJPAEntity)
+        .where(
+            commentJPAEntity.no.eq(commentNo),
+            commentJPAEntity.deletedAt.isNull())
+        .fetchFirst();
+
+    return one != null;
+  }
 }
