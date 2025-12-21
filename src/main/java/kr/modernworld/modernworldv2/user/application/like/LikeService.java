@@ -5,6 +5,7 @@ import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.user.application.alarm.event.AlarmEvent;
+import kr.modernworld.modernworldv2.user.application.user.UserService;
 import kr.modernworld.modernworldv2.user.application.userachievement.LegendField;
 import kr.modernworld.modernworldv2.user.application.userachievement.event.DecrementLegendEvent;
 import kr.modernworld.modernworldv2.user.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
@@ -26,6 +27,7 @@ public class LikeService {
   private final ApplicationEventPublisher eventPublisher;
   private final LikeRepository likeRepository;
   private final LikeQueryRepository likeQueryRepository;
+  private final UserService userService;
 
   @Transactional(readOnly = true)
   public List<? extends LikeResponseDTO> getAll(Long userNo, SenderReceiverNoField type) {
@@ -35,6 +37,8 @@ public class LikeService {
 
   @Transactional
   public CreateLikeResponseDTO createOne(Long senderNo, Long receiverNo) {
+    userService.isPresent(receiverNo);
+
     Boolean exists = likeQueryRepository.existsBySenderNoAndReceiverNo(senderNo, receiverNo);
     if (exists) {
       throw new BusinessException(BusinessErrorCode.LIKE_ALREADY_LIKED);
