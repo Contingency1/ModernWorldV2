@@ -46,6 +46,43 @@ public class Legend {
         .build();
   }
 
+  public void decrementLegend(Long userNo, LegendField legendField) {
+    validationUser(userNo);
+
+    switch (legendField) {
+      case ATTENDANCE_COUNT -> decrementAttendance();
+      case ITEM_COUNT -> decrementItemCount();
+      case PRESENT_COUNT -> decrementPresentCount();
+      case LIKE_COUNT -> decrementLikeCount();
+      case COMMENT_COUNT -> decrementCommentCount();
+      case RSP_WINT_COUNT -> decrementRspWinCount();
+    }
+  }
+
+  private void decrementAttendance() {
+    this.attendanceCount--;
+  }
+
+  private void decrementItemCount() {
+    this.itemCount--;
+  }
+
+  private void decrementPresentCount() {
+    this.presentCount--;
+  }
+
+  private void decrementLikeCount() {
+    this.likeCount--;
+  }
+
+  private void decrementCommentCount() {
+    this.commentCount--;
+  }
+
+  private void decrementRspWinCount() {
+    this.rspWinCount--;
+  }
+
   public void incrementLegend(Long userNo, LegendField legendField) {
     validationUser(userNo);
 
