@@ -76,6 +76,7 @@ public class LikeService {
     eventPublisher.publishEvent(new DecrementLegendEvent(this, receiverNo, LegendField.LIKE_COUNT));
   }
 
+  @Transactional(readOnly = true)
   public Boolean getOne(Long senderNo, Long receiverNo) {
     return likeQueryRepository.existsBySenderNoAndReceiverNo(senderNo, receiverNo);
   }
