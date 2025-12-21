@@ -21,7 +21,7 @@ public class Like {
 
   public static Like init(Long senderNo, Long receiverNo) {
     if (senderNo.equals(receiverNo)) {
-      throw new IllegalArgumentException("senderNo and receiverNo are equal");
+      throw new IllegalStateException("senderNo and receiverNo are equal");
     }
 
     return Like.builder()

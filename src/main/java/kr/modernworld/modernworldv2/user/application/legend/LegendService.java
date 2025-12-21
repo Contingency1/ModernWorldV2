@@ -43,16 +43,16 @@ public class LegendService {
   }
 
   @Transactional
-  public Legend decrement(Long userNo, LegendField legendField) {
+  public void decrement(Long userNo, LegendField legendField) {
     Legend legend = legendRepository.findByUserNoForUpdate(userNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.LEGEND_NOT_FOUND));
 
     try {
       legend.decrementLegend(userNo, legendField);
     } catch (IllegalArgumentException e) {
-      throw new BusinessException(BusinessErrorCode.LEGEND_NOT_FOUND, e.getMessage());
+      throw new BusinessException(BusinessErrorCode.LEGEND_NOT_FOUND, " reason: " + e.getMessage());
     }
 
-    return legendRepository.save(legend);
+    legendRepository.save(legend);
   }
 }

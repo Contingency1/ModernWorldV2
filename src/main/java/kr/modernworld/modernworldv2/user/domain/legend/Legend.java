@@ -134,7 +134,7 @@ public class Legend {
 
   private void validationUser(Long userNo) {
     if (!this.userNo.equals(userNo)) {
-      throw new IllegalArgumentException("This Legend is not port's.");
+      throw new IllegalStateException("This Legend is not user's.");
     }
   }
 }

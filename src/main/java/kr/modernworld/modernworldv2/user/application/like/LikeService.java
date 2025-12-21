@@ -43,7 +43,7 @@ public class LikeService {
     Like like;
     try {
       like = Like.init(senderNo, receiverNo);
-    } catch (IllegalArgumentException e) {
+    } catch (IllegalStateException e) {
       throw new BusinessException(BusinessErrorCode.LIKE_CANNOT_LIKE_YOURSELF);
     }
 
