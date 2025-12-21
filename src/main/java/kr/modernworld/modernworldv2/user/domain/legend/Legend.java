@@ -55,7 +55,7 @@ public class Legend {
       case PRESENT_COUNT -> decrementPresentCount();
       case LIKE_COUNT -> decrementLikeCount();
       case COMMENT_COUNT -> decrementCommentCount();
-      case RSP_WINT_COUNT -> decrementRspWinCount();
+      case RSP_WIN_COUNT -> decrementRspWinCount();
     }
   }
 
@@ -92,7 +92,7 @@ public class Legend {
       case PRESENT_COUNT -> incrementPresentCount();
       case LIKE_COUNT -> incrementLikeCount();
       case COMMENT_COUNT -> incrementCommentCount();
-      case RSP_WINT_COUNT -> incrementRspWinCount();
+      case RSP_WIN_COUNT -> incrementRspWinCount();
     }
   }
 
