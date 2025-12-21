@@ -1,8 +1,8 @@
 package kr.modernworld.modernworldv2.user.application.present;
 
 import java.util.List;
-import kr.modernworld.modernworldv2.admin.domain.item.port.ItemApi;
 import kr.modernworld.modernworldv2.admin.application.item.api.ItemNameAndPriceDTO;
+import kr.modernworld.modernworldv2.admin.domain.item.port.ItemApi;
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
@@ -10,7 +10,7 @@ import kr.modernworld.modernworldv2.user.application.alarm.event.AlarmEvent;
 import kr.modernworld.modernworldv2.user.application.inventory.InventoryService;
 import kr.modernworld.modernworldv2.user.application.user.UserService;
 import kr.modernworld.modernworldv2.user.application.userachievement.LegendField;
-import kr.modernworld.modernworldv2.user.application.userachievement.event.UpdateLegendCheckAchievementEvent;
+import kr.modernworld.modernworldv2.user.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
 import kr.modernworld.modernworldv2.user.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.user.domain.inventory.port.InventoryQueryRepository;
 import kr.modernworld.modernworldv2.user.domain.present.Present;
@@ -80,7 +80,7 @@ public class PresentService {
     String itemName = itemNameAndPrice.name();
 
     applicationEventPublisher.publishEvent(
-        new UpdateLegendCheckAchievementEvent(this, senderNo, LegendField.PRESENT_COUNT));
+        new IncrementLegendAndCheckAchievementEvent(this, senderNo, LegendField.PRESENT_COUNT));
 
     // ============================== 추후에 익명 바꿀것. =============================
     String eventMessage = String.format("%s님이 %s을(를) 선물로 보냈습니다.", "익명",
