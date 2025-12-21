@@ -59,27 +59,39 @@ public class Legend {
     }
   }
 
+  private void validateDecrement(Long currentValue, String fieldName) {
+    if (currentValue == null || currentValue <= 0L) {
+      throw new IllegalStateException("Legend " + fieldName + " cannot be decremented below zero.");
+    }
+  }
+
   private void decrementAttendance() {
+    validateDecrement(this.attendanceCount, "attendanceCount");
     this.attendanceCount--;
   }
 
   private void decrementItemCount() {
+    validateDecrement(this.itemCount, "itemCount");
     this.itemCount--;
   }
 
   private void decrementPresentCount() {
+    validateDecrement(this.presentCount, "presentCount");
     this.presentCount--;
   }
 
   private void decrementLikeCount() {
+    validateDecrement(this.likeCount, "likeCount");
     this.likeCount--;
   }
 
   private void decrementCommentCount() {
+    validateDecrement(this.commentCount, "commentCount");
     this.commentCount--;
   }
 
   private void decrementRspWinCount() {
+    validateDecrement(this.rspWinCount, "rspWinCount");
     this.rspWinCount--;
   }
 
