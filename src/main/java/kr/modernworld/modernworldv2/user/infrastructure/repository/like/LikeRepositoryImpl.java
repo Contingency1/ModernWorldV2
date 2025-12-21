@@ -47,8 +47,6 @@ public class LikeRepositoryImpl implements LikeRepository {
 
   @Override
   public void delete(Like like) {
-    likeJPARepository.delete(likeMapper.toEntity(like));
+    likeJPARepository.deleteById(like.getNo());
   }
-
-
 }
