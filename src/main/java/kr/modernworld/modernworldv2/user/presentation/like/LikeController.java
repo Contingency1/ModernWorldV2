@@ -51,7 +51,7 @@ public class LikeController {
 
   // 아 URI 진짜 맘에 안드네
   @GetMapping("/my/likes/{receiverNo}")
-  public ResponseEntity<Boolean> listLikes(@AuthenticationPrincipal TokenUserInfoDTO sender,
+  public ResponseEntity<Boolean> checkLike(@AuthenticationPrincipal TokenUserInfoDTO sender,
       @PathVariable Long receiverNo) {
     return new ResponseEntity<>(likeService.getOne(sender.userNo(), receiverNo), HttpStatus.OK);
   }
