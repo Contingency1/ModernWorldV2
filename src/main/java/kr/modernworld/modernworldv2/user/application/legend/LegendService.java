@@ -29,7 +29,7 @@ public class LegendService {
   }
 
   @Transactional
-  public Legend update(Long userNo, LegendField legendField) {
+  public Legend increment(Long userNo, LegendField legendField) {
     Legend legend = legendRepository.findByUserNoForUpdate(userNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.LEGEND_NOT_FOUND));
 
@@ -40,5 +40,19 @@ public class LegendService {
     }
 
     return legendRepository.save(legend);
+  }
+
+  @Transactional
+  public void decrement(Long userNo, LegendField legendField) {
+    Legend legend = legendRepository.findByUserNoForUpdate(userNo)
+        .orElseThrow(() -> new BusinessException(BusinessErrorCode.LEGEND_NOT_FOUND));
+
+    try {
+      legend.decrementLegend(userNo, legendField);
+    } catch (IllegalArgumentException e) {
+      throw new BusinessException(BusinessErrorCode.LEGEND_NOT_FOUND, " reason: " + e.getMessage());
+    }
+
+    legendRepository.save(legend);
   }
 }

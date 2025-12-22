@@ -8,7 +8,7 @@ import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.user.application.comment.CommentService;
 import kr.modernworld.modernworldv2.user.application.userachievement.LegendField;
-import kr.modernworld.modernworldv2.user.application.userachievement.event.UpdateLegendCheckAchievementEvent;
+import kr.modernworld.modernworldv2.user.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
 import kr.modernworld.modernworldv2.user.domain.reply.Reply;
 import kr.modernworld.modernworldv2.user.domain.reply.port.ReplyQueryRepository;
 import kr.modernworld.modernworldv2.user.domain.reply.port.ReplyRepository;
@@ -64,7 +64,7 @@ public class ReplyService {
     Reply saved = replyRepository.save(reply);
 
     eventPublisher.publishEvent(
-        new UpdateLegendCheckAchievementEvent(this, userNo, LegendField.COMMENT_COUNT));
+        new IncrementLegendAndCheckAchievementEvent(this, userNo, LegendField.COMMENT_COUNT));
 
     return new CreateResponseDTO(saved.getContent());
   }

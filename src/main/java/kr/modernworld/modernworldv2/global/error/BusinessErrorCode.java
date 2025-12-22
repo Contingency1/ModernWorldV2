@@ -9,6 +9,11 @@ public enum BusinessErrorCode {
   NO_SUCH_ALARM(HttpStatus.NOT_FOUND, "No such alarm"),
   ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "User doesn't have that alarm."),
 
+  LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no like."),
+  LIKE_CANNOT_LIKE_YOURSELF(HttpStatus.FORBIDDEN, "Cannot like yourself"),
+  LIKE_CANNOT_DELETE_OTHERS(HttpStatus.FORBIDDEN, "Cannot delete others"),
+  LIKE_ALREADY_LIKED(HttpStatus.CONFLICT, "User already liked"),
+
   COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no comment."),
   COMMENT_NOT_A_SENDER(HttpStatus.FORBIDDEN, "User is not a sender."),
 

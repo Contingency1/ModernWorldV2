@@ -5,7 +5,7 @@ import kr.modernworld.modernworldv2.admin.domain.item.ItemType;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.user.application.userachievement.LegendField;
-import kr.modernworld.modernworldv2.user.application.userachievement.event.UpdateLegendCheckAchievementEvent;
+import kr.modernworld.modernworldv2.user.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
 import kr.modernworld.modernworldv2.user.domain.inventory.Inventory;
 import kr.modernworld.modernworldv2.user.domain.inventory.InventoryCollection;
 import kr.modernworld.modernworldv2.user.domain.inventory.port.InventoryQueryRepository;
@@ -34,7 +34,7 @@ public class InventoryService {
   @Transactional
   public Inventory addOneItemInInventory(Long userNo, Long itemNo) {
     applicationEventPublisher.publishEvent(
-        new UpdateLegendCheckAchievementEvent(this, userNo, LegendField.ITEM_COUNT));
+        new IncrementLegendAndCheckAchievementEvent(this, userNo, LegendField.ITEM_COUNT));
 
     return inventoryRepository.save(Inventory.create(userNo, itemNo));
   }

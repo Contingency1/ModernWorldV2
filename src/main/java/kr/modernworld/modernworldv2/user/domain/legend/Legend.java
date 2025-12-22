@@ -46,6 +46,55 @@ public class Legend {
         .build();
   }
 
+  public void decrementLegend(Long userNo, LegendField legendField) {
+    validationUser(userNo);
+
+    switch (legendField) {
+      case ATTENDANCE_COUNT -> decrementAttendance();
+      case ITEM_COUNT -> decrementItemCount();
+      case PRESENT_COUNT -> decrementPresentCount();
+      case LIKE_COUNT -> decrementLikeCount();
+      case COMMENT_COUNT -> decrementCommentCount();
+      case RSP_WIN_COUNT -> decrementRspWinCount();
+    }
+  }
+
+  private void validateDecrement(Long currentValue, String fieldName) {
+    if (currentValue == null || currentValue <= 0L) {
+      throw new IllegalStateException("Legend " + fieldName + " cannot be decremented below zero.");
+    }
+  }
+
+  private void decrementAttendance() {
+    validateDecrement(this.attendanceCount, "attendanceCount");
+    this.attendanceCount--;
+  }
+
+  private void decrementItemCount() {
+    validateDecrement(this.itemCount, "itemCount");
+    this.itemCount--;
+  }
+
+  private void decrementPresentCount() {
+    validateDecrement(this.presentCount, "presentCount");
+    this.presentCount--;
+  }
+
+  private void decrementLikeCount() {
+    validateDecrement(this.likeCount, "likeCount");
+    this.likeCount--;
+  }
+
+  private void decrementCommentCount() {
+    validateDecrement(this.commentCount, "commentCount");
+    this.commentCount--;
+  }
+
+  private void decrementRspWinCount() {
+    validateDecrement(this.rspWinCount, "rspWinCount");
+    this.rspWinCount--;
+  }
+
   public void incrementLegend(Long userNo, LegendField legendField) {
     validationUser(userNo);
 
@@ -55,7 +104,7 @@ public class Legend {
       case PRESENT_COUNT -> incrementPresentCount();
       case LIKE_COUNT -> incrementLikeCount();
       case COMMENT_COUNT -> incrementCommentCount();
-      case RSP_WINT_COUNT -> incrementRspWinCount();
+      case RSP_WIN_COUNT -> incrementRspWinCount();
     }
   }
 
@@ -85,7 +134,7 @@ public class Legend {
 
   private void validationUser(Long userNo) {
     if (!this.userNo.equals(userNo)) {
-      throw new IllegalArgumentException("This Legend is not port's.");
+      throw new IllegalStateException("This Legend is not user's.");
     }
   }
 }

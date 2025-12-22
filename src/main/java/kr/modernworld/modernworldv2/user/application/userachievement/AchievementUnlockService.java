@@ -1,7 +1,7 @@
 package kr.modernworld.modernworldv2.user.application.userachievement;
 
-import kr.modernworld.modernworldv2.admin.domain.achievement.port.AchievementApi;
 import kr.modernworld.modernworldv2.admin.application.achievement.api.AchievementInfoDTO;
+import kr.modernworld.modernworldv2.admin.domain.achievement.port.AchievementApi;
 import kr.modernworld.modernworldv2.user.application.alarm.event.AlarmEvent;
 import kr.modernworld.modernworldv2.user.application.user.UserService;
 import kr.modernworld.modernworldv2.user.domain.alarm.AlarmTitle;
@@ -31,7 +31,7 @@ public class AchievementUnlockService {
       case LIKE_COUNT -> userLegend.getLikeCount();
       case ITEM_COUNT -> userLegend.getItemCount();
       case PRESENT_COUNT -> userLegend.getPresentCount();
-      case RSP_WINT_COUNT -> userLegend.getRspWinCount();
+      case RSP_WIN_COUNT -> userLegend.getRspWinCount();
     };
 
     AchievementTier.findByCount(legendCount).ifPresent(tier -> {

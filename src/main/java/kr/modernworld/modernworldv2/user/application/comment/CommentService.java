@@ -8,7 +8,7 @@ import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.user.application.alarm.event.AlarmEvent;
 import kr.modernworld.modernworldv2.user.application.user.UserService;
 import kr.modernworld.modernworldv2.user.application.userachievement.LegendField;
-import kr.modernworld.modernworldv2.user.application.userachievement.event.UpdateLegendCheckAchievementEvent;
+import kr.modernworld.modernworldv2.user.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
 import kr.modernworld.modernworldv2.user.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.user.domain.comment.Comment;
 import kr.modernworld.modernworldv2.user.domain.comment.port.CommentQueryRepository;
@@ -60,7 +60,7 @@ public class CommentService {
         response.commentSender().nickname());
 
     eventPublisher.publishEvent(
-        new UpdateLegendCheckAchievementEvent(this, senderNo, LegendField.COMMENT_COUNT));
+        new IncrementLegendAndCheckAchievementEvent(this, senderNo, LegendField.COMMENT_COUNT));
 
     eventPublisher.publishEvent(
         new AlarmEvent(this, receiverNo, messageForReceiver, AlarmTitle.COMMENT));
