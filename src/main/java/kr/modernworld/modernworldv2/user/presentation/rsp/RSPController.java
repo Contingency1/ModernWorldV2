@@ -32,7 +32,7 @@ public class RSPController {
   }
 
   @PostMapping("/my/rock-scissors-paper")
-  public ResponseEntity<RSPResponseDTO> put(
+  public ResponseEntity<RSPResponseDTO> create(
       @AuthenticationPrincipal TokenUserInfoDTO user,
       RSPRequestDTO body) {
     RSPResponseDTO response = rspService.create(user.userNo(), body.choice());
