@@ -1,5 +1,6 @@
 package kr.modernworld.modernworldv2.user.presentation.rsp;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import kr.modernworld.modernworldv2.user.application.rsp.RSPService;
 import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.TokenUserInfoDTO;
@@ -34,7 +35,7 @@ public class RSPController {
   @PostMapping("/my/rock-scissors-paper")
   public ResponseEntity<RSPResponseDTO> create(
       @AuthenticationPrincipal TokenUserInfoDTO user,
-      RSPRequestDTO body) {
+      @Valid RSPRequestDTO body) {
     RSPResponseDTO response = rspService.create(user.userNo(), body.choice());
 
     return new ResponseEntity<>(response, HttpStatus.CREATED);

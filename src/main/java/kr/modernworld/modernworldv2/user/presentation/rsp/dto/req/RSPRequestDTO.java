@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
 public record RSPRequestDTO(
-    @Max(3) @Min(1) Integer choice) {
+    @Max(2) @Min(0) Integer choice) {
 
   public RSPRequestDTO {
     if (choice == null) {
