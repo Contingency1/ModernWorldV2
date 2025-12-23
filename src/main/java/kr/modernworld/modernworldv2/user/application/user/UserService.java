@@ -68,7 +68,7 @@ public class UserService {
 
   @Transactional
   public void decreaseChance(Long userNo) {
-    User user = userQueryRepository.findOneByUserNo(userNo).orElseThrow(
+    User user = userRepository.findUserByUserNoForUpdate(userNo).orElseThrow(
         () -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND, " userNo: " + userNo));
 
     try {
