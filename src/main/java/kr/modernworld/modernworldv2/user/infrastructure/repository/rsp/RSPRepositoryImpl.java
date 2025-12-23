@@ -16,17 +16,13 @@ public class RSPRepositoryImpl implements RSPRepository {
 
   @Override
   public RSP save(RSP rsp) {
-    if (rsp.getNo() == null) {
-      RspGameRecordJPAEntity save = rspJPARepository.save(rspMapper.toEntity(rsp));
-
-      return rspMapper.toDomain(save);
+    if (rsp.getNo() != null) {
+      throw new IllegalStateException(
+          "Cant fix this record. no: " + rsp.getNo());
     }
 
-    RspGameRecordJPAEntity rspRecord = rspJPARepository.findById(rsp.getNo())
-        .orElseThrow(() -> new IllegalArgumentException("No such RSP"));
+    RspGameRecordJPAEntity save = rspJPARepository.save(rspMapper.toEntity(rsp));
 
-    rspMapper.updateEntityFromDomain(rsp, rspRecord);
-
-    return rspMapper.toDomain(rspRecord);
+    return rspMapper.toDomain(save);
   }
 }
