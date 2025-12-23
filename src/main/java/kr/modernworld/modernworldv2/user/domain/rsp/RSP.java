@@ -38,10 +38,10 @@ public class RSP {
     RSPChoice computerChoice = RSPChoice.integerToRSPChoice(
         ThreadLocalRandom.current().nextInt(0, 3));
 
-    if (userChoice.equals(RSPChoice.NULL)) {
+    if (userChoice == null || userChoice.equals(RSPChoice.NULL)) {
       return RSP.builder()
           .userNo(userNo)
-          .userChoice(userChoice)
+          .userChoice(userChoice == null ? RSPChoice.NULL : userChoice)
           .computerChoice(computerChoice)
           .result(gameResult)
           .createdAt(Instant.now())
