@@ -7,7 +7,7 @@ public enum LegendField {
 
   COMMENT_COUNT("commentCount"), LIKE_COUNT("likeCount"),
   ITEM_COUNT("itemCount"), PRESENT_COUNT("presentCount"),
-  ATTENDANCE_COUNT("attendanceCount"), RSP_WIN_COUNT("RSPWintCount");
+  ATTENDANCE_COUNT("attendanceCount"), RSP_WIN_COUNT("RSPWinCount");
 
   private final String title;
 
