@@ -123,4 +123,11 @@ public class User {
     return data;
   }
 
+  public void decreaseChance() {
+    if (this.chance <= 0) {
+      throw new IllegalStateException("Chance must be greater than zero");
+    }
+
+    this.chance -= 1L;
+  }
 }
