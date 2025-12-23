@@ -11,6 +11,7 @@ public enum GameResult {
     this.result = result;
   }
 
+  @Override
   public String toString() {
     return this.result;
   }
