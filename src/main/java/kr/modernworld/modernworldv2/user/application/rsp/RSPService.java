@@ -43,15 +43,15 @@ public class RSPService {
 
   @Transactional
   public RSPResponseDTO create(Long userNo, Integer choice) {
-    userService.decreaseChance(userNo);
-
     RSPChoice userChoice = RSPChoice.integerToRSPChoice(choice);
 
     RSP rspRecord = RSP.init(userNo, userChoice);
     RSP saved = rspRepository.save(rspRecord);
 
+    Long pointToAdd = 0L;
+
     if (saved.getResult().equals(GameResult.WIN)) {
-      userService.increaseCurrentAccumulationPoint(userNo, RewardPoint.WIN_GAME.getPoint());
+      pointToAdd = RewardPoint.WIN_GAME.getPoint();
 
       eventPublisher.publishEvent(new IncrementLegendAndCheckAchievementEvent(this, userNo,
           LegendField.RSP_WIN_COUNT));
@@ -60,6 +60,8 @@ public class RSPService {
           RewardPoint.WIN_GAME.getPoint());
       eventPublisher.publishEvent(new AlarmEvent(this, userNo, eventMessage, AlarmTitle.GAME));
     }
+
+    userService.processGameResult(userNo, pointToAdd);
 
     return new RSPResponseDTO(saved.getNo(), saved.getUserNo(), saved.getUserChoice(),
         saved.getComputerChoice(), saved.getResult(), saved.getCreatedAt());
