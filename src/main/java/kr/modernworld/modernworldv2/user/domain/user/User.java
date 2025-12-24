@@ -95,6 +95,10 @@ public class User {
   }
 
   public void increaseCurrentAccumulationPoint(Long point) {
+    if (point < 0) {
+      throw new IllegalArgumentException("Current point is less than zero");
+    }
+    
     this.currentPoint += point;
     this.accumulationPoint += point;
   }
@@ -123,4 +127,11 @@ public class User {
     return data;
   }
 
+  public void decreaseChance() {
+    if (this.chance <= 0) {
+      throw new IllegalStateException("Chance must be greater than zero");
+    }
+
+    this.chance -= 1L;
+  }
 }

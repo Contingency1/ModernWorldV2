@@ -2,8 +2,6 @@ package kr.modernworld.modernworldv2.user.infrastructure.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,8 +11,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import java.time.Instant;
+import kr.modernworld.modernworldv2.user.domain.rsp.GameResult;
+import kr.modernworld.modernworldv2.user.domain.rsp.RSPChoice;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,18 +46,15 @@ public class RspGameRecordJPAEntity {
   @JoinColumn(name = "user_no", nullable = false)
   private UserJPAEntity user;
 
-  @Size(max = 10)
   @NotNull
   @Column(name = "user_choice", nullable = false, length = 10)
-  private String userChoice;
+  private RSPChoice userChoice;
 
-  @Size(max = 10)
   @NotNull
   @Column(name = "computer_choice", nullable = false, length = 10)
-  private String computerChoice;
+  private RSPChoice computerChoice;
 
   @NotNull
-  @Enumerated(EnumType.STRING)
   @Column(name = "result", nullable = false)
   private GameResult result;
 

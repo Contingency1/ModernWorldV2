@@ -67,6 +67,22 @@ public class UserService {
   }
 
   @Transactional
+  public void processGameResult(Long userNo, Long pointToAdd) {
+    User user = userRepository.findUserByUserNoForUpdate(userNo).orElseThrow(
+        () -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND, " userNo: " + userNo));
+
+    try {
+      user.decreaseChance();
+    } catch (IllegalStateException e) {
+      throw new BusinessException(BusinessErrorCode.USER_NOT_HAS_ENOUGH_CHANCE);
+    }
+
+    user.increaseCurrentAccumulationPoint(pointToAdd);
+
+    userRepository.save(user);
+  }
+
+  @Transactional
   public void decreaseCurrentPoint(Long userNo, Long price) {
     User user = userRepository.findUserByUserNoForUpdate(userNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND));

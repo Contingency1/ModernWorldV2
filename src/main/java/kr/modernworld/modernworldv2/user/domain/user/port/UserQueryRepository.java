@@ -9,4 +9,6 @@ public interface UserQueryRepository {
 
   Boolean exists(Long userNo);
 
+  Optional<User> findOneByUserNo(Long userNo);
+
 }

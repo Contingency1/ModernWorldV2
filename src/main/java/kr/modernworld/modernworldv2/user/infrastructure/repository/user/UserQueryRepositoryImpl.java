@@ -7,6 +7,7 @@ import java.util.Optional;
 import kr.modernworld.modernworldv2.user.domain.user.User;
 import kr.modernworld.modernworldv2.user.domain.user.port.UserQueryRepository;
 import kr.modernworld.modernworldv2.user.infrastructure.mapper.UserMapper;
+import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.UserJPAEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,5 +35,15 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
         .fetchFirst();
 
     return one != null;
+  }
+
+  @Override
+  public Optional<User> findOneByUserNo(Long userNo) {
+    Optional<UserJPAEntity> entity = userJPARepository.findById(userNo);
+    if (entity.isEmpty()) {
+      return Optional.empty();
+    }
+
+    return Optional.of(userMapper.toDomain(entity.get()));
   }
 }
