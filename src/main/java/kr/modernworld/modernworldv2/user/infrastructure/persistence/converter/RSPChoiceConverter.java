@@ -9,11 +9,11 @@ public class RSPChoiceConverter implements AttributeConverter<RSPChoice, String>
 
   @Override
   public String convertToDatabaseColumn(RSPChoice attribute) {
-    return attribute.getName();
+    return attribute == null ? null : attribute.getName();
   }
 
   @Override
   public RSPChoice convertToEntityAttribute(String dbData) {
-    return RSPChoice.stringToRSPChoice(dbData);
+    return dbData == null ? null : RSPChoice.stringToRSPChoice(dbData);
   }
 }

@@ -9,11 +9,11 @@ public class RSPResultConverter implements AttributeConverter<GameResult, String
 
   @Override
   public String convertToDatabaseColumn(GameResult attribute) {
-    return attribute.toString();
+    return attribute == null ? null : attribute.toString();
   }
 
   @Override
   public GameResult convertToEntityAttribute(String dbData) {
-    return GameResult.stringToGameResult(dbData);
+    return dbData == null ? null : GameResult.stringToGameResult(dbData);
   }
 }
