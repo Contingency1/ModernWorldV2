@@ -18,6 +18,10 @@ public enum RSPChoice {
   }
 
   public static RSPChoice integerToRSPChoice(Integer number) {
+    if (number == null) {
+      return NULL;
+    }
+    
     for (RSPChoice choice : RSPChoice.values()) {
       if (number.equals(choice.number)) {
         return choice;
