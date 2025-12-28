@@ -1,6 +1,7 @@
 package kr.modernworld.modernworldv2.user.presentation.shop.character;
 
 import java.util.List;
+import kr.modernworld.modernworldv2.admin.application.character.api.CharacterApiDTO;
 import kr.modernworld.modernworldv2.user.application.shop.CharacterShopService;
 import kr.modernworld.modernworldv2.user.presentation.shop.character.dto.req.ShopCharacterRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.shop.character.dto.res.ShopCharacterResponseDTO;
@@ -21,14 +22,18 @@ public class CharacterController {
 
   @GetMapping("/{characterNo}")
   public ResponseEntity<ShopCharacterResponseDTO> getOne(@PathVariable Long characterNo) {
-    ShopCharacterResponseDTO response = characterShopService.getCharacter(characterNo);
-    return new ResponseEntity<>(response, HttpStatus.OK);
+    CharacterApiDTO response = characterShopService.getCharacter(characterNo);
+    
+    return new ResponseEntity<>(ShopCharacterResponseDTO.from(response), HttpStatus.OK);
   }
 
   @GetMapping
   public ResponseEntity<List<ShopCharacterResponseDTO>> getAll(ShopCharacterRequestDTO query) {
-    List<ShopCharacterResponseDTO> response = characterShopService.getCharacters(query);
-    return new ResponseEntity<>(response, HttpStatus.OK);
+    List<CharacterApiDTO> response = characterShopService.getCharacters(query);
+
+    return new ResponseEntity<>(
+        response.stream().map(ShopCharacterResponseDTO::from).toList(),
+        HttpStatus.OK);
   }
 
 }
