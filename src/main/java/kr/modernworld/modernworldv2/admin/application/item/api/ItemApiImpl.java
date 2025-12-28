@@ -23,12 +23,14 @@ public class ItemApiImpl implements ItemApi {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public ItemApiDTO getOne(Long itemNo) {
     return itemQueryRepository.findOne(itemNo).orElseThrow(
         () -> new BusinessException(BusinessErrorCode.ITEM_NOT_FOUND, " itemNo: " + itemNo));
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<ItemApiDTO> getAll(String theme, String itemName) {
     return itemQueryRepository.findAll(theme, itemName);
   }

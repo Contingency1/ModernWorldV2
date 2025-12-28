@@ -8,6 +8,7 @@ import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +17,7 @@ public class CharacterApiImpl implements CharacterApi {
   private final CharacterQueryRepository characterQueryRepository;
 
   @Override
+  @Transactional(readOnly = true)
   public Long getPrice(Long characterNo) {
     return characterQueryRepository.getPrice(characterNo)
         .orElseThrow(() -> new BusinessException(
@@ -23,6 +25,7 @@ public class CharacterApiImpl implements CharacterApi {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public CharacterApiDTO getOne(Long characterNo) {
     return characterQueryRepository.findOne(characterNo)
         .orElseThrow(
@@ -31,6 +34,7 @@ public class CharacterApiImpl implements CharacterApi {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<CharacterApiDTO> getAll(CharacterSpecies species, String characterName) {
     return characterQueryRepository.findAll(species, characterName);
   }
