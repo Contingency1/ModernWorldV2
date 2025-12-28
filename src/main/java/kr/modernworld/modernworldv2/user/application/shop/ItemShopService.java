@@ -8,7 +8,6 @@ import kr.modernworld.modernworldv2.user.application.inventory.InventoryService;
 import kr.modernworld.modernworldv2.user.application.user.UserService;
 import kr.modernworld.modernworldv2.user.domain.inventory.Inventory;
 import kr.modernworld.modernworldv2.user.presentation.shop.item.dto.req.ItemRequestDTO;
-import kr.modernworld.modernworldv2.user.presentation.shop.item.dto.res.ShopItemResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,18 +32,12 @@ public class ItemShopService {
   }
 
   @Transactional(readOnly = true)
-  public ShopItemResponseDTO getOne(Long itemNo) {
-    ItemApiDTO response = itemApi.getOne(itemNo);
-
-    return ShopItemResponseDTO.from(response);
+  public ItemApiDTO getOne(Long itemNo) {
+    return itemApi.getOne(itemNo);
   }
 
   @Transactional(readOnly = true)
-  public List<ShopItemResponseDTO> getAll(ItemRequestDTO query) {
-    return itemApi
-        .getAll(query.theme(), query.itemName())
-        .stream()
-        .map(ShopItemResponseDTO::from)
-        .toList();
+  public List<ItemApiDTO> getAll(ItemRequestDTO query) {
+    return itemApi.getAll(query.theme(), query.itemName());
   }
 }
