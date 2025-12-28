@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum BusinessErrorCode {
+  CHARACTER_NOT_FOUND(HttpStatus.NOT_FOUND, "Character Not Found"),
   ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no item."),
   NO_SUCH_ALARM(HttpStatus.NOT_FOUND, "No such alarm"),
   ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "User doesn't have that alarm."),
