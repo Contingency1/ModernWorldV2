@@ -18,7 +18,6 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class CharacterQueryRepositoryImpl implements CharacterQueryRepository {
 
-  private final CharacterJPARepository characterJPARepository;
   private final JPAQueryFactory queryFactory;
 
   @Override
@@ -76,14 +75,12 @@ public class CharacterQueryRepositoryImpl implements CharacterQueryRepository {
         .fetch();
   }
 
-  private static BooleanExpression speciesEq(CharacterSpecies species) {
+  private BooleanExpression speciesEq(CharacterSpecies species) {
     return species == null ? null : characterJPAEntity.species.eq(species);
 
   }
 
-  private static BooleanExpression nameContains(String name) {
+  private BooleanExpression nameContains(String name) {
     return name == null ? null : characterJPAEntity.name.contains(name);
   }
-
-
 }
