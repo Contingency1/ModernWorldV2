@@ -5,6 +5,11 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum BusinessErrorCode {
+  INVALID_OAUTH_STATE(HttpStatus.UNAUTHORIZED,
+      "Login failed due to invalid state parameter. (Potential CSRF attack)"),
+  INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED,
+      "Refresh Token is invalid or expired. Please login again."),
+
   CHARACTER_NOT_FOUND(HttpStatus.NOT_FOUND, "Character Not Found"),
   ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "There is no item."),
   NO_SUCH_ALARM(HttpStatus.NOT_FOUND, "No such alarm"),
