@@ -1,13 +1,22 @@
 package kr.modernworld.modernworldv2.user.infrastructure.mapper;
 
-import kr.modernworld.modernworldv2.user.domain.user.UserLegend;
+import kr.modernworld.modernworldv2.user.domain.legend.Legend;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.LegendJPAEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface LegendMapper {
 
-  LegendJPAEntity toEntity(UserLegend userLegend);
+  @Mapping(target = "no", ignore = true)
+  @Mapping(target = "user", ignore = true)
+  LegendJPAEntity toEntity(Legend domain);
 
-  UserLegend toDomain(LegendJPAEntity legendJPAEntity);
+  @Mapping(target = "userNo", source = "user.no")
+  Legend toDomain(LegendJPAEntity legendJPAEntity);
+
+  @Mapping(target = "no", ignore = true)
+  @Mapping(target = "user", ignore = true)
+  void updateEntityFromDomain(Legend domain, @MappingTarget LegendJPAEntity legendJPAEntity);
 }

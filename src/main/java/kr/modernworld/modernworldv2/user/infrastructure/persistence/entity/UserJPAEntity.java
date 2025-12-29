@@ -10,7 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
@@ -43,7 +42,7 @@ public class UserJPAEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "no", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "no")
   private Long no;
 
   @Size(max = 10)
@@ -51,11 +50,11 @@ public class UserJPAEntity {
   private String nickname;
 
   @ColumnDefault("'0'")
-  @Column(name = "current_point", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "current_point")
   private Long currentPoint;
 
   @ColumnDefault("'0'")
-  @Column(name = "accumulation_point", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "accumulation_point")
   private Long accumulationPoint;
 
   @Size(max = 150)
@@ -105,7 +104,7 @@ public class UserJPAEntity {
   private UserDomain domain;
 
   @ColumnDefault("'10'")
-  @Column(name = "chance", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "chance")
   private Long chance;
 
   // User의 생명주기와 완전히 동일한 관계
@@ -123,64 +122,4 @@ public class UserJPAEntity {
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<UserAchievementJPAEntity> userAchievements = new ArrayList<>();
-
-  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-  private LegendJPAEntity legend;
-
-  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-  private TokenJPAEntity token;
-
-  // User가 삭제되어도 다른 User는 남아있어야 하는 관계
-  @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
-  private List<CommentJPAEntity> sentComments = new ArrayList<>();
-
-  @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
-  private List<CommentJPAEntity> receivedComments = new ArrayList<>();
-
-  @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
-  private List<LikeJPAEntity> sentLikes = new ArrayList<>();
-
-  @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
-  private List<LikeJPAEntity> receivedLikes = new ArrayList<>();
-
-  @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
-  private List<NeighborJPAEntity> sentNeighbors = new ArrayList<>();
-
-  @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
-  private List<NeighborJPAEntity> receivedNeighbors = new ArrayList<>();
-
-  @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
-  private List<PostJPAEntity> sentPosts = new ArrayList<>();
-
-  @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
-  private List<PostJPAEntity> receivedPosts = new ArrayList<>();
-
-  @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
-  private List<PresentJPAEntity> sentPresents = new ArrayList<>();
-
-  @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
-  private List<PresentJPAEntity> receivedPresents = new ArrayList<>();
-
-  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-  private List<ReplyJPAEntity> replies = new ArrayList<>();
-
-  @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
-  private List<ReportJPAEntity> sentReports = new ArrayList<>();
-
-  @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
-  private List<ReportJPAEntity> receivedReports = new ArrayList<>();
-
-  public void setToken(TokenJPAEntity token) {
-    this.token = token;
-    if (token != null) {
-      token.setUser(this);
-    }
-  }
-
-  public void setLegend(LegendJPAEntity legend) {
-    this.legend = legend;
-    if (legend != null) {
-      legend.setUser(this);
-    }
-  }
 }

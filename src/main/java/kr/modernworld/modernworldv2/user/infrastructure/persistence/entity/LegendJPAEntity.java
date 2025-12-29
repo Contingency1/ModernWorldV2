@@ -28,7 +28,7 @@ import org.hibernate.annotations.OnDeleteAction;
 public class LegendJPAEntity {
 
   @Id
-  @Column(name = "user_no", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "user_no")
   private Long no;
 
   @MapsId
@@ -38,27 +38,27 @@ public class LegendJPAEntity {
   private UserJPAEntity user;
 
   @ColumnDefault("'0'")
-  @Column(name = "attendance_count", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "attendance_count")
   private Long attendanceCount;
 
   @ColumnDefault("'0'")
-  @Column(name = "item_count", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "item_count")
   private Long itemCount;
 
   @ColumnDefault("'0'")
-  @Column(name = "present_count", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "present_count")
   private Long presentCount;
 
   @ColumnDefault("'0'")
-  @Column(name = "like_count", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "like_count")
   private Long likeCount;
 
   @ColumnDefault("'0'")
-  @Column(name = "comment_count", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "comment_count")
   private Long commentCount;
 
   @ColumnDefault("'0'")
-  @Column(name = "RSP_win_count", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "RSP_win_count")
   private Long rspWinCount;
 
 }

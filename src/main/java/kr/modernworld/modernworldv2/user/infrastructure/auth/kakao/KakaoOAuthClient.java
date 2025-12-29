@@ -1,9 +1,9 @@
 package kr.modernworld.modernworldv2.user.infrastructure.auth.kakao;
 
 import kr.modernworld.modernworldv2.global.exception.OAuthException;
-import kr.modernworld.modernworldv2.user.application.oauth.OAuthTokenDTO;
-import kr.modernworld.modernworldv2.user.application.oauth.SocialUserInfoDTO;
-import kr.modernworld.modernworldv2.user.domain.port.OAuthClient;
+import kr.modernworld.modernworldv2.user.application.auth.OAuthTokenDTO;
+import kr.modernworld.modernworldv2.user.application.auth.SocialUserInfoDTO;
+import kr.modernworld.modernworldv2.user.domain.auth.port.OAuthClient;
 import kr.modernworld.modernworldv2.user.domain.user.UserDomain;
 import kr.modernworld.modernworldv2.user.infrastructure.auth.kakao.dto.KakaoAPIErrorDTO;
 import kr.modernworld.modernworldv2.user.infrastructure.auth.kakao.dto.KakaoTokenFailDTO;

@@ -10,14 +10,22 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring", uses = {TimeMapper.class})
 public interface UserMapper {
 
-  @Mapping(source = "token.socialAccess", target = "token.socialAccessToken")
-  @Mapping(source = "token.socialRefresh", target = "token.socialRefreshToken")
+  @Mapping(target = "token", ignore = true)
   User toDomain(UserJPAEntity userJPAEntity);
 
-  @Mapping(source = "token.socialAccessToken", target = "token.socialAccess")
-  @Mapping(source = "token.socialRefreshToken", target = "token.socialRefresh")
+  @Mapping(target = "no", ignore = true)
+  @Mapping(target = "userAchievements", ignore = true)
+  @Mapping(target = "rspGameRecords", ignore = true)
+  @Mapping(target = "inventories", ignore = true)
+  @Mapping(target = "characterLockers", ignore = true)
+  @Mapping(target = "alarms", ignore = true)
   UserJPAEntity toEntity(User user);
 
   @Mapping(target = "no", ignore = true)
-  void updateUserEntityFromDomain(User user, @MappingTarget UserJPAEntity userJPAEntity);
+  @Mapping(target = "userAchievements", ignore = true)
+  @Mapping(target = "rspGameRecords", ignore = true)
+  @Mapping(target = "inventories", ignore = true)
+  @Mapping(target = "characterLockers", ignore = true)
+  @Mapping(target = "alarms", ignore = true)
+  void updateEntityFromDomain(User user, @MappingTarget UserJPAEntity entity);
 }

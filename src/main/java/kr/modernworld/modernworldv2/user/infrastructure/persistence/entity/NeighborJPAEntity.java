@@ -10,6 +10,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 import lombok.AccessLevel;
@@ -28,6 +29,11 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "neighbor", schema = "modernworld", indexes = {
     @Index(name = "sender_no", columnList = "sender_no"),
     @Index(name = "receiver_no", columnList = "receiver_no")
+}, uniqueConstraints = {
+    @UniqueConstraint(
+        name = "uk_neighbor_sender_receiver",
+        columnNames = {"sender_no", "receiver_no"}
+    )
 })
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -36,7 +42,7 @@ public class NeighborJPAEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "no", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "no")
   private Long no;
 
   @NotNull

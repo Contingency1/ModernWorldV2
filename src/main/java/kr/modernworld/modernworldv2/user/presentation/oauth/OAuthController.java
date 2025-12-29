@@ -3,7 +3,7 @@ package kr.modernworld.modernworldv2.user.presentation.oauth;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.modernworld.modernworldv2.global.util.CookieUtil;
-import kr.modernworld.modernworldv2.user.application.oauth.OAuthService;
+import kr.modernworld.modernworldv2.user.application.auth.OAuthService;
 import kr.modernworld.modernworldv2.user.domain.user.UserDomain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

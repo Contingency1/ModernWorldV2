@@ -13,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
+import kr.modernworld.modernworldv2.admin.domain.item.ItemType;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.InventoryJPAEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +27,7 @@ public class ItemJPAEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "no", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "no")
   private Long no;
 
   @Size(max = 15)
@@ -52,10 +53,10 @@ public class ItemJPAEntity {
   @Size(max = 20)
   @NotNull
   @Column(name = "type", nullable = false, length = 20)
-  private String type;
+  private ItemType type;
 
   @ColumnDefault("'0'")
-  @Column(name = "price", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "price")
   private Long price;
 
   @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

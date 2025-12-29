@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.Instant;
+import kr.modernworld.modernworldv2.user.domain.alarm.AlarmTitle;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,7 +37,7 @@ public class AlarmJPAEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "no", columnDefinition = "int UNSIGNED not null")
+  @Column(name = "no")
   private Long no;
 
   @NotNull
@@ -60,10 +61,9 @@ public class AlarmJPAEntity {
   @Column(name = "created_at", nullable = false)
   private Instant createdAt;
 
-  @Size(max = 20)
   @NotNull
   @ColumnDefault("'기타'")
   @Column(name = "title", nullable = false, length = 20)
-  private String title;
+  private AlarmTitle title;
 
 }
