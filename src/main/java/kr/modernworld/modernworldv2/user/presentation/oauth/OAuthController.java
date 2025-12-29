@@ -4,7 +4,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.modernworld.modernworldv2.global.util.CookieUtil;
 import kr.modernworld.modernworldv2.user.application.auth.OAuthService;
+import kr.modernworld.modernworldv2.user.application.auth.dto.RenewRefreshTokenDTO;
 import kr.modernworld.modernworldv2.user.domain.user.UserDomain;
+import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class OAuthController {
 
   private final OAuthService authService;
+  private final JwtTokenProvider jwtTokenProvider;
 
   @GetMapping("/login-url/{provider}")
   public ResponseEntity<LoginURLResponseDTO> getLoginUrl(@PathVariable UserDomain provider) {
@@ -39,7 +42,8 @@ public class OAuthController {
   ) {
     LoginResultDTO result = authService.login(provider, code, state);
 
-    Cookie cookie = CookieUtil.createRefreshTokenCookie(result.refreshToken(),
+    Cookie cookie = CookieUtil.createRefreshTokenCookie(
+        result.refreshToken(),
         result.refreshExpirationMillis());
     httpResponse.addCookie(cookie);
 
@@ -49,13 +53,17 @@ public class OAuthController {
   }
 
   @GetMapping("/new-access-token")
-  public RenewalAccessTokenResponseDTO renewAccessToken(
-//      @AuthenticationPrincipal TokenUserInfoDTO user,
-      @CookieValue("refreshToken") String cookie) {
+  public ResponseEntity<RenewalAccessTokenResponseDTO> renewAccessToken(
+      @CookieValue("refreshToken") String inputCookie,
+      HttpServletResponse httpResponse) {
+    RenewRefreshTokenDTO response = authService.renewAccessToken(inputCookie);
 
-    System.out.println("refreshToken = " + cookie);
+    Cookie cookie = CookieUtil.createRefreshTokenCookie(
+        response.refreshToken(),
+        response.refreshExpirationMillis());
+    httpResponse.addCookie(cookie);
 
-    return null;
-
+    return new ResponseEntity<>(
+        new RenewalAccessTokenResponseDTO(response.accessToken()), HttpStatus.OK);
   }
 }
