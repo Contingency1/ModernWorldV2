@@ -6,7 +6,6 @@ import kr.modernworld.modernworldv2.global.util.CookieUtil;
 import kr.modernworld.modernworldv2.user.application.auth.OAuthService;
 import kr.modernworld.modernworldv2.user.application.auth.dto.RenewRefreshTokenDTO;
 import kr.modernworld.modernworldv2.user.domain.user.UserDomain;
-import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class OAuthController {
 
   private final OAuthService authService;
-  private final JwtTokenProvider jwtTokenProvider;
 
   @GetMapping("/login-url/{provider}")
   public ResponseEntity<LoginURLResponseDTO> getLoginUrl(@PathVariable UserDomain provider) {
