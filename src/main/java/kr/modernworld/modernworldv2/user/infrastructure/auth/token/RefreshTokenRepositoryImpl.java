@@ -1,6 +1,7 @@
 package kr.modernworld.modernworldv2.user.infrastructure.auth.token;
 
 import java.time.Duration;
+import java.util.Optional;
 import kr.modernworld.modernworldv2.user.domain.token.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -25,12 +26,18 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
   }
 
   @Override
-  public String findByUserNo(Long userNo) {
-    return "";
+  public Optional<String> findByUserNo(Long userNo) {
+    String response = redisTemplate.opsForValue().get("[RT]" + userNo);
+
+    if (response == null || response.isEmpty()) {
+      return Optional.empty();
+    }
+
+    return Optional.of(response);
   }
 
   @Override
   public void delete(Long userNo) {
-
+    redisTemplate.delete("[RT]" + userNo);
   }
 }
