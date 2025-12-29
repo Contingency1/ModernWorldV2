@@ -43,10 +43,12 @@ public class SecurityConfig {
         )
 
         .authorizeHttpRequests(authorize -> authorize
+            .requestMatchers("/auth/new-access-token").permitAll()
             .requestMatchers("/error").permitAll() // 아무런 에러 핸들링이 안됐을 경우 최후의 보루
             .requestMatchers("/auth/**").permitAll()
             .requestMatchers("/api/admin/**").hasAuthority(UserRole.ROLE_ADMIN.name())
-            .anyRequest().authenticated()
+            .anyRequest()
+            .authenticated()
         );
 
     return http.build();

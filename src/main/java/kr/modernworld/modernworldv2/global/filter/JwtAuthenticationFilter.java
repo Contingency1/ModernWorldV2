@@ -56,4 +56,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     return bearerToken.split(" ")[1];
   }
+
+  @Override
+  protected boolean shouldNotFilter(HttpServletRequest request) {
+    return request.getRequestURI().equals("/auth/new-access-token");
+  }
 }

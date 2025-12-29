@@ -29,7 +29,7 @@ public class ExceptionHandlingFilter extends OncePerRequestFilter {
     try {
       filterChain.doFilter(request, response);
     } catch (JwtValidationCustomException e) {
-      log.error("JWT validation failed: {}", e.getMessage(), e);
+      log.warn("JWT validation failed: {}", e.getMessage(), e);
       makeResponse(response, e);
     }
 
