@@ -29,7 +29,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
   public Optional<String> findByUserNo(Long userNo) {
     String response = redisTemplate.opsForValue().get("[RT]" + userNo);
 
-    if (response == null || response.isEmpty()) {
+    if (response == null) {
       return Optional.empty();
     }
 
