@@ -17,11 +17,13 @@ import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.TokenResultDTO;
 import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.presentation.oauth.LoginResultDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OAuthService {
 
   private final SessionRepository sessionRepository;
@@ -90,11 +92,14 @@ public class OAuthService {
         refreshTokenRepository.findByUserNo(user.userNo())
             .orElseThrow(() -> new BusinessException(BusinessErrorCode.INVALID_REFRESH_TOKEN));
 
-    refreshTokenRepository.delete(user.userNo());
-
     if (!savedRefreshToken.equals(inputToken)) {
+      refreshTokenRepository.delete(user.userNo());
+      log.warn("Refresh Token Reuse Detected! UserNo: {}", user.userNo());
+      
       throw new BusinessException(BusinessErrorCode.INVALID_REFRESH_TOKEN);
     }
+
+    refreshTokenRepository.delete(user.userNo());
 
     Long now = System.currentTimeMillis();
 
