@@ -2,11 +2,13 @@ package kr.modernworld.modernworldv2.global.error;
 
 import jakarta.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
+import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.JwtValidationCustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -27,6 +29,38 @@ public class GlobalExceptionHandler {
     );
 
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+  }
+
+  @ExceptionHandler(MissingRequestCookieException.class)
+  public ResponseEntity<ErrorResponseDTO> handleMissingRequestCookieException(
+      MissingRequestCookieException ex) {
+
+    if ("refreshToken".equals(ex.getCookieName())) {
+      ErrorResponseDTO response = new ErrorResponseDTO(
+          "Refresh Token is missing. Please login again.",
+          BusinessErrorCode.INVALID_REFRESH_TOKEN.getStatus().getReasonPhrase(),
+          BusinessErrorCode.INVALID_REFRESH_TOKEN.getStatus().value()
+      );
+      return new ResponseEntity<>(response, BusinessErrorCode.INVALID_REFRESH_TOKEN.getStatus());
+    }
+
+    ErrorResponseDTO response = new ErrorResponseDTO(
+        ex.getMessage(),
+        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+        HttpStatus.BAD_REQUEST.value()
+    );
+    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(JwtValidationCustomException.class)
+  public ResponseEntity<ErrorResponseDTO> handleAllException(JwtValidationCustomException ex) {
+    ErrorResponseDTO response = new ErrorResponseDTO(
+        BusinessErrorCode.INVALID_REFRESH_TOKEN.getMessage() + " " + ex.getMessage(),
+        BusinessErrorCode.INVALID_REFRESH_TOKEN.getStatus().getReasonPhrase(),
+        BusinessErrorCode.INVALID_REFRESH_TOKEN.getStatus().value()
+    );
+
+    return new ResponseEntity<>(response, BusinessErrorCode.INVALID_REFRESH_TOKEN.getStatus());
   }
 
   // Validation Error.
@@ -93,7 +127,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(BusinessException.class)
   public ResponseEntity<ErrorResponseDTO> handleBusinessException(BusinessException ex) {
     ErrorResponseDTO response = new ErrorResponseDTO(ex.getMessage(),
-        ex.getErrorCode().getMessage(), ex.getErrorCode().getStatus().value());
+        ex.getErrorCode().getStatus().getReasonPhrase(), ex.getErrorCode().getStatus().value());
 
     return new ResponseEntity<>(response, ex.getErrorCode().getStatus());
   }

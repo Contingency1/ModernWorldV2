@@ -4,10 +4,12 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.modernworld.modernworldv2.global.util.CookieUtil;
 import kr.modernworld.modernworldv2.user.application.auth.OAuthService;
+import kr.modernworld.modernworldv2.user.application.auth.dto.RenewRefreshTokenDTO;
 import kr.modernworld.modernworldv2.user.domain.user.UserDomain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,12 +40,28 @@ public class OAuthController {
   ) {
     LoginResultDTO result = authService.login(provider, code, state);
 
-    Cookie cookie = CookieUtil.createRefreshTokenCookie(result.refreshToken(),
+    Cookie cookie = CookieUtil.createRefreshTokenCookie(
+        result.refreshToken(),
         result.refreshExpirationMillis());
     httpResponse.addCookie(cookie);
 
     return new ResponseEntity<>(
         new LoginResponseDTO(result.accessToken(), result.nickname(), result.userNo()),
         HttpStatus.OK);
+  }
+
+  @GetMapping("/new-access-token")
+  public ResponseEntity<RenewalAccessTokenResponseDTO> renewAccessToken(
+      @CookieValue("refreshToken") String inputCookie,
+      HttpServletResponse httpResponse) {
+    RenewRefreshTokenDTO response = authService.renewToken(inputCookie);
+
+    Cookie cookie = CookieUtil.createRefreshTokenCookie(
+        response.refreshToken(),
+        response.refreshExpirationMillis());
+    httpResponse.addCookie(cookie);
+
+    return new ResponseEntity<>(
+        new RenewalAccessTokenResponseDTO(response.accessToken()), HttpStatus.OK);
   }
 }

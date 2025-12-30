@@ -1,6 +1,9 @@
 package kr.modernworld.modernworldv2.user.application.auth;
 
 import java.util.UUID;
+import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
+import kr.modernworld.modernworldv2.global.error.BusinessException;
+import kr.modernworld.modernworldv2.user.application.auth.dto.RenewRefreshTokenDTO;
 import kr.modernworld.modernworldv2.user.application.auth.event.LoginFailEvent;
 import kr.modernworld.modernworldv2.user.application.auth.event.LoginSuccessEvent;
 import kr.modernworld.modernworldv2.user.application.user.UserService;
@@ -11,13 +14,16 @@ import kr.modernworld.modernworldv2.user.domain.token.RefreshTokenRepository;
 import kr.modernworld.modernworldv2.user.domain.user.User;
 import kr.modernworld.modernworldv2.user.domain.user.UserDomain;
 import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.TokenResultDTO;
+import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.presentation.oauth.LoginResultDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OAuthService {
 
   private final SessionRepository sessionRepository;
@@ -44,7 +50,7 @@ public class OAuthService {
     // 테스트 할때는 아래 state값 확인로직 주석처리할것.
     if (!storedSate.equals(state)) {
       eventPublisher.publishEvent(new LoginFailEvent(this));
-      throw new RuntimeException("Login failed");
+      throw new BusinessException(BusinessErrorCode.INVALID_OAUTH_STATE);
     }
 
     OAuthClient client = authProvider.getOAuthClient(providerName);
@@ -79,5 +85,38 @@ public class OAuthService {
         refreshToken.expirationMillis());
   }
 
+  public RenewRefreshTokenDTO renewToken(String inputToken) {
+    TokenUserInfoDTO user = tokenProvider.validateRefresh(inputToken);
 
+    if (!refreshTokenRepository.tryLock(user.userNo())) {
+      throw new BusinessException(BusinessErrorCode.REDIS_CONCURRENT_UPDATE_REQUEST);
+    }
+
+    try {
+      String savedRefreshToken =
+          refreshTokenRepository.findByUserNo(user.userNo())
+              .orElseThrow(() -> new BusinessException(BusinessErrorCode.INVALID_REFRESH_TOKEN));
+
+      if (!savedRefreshToken.equals(inputToken)) {
+        refreshTokenRepository.delete(user.userNo());
+        log.warn("Refresh Token Reuse Detected! UserNo: {}", user.userNo());
+
+        throw new BusinessException(BusinessErrorCode.INVALID_REFRESH_TOKEN);
+      }
+
+      refreshTokenRepository.delete(user.userNo());
+
+      Long now = System.currentTimeMillis();
+
+      TokenResultDTO access = tokenProvider.createAccess(user.userNo(), user.isAdmin(), now);
+      TokenResultDTO refresh = tokenProvider.createRefresh(user.userNo(), user.isAdmin(),
+          now);
+
+      refreshTokenRepository.save(user.userNo(), refresh.token(), refresh.expirationMillis());
+
+      return new RenewRefreshTokenDTO(access.token(), refresh.token(), refresh.expirationMillis());
+    } finally {
+      refreshTokenRepository.unlock(user.userNo());
+    }
+  }
 }
