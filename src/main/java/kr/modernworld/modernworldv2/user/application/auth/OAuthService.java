@@ -85,30 +85,38 @@ public class OAuthService {
         refreshToken.expirationMillis());
   }
 
-  public RenewRefreshTokenDTO renewAccessToken(String inputToken) {
+  public RenewRefreshTokenDTO renewToken(String inputToken) {
     TokenUserInfoDTO user = tokenProvider.validateRefresh(inputToken);
 
-    String savedRefreshToken =
-        refreshTokenRepository.findByUserNo(user.userNo())
-            .orElseThrow(() -> new BusinessException(BusinessErrorCode.INVALID_REFRESH_TOKEN));
-
-    if (!savedRefreshToken.equals(inputToken)) {
-      refreshTokenRepository.delete(user.userNo());
-      log.warn("Refresh Token Reuse Detected! UserNo: {}", user.userNo());
-      
-      throw new BusinessException(BusinessErrorCode.INVALID_REFRESH_TOKEN);
+    if (!refreshTokenRepository.tryLock(user.userNo())) {
+      throw new BusinessException(BusinessErrorCode.REDIS_CONCURRENT_UPDATE_REQUEST);
     }
 
-    refreshTokenRepository.delete(user.userNo());
+    try {
+      String savedRefreshToken =
+          refreshTokenRepository.findByUserNo(user.userNo())
+              .orElseThrow(() -> new BusinessException(BusinessErrorCode.INVALID_REFRESH_TOKEN));
 
-    Long now = System.currentTimeMillis();
+      if (!savedRefreshToken.equals(inputToken)) {
+        refreshTokenRepository.delete(user.userNo());
+        log.warn("Refresh Token Reuse Detected! UserNo: {}", user.userNo());
 
-    TokenResultDTO access = tokenProvider.createAccess(user.userNo(), user.isAdmin(), now);
-    TokenResultDTO refresh = tokenProvider.createRefresh(user.userNo(), user.isAdmin(),
-        now);
+        throw new BusinessException(BusinessErrorCode.INVALID_REFRESH_TOKEN);
+      }
 
-    refreshTokenRepository.save(user.userNo(), refresh.token(), refresh.expirationMillis());
+      refreshTokenRepository.delete(user.userNo());
 
-    return new RenewRefreshTokenDTO(access.token(), refresh.token(), refresh.expirationMillis());
+      Long now = System.currentTimeMillis();
+
+      TokenResultDTO access = tokenProvider.createAccess(user.userNo(), user.isAdmin(), now);
+      TokenResultDTO refresh = tokenProvider.createRefresh(user.userNo(), user.isAdmin(),
+          now);
+
+      refreshTokenRepository.save(user.userNo(), refresh.token(), refresh.expirationMillis());
+
+      return new RenewRefreshTokenDTO(access.token(), refresh.token(), refresh.expirationMillis());
+    } finally {
+      refreshTokenRepository.unlock(user.userNo());
+    }
   }
 }

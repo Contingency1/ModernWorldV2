@@ -54,7 +54,7 @@ public class OAuthController {
   public ResponseEntity<RenewalAccessTokenResponseDTO> renewAccessToken(
       @CookieValue("refreshToken") String inputCookie,
       HttpServletResponse httpResponse) {
-    RenewRefreshTokenDTO response = authService.renewAccessToken(inputCookie);
+    RenewRefreshTokenDTO response = authService.renewToken(inputCookie);
 
     Cookie cookie = CookieUtil.createRefreshTokenCookie(
         response.refreshToken(),

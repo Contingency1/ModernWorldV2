@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum BusinessErrorCode {
+  REDIS_CONCURRENT_UPDATE_REQUEST(HttpStatus.TOO_MANY_REQUESTS,
+      "Token renewal is already in progress. Please wait."),
   INVALID_OAUTH_STATE(HttpStatus.UNAUTHORIZED,
       "Login failed due to invalid state parameter. (Potential CSRF attack)"),
   INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED,

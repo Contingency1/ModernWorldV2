@@ -10,4 +10,8 @@ public interface RefreshTokenRepository {
   Optional<String> findByUserNo(Long userNo);
 
   void delete(Long userNo);
+
+  boolean tryLock(Long userNo);
+
+  void unlock(Long userNo);
 }
