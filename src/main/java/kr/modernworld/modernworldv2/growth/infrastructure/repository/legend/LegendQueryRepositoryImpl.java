@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.growth.infrastructure.repository.legend;
 
-import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QLegendJPAEntity.legendJPAEntity;
+import static kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.QLegendJPAEntity.legendJPAEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;

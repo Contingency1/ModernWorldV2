@@ -1,7 +1,7 @@
 package kr.modernworld.modernworldv2.social.infrastructure.repository.like;
 
-import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QLikeJPAEntity.likeJPAEntity;
-import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QUserJPAEntity.userJPAEntity;
+import static kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.QUserJPAEntity.userJPAEntity;
+import static kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.QLikeJPAEntity.likeJPAEntity;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;

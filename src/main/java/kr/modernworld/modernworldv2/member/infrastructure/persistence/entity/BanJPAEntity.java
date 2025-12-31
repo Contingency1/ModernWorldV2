@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.admin.infrastructure.persistence.entity;
+package kr.modernworld.modernworldv2.member.infrastructure.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

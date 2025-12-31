@@ -1,13 +1,13 @@
 package kr.modernworld.modernworldv2.social.infrastructure.repository.like;
 
-import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QLikeJPAEntity.likeJPAEntity;
+import static kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.QLikeJPAEntity.likeJPAEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.LockModeType;
 import java.util.Optional;
+import kr.modernworld.modernworldv2.member.infrastructure.mapper.LikeMapper;
 import kr.modernworld.modernworldv2.social.domain.like.Like;
 import kr.modernworld.modernworldv2.social.domain.like.port.LikeRepository;
-import kr.modernworld.modernworldv2.member.infrastructure.mapper.LikeMapper;
 import kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.LikeJPAEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.social.infrastructure.repository.post;
 
-import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QPostJPAEntity.postJPAEntity;
+import static kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.QPostJPAEntity.postJPAEntity;
 
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -9,9 +9,9 @@ import jakarta.persistence.LockModeType;
 import java.util.Optional;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
+import kr.modernworld.modernworldv2.member.infrastructure.mapper.PostMapper;
 import kr.modernworld.modernworldv2.social.domain.post.Post;
 import kr.modernworld.modernworldv2.social.domain.post.port.PostRepository;
-import kr.modernworld.modernworldv2.member.infrastructure.mapper.PostMapper;
 import kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.PostJPAEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

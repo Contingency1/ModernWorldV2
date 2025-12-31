@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.social.infrastructure.repository.post;
 
-import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QPostJPAEntity.postJPAEntity;
+import static kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.QPostJPAEntity.postJPAEntity;
 
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.OrderSpecifier;
@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Optional;
 import kr.modernworld.modernworldv2.global.common.OrderBy;
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
+import kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.QUserJPAEntity;
 import kr.modernworld.modernworldv2.social.domain.post.port.PostQueryRepository;
-import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QUserJPAEntity;
 import kr.modernworld.modernworldv2.social.presentation.post.dto.res.PostResponseDTO;
 import kr.modernworld.modernworldv2.social.presentation.post.dto.res.PostUserInfoDTO;
 import lombok.RequiredArgsConstructor;

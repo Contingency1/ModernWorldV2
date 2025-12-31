@@ -14,7 +14,7 @@ import kr.modernworld.modernworldv2.asset.presentation.present.dto.res.GetPresen
 import kr.modernworld.modernworldv2.asset.presentation.present.dto.res.PresentItemDTO;
 import kr.modernworld.modernworldv2.asset.presentation.present.dto.res.PresentUserDTO;
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
-import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QUserJPAEntity;
+import kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.QUserJPAEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

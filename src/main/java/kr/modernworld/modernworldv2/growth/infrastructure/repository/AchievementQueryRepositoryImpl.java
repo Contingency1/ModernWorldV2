@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.growth.infrastructure.repository;
 
-import static kr.modernworld.modernworldv2.admin.infrastructure.persistence.entity.QAchievementJPAEntity.achievementJPAEntity;
+import static kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.QAchievementJPAEntity.achievementJPAEntity;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;

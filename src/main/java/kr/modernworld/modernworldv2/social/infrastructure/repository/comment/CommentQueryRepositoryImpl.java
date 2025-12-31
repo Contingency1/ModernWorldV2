@@ -1,7 +1,7 @@
 package kr.modernworld.modernworldv2.social.infrastructure.repository.comment;
 
-import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QCommentJPAEntity.commentJPAEntity;
-import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QReplyJPAEntity.replyJPAEntity;
+import static kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.QCommentJPAEntity.commentJPAEntity;
+import static kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.QReplyJPAEntity.replyJPAEntity;
 
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;

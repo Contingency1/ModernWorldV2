@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.growth.infrastructure.repository.userachievement;
 
-import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QUserAchievementJPAEntity.userAchievementJPAEntity;
+import static kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.QUserAchievementJPAEntity.userAchievementJPAEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.LockModeType;

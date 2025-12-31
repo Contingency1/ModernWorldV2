@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.social.infrastructure.repository.neighbor;
 
-import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QNeighborJPAEntity.neighborJPAEntity;
+import static kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.QNeighborJPAEntity.neighborJPAEntity;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;

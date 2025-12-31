@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.growth.infrastructure.repository.alarm;
 
-import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QAlarmJPAEntity.alarmJPAEntity;
+import static kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.QAlarmJPAEntity.alarmJPAEntity;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;

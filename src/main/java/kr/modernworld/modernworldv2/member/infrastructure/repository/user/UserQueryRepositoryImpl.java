@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.member.infrastructure.repository.user;
 
-import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QUserJPAEntity.userJPAEntity;
+import static kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.QUserJPAEntity.userJPAEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;

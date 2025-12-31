@@ -1,15 +1,15 @@
 package kr.modernworld.modernworldv2.social.infrastructure.repository.comment;
 
-import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QCommentJPAEntity.commentJPAEntity;
+import static kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.QCommentJPAEntity.commentJPAEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.LockModeType;
 import java.util.Optional;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
+import kr.modernworld.modernworldv2.member.infrastructure.mapper.CommentMapper;
 import kr.modernworld.modernworldv2.social.domain.comment.Comment;
 import kr.modernworld.modernworldv2.social.domain.comment.port.CommentRepository;
-import kr.modernworld.modernworldv2.member.infrastructure.mapper.CommentMapper;
 import kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.CommentJPAEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.growth.infrastructure.repository.rsp;
 
-import static kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.QRspGameRecordJPAEntity.rspGameRecordJPAEntity;
+import static kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.QRspGameRecordJPAEntity.rspGameRecordJPAEntity;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
