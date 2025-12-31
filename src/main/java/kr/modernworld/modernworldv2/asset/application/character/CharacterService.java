@@ -1,8 +1,8 @@
-package kr.modernworld.modernworldv2.asset.application.character.api;
+package kr.modernworld.modernworldv2.asset.application.character;
 
 import java.util.List;
+import kr.modernworld.modernworldv2.asset.application.character.dto.CharacterApiDTO;
 import kr.modernworld.modernworldv2.asset.domain.character.CharacterSpecies;
-import kr.modernworld.modernworldv2.asset.domain.character.port.CharacterApi;
 import kr.modernworld.modernworldv2.asset.domain.character.port.CharacterQueryRepository;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
@@ -12,11 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class CharacterApiImpl implements CharacterApi {
+public class CharacterService {
 
   private final CharacterQueryRepository characterQueryRepository;
 
-  @Override
   @Transactional(readOnly = true)
   public Long getPrice(Long characterNo) {
     return characterQueryRepository.getPrice(characterNo)
@@ -24,7 +23,6 @@ public class CharacterApiImpl implements CharacterApi {
             BusinessErrorCode.NO_SUCH_CHARACTER, " characterNo: " + characterNo));
   }
 
-  @Override
   @Transactional(readOnly = true)
   public CharacterApiDTO getOne(Long characterNo) {
     return characterQueryRepository.findOne(characterNo)
@@ -33,7 +31,6 @@ public class CharacterApiImpl implements CharacterApi {
                 " characterNo: " + characterNo));
   }
 
-  @Override
   @Transactional(readOnly = true)
   public List<CharacterApiDTO> getAll(CharacterSpecies species, String characterName) {
     return characterQueryRepository.findAll(species, characterName);

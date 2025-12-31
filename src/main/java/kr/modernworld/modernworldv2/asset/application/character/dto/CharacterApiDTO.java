@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.asset.application.character.api;
+package kr.modernworld.modernworldv2.asset.application.character.dto;
 
 import kr.modernworld.modernworldv2.asset.domain.character.CharacterSpecies;
 

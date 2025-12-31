@@ -1,10 +1,10 @@
 package kr.modernworld.modernworldv2.asset.application.shop;
 
 import java.util.List;
-import kr.modernworld.modernworldv2.asset.application.character.api.CharacterApiDTO;
+import kr.modernworld.modernworldv2.asset.application.character.CharacterService;
+import kr.modernworld.modernworldv2.asset.application.character.dto.CharacterApiDTO;
 import kr.modernworld.modernworldv2.asset.application.characterlocker.CharacterLockerService;
 import kr.modernworld.modernworldv2.asset.domain.character.CharacterSpecies;
-import kr.modernworld.modernworldv2.asset.domain.character.port.CharacterApi;
 import kr.modernworld.modernworldv2.asset.domain.characterlocker.CharacterLocker;
 import kr.modernworld.modernworldv2.asset.presentation.shop.character.dto.req.ShopCharacterRequestDTO;
 import kr.modernworld.modernworldv2.user.application.user.UserService;
@@ -17,14 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class CharacterShopService {
 
   private final CharacterLockerService characterLockerService;
-  private final CharacterApi characterApi;
+  private final CharacterService characterService;
   private final UserService userService;
 
   @Transactional
   public CharacterLocker buyOneCharacter(Long userNo, Long characterNo) {
     characterLockerService.validateCharacterExists(userNo, characterNo);
 
-    Long characterPrice = characterApi.getPrice(characterNo);
+    Long characterPrice = characterService.getPrice(characterNo);
 
     userService.decreaseCurrentPoint(userNo, characterPrice);
 
@@ -33,7 +33,7 @@ public class CharacterShopService {
 
   @Transactional(readOnly = true)
   public CharacterApiDTO getCharacter(Long characterNo) {
-    return characterApi.getOne(characterNo);
+    return characterService.getOne(characterNo);
   }
 
   @Transactional(readOnly = true)
@@ -41,6 +41,6 @@ public class CharacterShopService {
     CharacterSpecies species = CharacterSpecies.stringToCharacterSpecies(query.species());
     String characterName = query.characterName();
 
-    return characterApi.getAll(species, characterName);
+    return characterService.getAll(species, characterName);
   }
 }
