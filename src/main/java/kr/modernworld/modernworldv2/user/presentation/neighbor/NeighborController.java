@@ -2,8 +2,8 @@ package kr.modernworld.modernworldv2.user.presentation.neighbor;
 
 import jakarta.validation.Valid;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
+import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.application.neighbor.NeighborService;
-import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.presentation.neighbor.dto.req.GetNeighborsRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.neighbor.dto.res.NeighborResponseDTO;
 import kr.modernworld.modernworldv2.user.presentation.neighbor.dto.res.get.GetNeighborResponseDTO;

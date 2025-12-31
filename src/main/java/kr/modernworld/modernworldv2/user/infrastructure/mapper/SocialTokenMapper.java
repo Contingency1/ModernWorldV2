@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.user.infrastructure.mapper;
 
-import kr.modernworld.modernworldv2.user.domain.user.UserSocialToken;
+import kr.modernworld.modernworldv2.member.domain.user.UserSocialToken;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.TokenJPAEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

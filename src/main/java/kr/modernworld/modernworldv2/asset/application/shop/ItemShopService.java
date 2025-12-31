@@ -7,7 +7,7 @@ import kr.modernworld.modernworldv2.asset.application.item.dto.ItemApiDTO;
 import kr.modernworld.modernworldv2.asset.application.item.dto.ItemNameAndPriceDTO;
 import kr.modernworld.modernworldv2.asset.domain.inventory.Inventory;
 import kr.modernworld.modernworldv2.asset.presentation.shop.item.dto.req.ItemRequestDTO;
-import kr.modernworld.modernworldv2.user.application.user.UserService;
+import kr.modernworld.modernworldv2.member.application.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

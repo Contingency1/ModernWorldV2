@@ -1,9 +1,9 @@
 package kr.modernworld.modernworldv2.user.presentation.userachievement;
 
 import java.util.List;
+import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.application.userachievement.UserAchievementService;
 import kr.modernworld.modernworldv2.user.domain.userachievement.UserAchievement;
-import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.presentation.userachievement.dto.req.GetUserAchievementRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.userachievement.dto.req.UpdateUserAchievementStatusDTO;
 import kr.modernworld.modernworldv2.user.presentation.userachievement.dto.res.UserAchievementResponseDTO;

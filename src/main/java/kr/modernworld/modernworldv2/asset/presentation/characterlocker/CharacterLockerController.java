@@ -8,7 +8,7 @@ import kr.modernworld.modernworldv2.asset.presentation.characterlocker.dto.req.C
 import kr.modernworld.modernworldv2.asset.presentation.characterlocker.dto.req.GetCharacterRequestDTO;
 import kr.modernworld.modernworldv2.asset.presentation.characterlocker.dto.res.CharacterLockerResponseDTO;
 import kr.modernworld.modernworldv2.asset.presentation.characterlocker.dto.res.GetCharacterLockerResponseDTO;
-import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.TokenUserInfoDTO;
+import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

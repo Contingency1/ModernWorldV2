@@ -1,8 +1,8 @@
 package kr.modernworld.modernworldv2.user.presentation.like;
 
 import java.util.List;
+import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.application.like.LikeService;
-import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.presentation.like.dto.req.GetLikeRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.like.dto.res.CreateLikeResponseDTO;
 import kr.modernworld.modernworldv2.user.presentation.like.dto.res.get.LikeResponseDTO;

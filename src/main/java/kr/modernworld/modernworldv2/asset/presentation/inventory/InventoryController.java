@@ -11,7 +11,7 @@ import kr.modernworld.modernworldv2.asset.presentation.inventory.dto.request.Get
 import kr.modernworld.modernworldv2.asset.presentation.inventory.dto.request.UpdateInventoryRequestDTO;
 import kr.modernworld.modernworldv2.asset.presentation.inventory.dto.response.GetInventoryResponseDTO;
 import kr.modernworld.modernworldv2.asset.presentation.inventory.dto.response.InventoryResponseDTO;
-import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.TokenUserInfoDTO;
+import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

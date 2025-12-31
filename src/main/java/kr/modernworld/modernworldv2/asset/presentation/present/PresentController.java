@@ -8,7 +8,7 @@ import kr.modernworld.modernworldv2.asset.presentation.present.dto.req.ItemNoReq
 import kr.modernworld.modernworldv2.asset.presentation.present.dto.res.GetPresentResponseDTO;
 import kr.modernworld.modernworldv2.asset.presentation.present.dto.res.PresentResponseDTO;
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
-import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.TokenUserInfoDTO;
+import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

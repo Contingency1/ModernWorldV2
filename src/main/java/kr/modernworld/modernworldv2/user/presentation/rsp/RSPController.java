@@ -2,8 +2,8 @@ package kr.modernworld.modernworldv2.user.presentation.rsp;
 
 import jakarta.validation.Valid;
 import java.util.List;
+import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.application.rsp.RSPService;
-import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.presentation.rsp.dto.req.GetRSPRecordsRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.rsp.dto.req.RSPRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.rsp.dto.res.RSPResponseDTO;

@@ -2,8 +2,8 @@ package kr.modernworld.modernworldv2.user.presentation.reply;
 
 import jakarta.validation.Valid;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
+import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.application.reply.ReplyService;
-import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.presentation.reply.dto.req.CreateReplyRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.reply.dto.req.GetAllReplyRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.reply.dto.res.CreateResponseDTO;

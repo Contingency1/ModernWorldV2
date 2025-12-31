@@ -2,8 +2,8 @@ package kr.modernworld.modernworldv2.user.presentation.comment;
 
 import jakarta.validation.Valid;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
+import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.application.comment.CommentService;
-import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.user.presentation.comment.dto.req.CreateCommentRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.comment.dto.req.GetCommentsRequestDTO;
 import kr.modernworld.modernworldv2.user.presentation.comment.dto.res.CommentResponseDTO;

@@ -7,7 +7,7 @@ import kr.modernworld.modernworldv2.asset.application.characterlocker.CharacterL
 import kr.modernworld.modernworldv2.asset.domain.character.CharacterSpecies;
 import kr.modernworld.modernworldv2.asset.domain.characterlocker.CharacterLocker;
 import kr.modernworld.modernworldv2.asset.presentation.shop.character.dto.req.ShopCharacterRequestDTO;
-import kr.modernworld.modernworldv2.user.application.user.UserService;
+import kr.modernworld.modernworldv2.member.application.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
