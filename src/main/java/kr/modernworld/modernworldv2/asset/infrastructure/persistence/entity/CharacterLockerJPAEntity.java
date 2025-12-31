@@ -12,7 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
-import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.UserJPAEntity;
+import kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.UserJPAEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

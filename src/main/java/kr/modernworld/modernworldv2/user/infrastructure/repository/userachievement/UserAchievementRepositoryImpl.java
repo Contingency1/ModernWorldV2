@@ -7,10 +7,10 @@ import jakarta.persistence.LockModeType;
 import java.util.Optional;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
+import kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.UserAchievementJPAEntity;
 import kr.modernworld.modernworldv2.user.domain.userachievement.UserAchievement;
 import kr.modernworld.modernworldv2.user.domain.userachievement.port.UserAchievementRepository;
 import kr.modernworld.modernworldv2.user.infrastructure.mapper.UserAchievementMapper;
-import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.UserAchievementJPAEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

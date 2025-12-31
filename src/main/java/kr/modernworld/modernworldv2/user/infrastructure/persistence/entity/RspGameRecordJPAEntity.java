@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
+import kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.UserJPAEntity;
 import kr.modernworld.modernworldv2.user.domain.rsp.GameResult;
 import kr.modernworld.modernworldv2.user.domain.rsp.RSPChoice;
 import lombok.AccessLevel;

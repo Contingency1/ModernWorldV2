@@ -2,7 +2,7 @@ package kr.modernworld.modernworldv2.member.infrastructure.auth.token;
 
 import java.time.Duration;
 import java.util.Optional;
-import kr.modernworld.modernworldv2.user.domain.token.RefreshTokenRepository;
+import kr.modernworld.modernworldv2.member.domain.token.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;

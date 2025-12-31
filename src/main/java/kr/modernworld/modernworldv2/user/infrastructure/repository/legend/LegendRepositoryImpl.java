@@ -10,7 +10,7 @@ import kr.modernworld.modernworldv2.user.domain.legend.Legend;
 import kr.modernworld.modernworldv2.user.domain.legend.port.LegendRepository;
 import kr.modernworld.modernworldv2.user.infrastructure.mapper.LegendMapper;
 import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.LegendJPAEntity;
-import kr.modernworld.modernworldv2.user.infrastructure.persistence.entity.UserJPAEntity;
+import kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.UserJPAEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

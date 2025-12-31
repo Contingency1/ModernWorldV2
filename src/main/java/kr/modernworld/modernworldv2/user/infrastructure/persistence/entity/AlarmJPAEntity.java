@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.Instant;
+import kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.UserJPAEntity;
 import kr.modernworld.modernworldv2.user.domain.alarm.AlarmTitle;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

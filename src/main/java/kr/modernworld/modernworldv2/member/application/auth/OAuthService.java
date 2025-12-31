@@ -15,7 +15,7 @@ import kr.modernworld.modernworldv2.member.domain.user.User;
 import kr.modernworld.modernworldv2.member.domain.user.UserDomain;
 import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenResultDTO;
 import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
-import kr.modernworld.modernworldv2.user.domain.token.RefreshTokenRepository;
+import kr.modernworld.modernworldv2.member.domain.token.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
