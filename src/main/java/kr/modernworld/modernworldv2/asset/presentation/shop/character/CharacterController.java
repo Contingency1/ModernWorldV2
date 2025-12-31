@@ -1,10 +1,10 @@
 package kr.modernworld.modernworldv2.asset.presentation.shop.character;
 
 import java.util.List;
-import kr.modernworld.modernworldv2.admin.application.character.api.CharacterApiDTO;
+import kr.modernworld.modernworldv2.asset.application.character.api.CharacterApiDTO;
+import kr.modernworld.modernworldv2.asset.application.shop.CharacterShopService;
 import kr.modernworld.modernworldv2.asset.presentation.shop.character.dto.req.ShopCharacterRequestDTO;
 import kr.modernworld.modernworldv2.asset.presentation.shop.character.dto.res.ShopCharacterResponseDTO;
-import kr.modernworld.modernworldv2.user.application.shop.CharacterShopService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

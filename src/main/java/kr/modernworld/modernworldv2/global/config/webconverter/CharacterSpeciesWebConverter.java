@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.global.config.webconverter;
 
-import kr.modernworld.modernworldv2.admin.domain.character.CharacterSpecies;
+import kr.modernworld.modernworldv2.asset.domain.character.CharacterSpecies;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

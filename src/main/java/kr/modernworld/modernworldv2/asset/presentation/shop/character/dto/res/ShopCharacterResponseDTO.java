@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.asset.presentation.shop.character.dto.res;
 
-import kr.modernworld.modernworldv2.admin.application.character.api.CharacterApiDTO;
+import kr.modernworld.modernworldv2.asset.application.character.api.CharacterApiDTO;
 
 public record ShopCharacterResponseDTO(
     Long no,
