@@ -2,6 +2,7 @@ package kr.modernworld.modernworldv2.member.application.user;
 
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
+import kr.modernworld.modernworldv2.growth.application.legend.LegendService;
 import kr.modernworld.modernworldv2.member.application.auth.OAuthTokenDTO;
 import kr.modernworld.modernworldv2.member.application.auth.SocialUserInfoDTO;
 import kr.modernworld.modernworldv2.member.application.user.socialtoken.SocialTokenService;
@@ -10,7 +11,6 @@ import kr.modernworld.modernworldv2.member.domain.user.User;
 import kr.modernworld.modernworldv2.member.domain.user.UserSocialToken;
 import kr.modernworld.modernworldv2.member.domain.user.port.UserQueryRepository;
 import kr.modernworld.modernworldv2.member.domain.user.port.UserRepository;
-import kr.modernworld.modernworldv2.user.application.legend.LegendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

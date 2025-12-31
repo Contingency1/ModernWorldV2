@@ -2,9 +2,9 @@ package kr.modernworld.modernworldv2.member.infrastructure.repository.user.socia
 
 import kr.modernworld.modernworldv2.member.domain.user.UserSocialToken;
 import kr.modernworld.modernworldv2.member.domain.user.socialtoken.port.SocialTokenRepository;
+import kr.modernworld.modernworldv2.member.infrastructure.mapper.SocialTokenMapper;
 import kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.TokenJPAEntity;
 import kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.UserJPAEntity;
-import kr.modernworld.modernworldv2.user.infrastructure.mapper.SocialTokenMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

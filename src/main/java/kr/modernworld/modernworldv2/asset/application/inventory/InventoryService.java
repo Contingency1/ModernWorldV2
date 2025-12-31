@@ -10,8 +10,8 @@ import kr.modernworld.modernworldv2.asset.presentation.inventory.dto.request.Get
 import kr.modernworld.modernworldv2.asset.presentation.inventory.dto.response.GetInventoryResponseDTO;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
-import kr.modernworld.modernworldv2.user.application.userachievement.LegendField;
-import kr.modernworld.modernworldv2.user.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
+import kr.modernworld.modernworldv2.growth.application.userachievement.LegendField;
+import kr.modernworld.modernworldv2.growth.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

@@ -6,7 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import kr.modernworld.modernworldv2.member.domain.user.User;
 import kr.modernworld.modernworldv2.member.domain.user.port.UserQueryRepository;
-import kr.modernworld.modernworldv2.user.infrastructure.mapper.UserMapper;
+import kr.modernworld.modernworldv2.member.infrastructure.mapper.UserMapper;
 import kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.UserJPAEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

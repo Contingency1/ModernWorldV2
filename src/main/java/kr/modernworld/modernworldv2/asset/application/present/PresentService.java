@@ -13,11 +13,11 @@ import kr.modernworld.modernworldv2.asset.presentation.present.dto.res.GetPresen
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
+import kr.modernworld.modernworldv2.growth.application.alarm.event.AlarmEvent;
+import kr.modernworld.modernworldv2.growth.application.userachievement.LegendField;
+import kr.modernworld.modernworldv2.growth.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
+import kr.modernworld.modernworldv2.growth.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.member.application.user.UserService;
-import kr.modernworld.modernworldv2.user.application.alarm.event.AlarmEvent;
-import kr.modernworld.modernworldv2.user.application.userachievement.LegendField;
-import kr.modernworld.modernworldv2.user.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
-import kr.modernworld.modernworldv2.user.domain.alarm.AlarmTitle;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
