@@ -4,9 +4,9 @@ import kr.modernworld.modernworldv2.growth.application.achievement.AchievementSe
 import kr.modernworld.modernworldv2.growth.application.achievement.dto.AchievementInfoDTO;
 import kr.modernworld.modernworldv2.growth.application.alarm.event.AlarmEvent;
 import kr.modernworld.modernworldv2.growth.domain.alarm.AlarmTitle;
+import kr.modernworld.modernworldv2.growth.domain.external.MemberExternalPort;
 import kr.modernworld.modernworldv2.growth.domain.legend.Legend;
 import kr.modernworld.modernworldv2.growth.domain.userachievement.port.UserAchievementQueryRepository;
-import kr.modernworld.modernworldv2.growth.infrastructure.external.GrowthMemberExternalPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class AchievementUnlockService {
   private final AchievementService achievementService;
   private final ApplicationEventPublisher applicationEventPublisher;
 
-  private final GrowthMemberExternalPort memberExternalPort;
+  private final MemberExternalPort memberExternalPort;
 
   @Transactional
   public void unlockAchievement(Long userNo, Legend userLegend,

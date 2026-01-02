@@ -9,12 +9,12 @@ import kr.modernworld.modernworldv2.growth.application.alarm.event.AlarmEvent;
 import kr.modernworld.modernworldv2.growth.application.userachievement.LegendField;
 import kr.modernworld.modernworldv2.growth.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
 import kr.modernworld.modernworldv2.growth.domain.alarm.AlarmTitle;
+import kr.modernworld.modernworldv2.growth.domain.external.MemberExternalPort;
 import kr.modernworld.modernworldv2.growth.domain.rsp.GameResult;
 import kr.modernworld.modernworldv2.growth.domain.rsp.RSP;
 import kr.modernworld.modernworldv2.growth.domain.rsp.RSPChoice;
 import kr.modernworld.modernworldv2.growth.domain.rsp.port.RSPQueryRepository;
 import kr.modernworld.modernworldv2.growth.domain.rsp.port.RSPRepository;
-import kr.modernworld.modernworldv2.growth.infrastructure.external.GrowthMemberExternalPort;
 import kr.modernworld.modernworldv2.growth.presentation.rsp.dto.res.RSPResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -29,7 +29,7 @@ public class RSPService {
   private final RSPRepository rspRepository;
   private final ApplicationEventPublisher eventPublisher;
 
-  private final GrowthMemberExternalPort memberExternalPort;
+  private final MemberExternalPort memberExternalPort;
 
   @Transactional(readOnly = true)
   public List<RSPResponseDTO> get(Long userNo, LocalDate date) {
