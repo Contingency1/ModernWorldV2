@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class MemberExternalAdapter implements MemberExternalPort {
+public class SocialMemberExternalAdapter implements MemberExternalPort {
 
   private final UserService userService;
 

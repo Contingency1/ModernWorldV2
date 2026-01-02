@@ -6,7 +6,7 @@ import kr.modernworld.modernworldv2.growth.application.alarm.event.AlarmEvent;
 import kr.modernworld.modernworldv2.growth.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.growth.domain.legend.Legend;
 import kr.modernworld.modernworldv2.growth.domain.userachievement.port.UserAchievementQueryRepository;
-import kr.modernworld.modernworldv2.member.application.user.UserService;
+import kr.modernworld.modernworldv2.growth.infrastructure.external.GrowthMemberExternalPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -19,8 +19,9 @@ public class AchievementUnlockService {
   private final UserAchievementService userAchievementService;
   private final UserAchievementQueryRepository userAchievementQueryRepository;
   private final AchievementService achievementService;
-  private final UserService userService;
   private final ApplicationEventPublisher applicationEventPublisher;
+
+  private final GrowthMemberExternalPort memberExternalPort;
 
   @Transactional
   public void unlockAchievement(Long userNo, Legend userLegend,
@@ -48,7 +49,7 @@ public class AchievementUnlockService {
       AchievementInfoDTO achievementInfo = achievementService.getAchievementInfo(achievementName);
 
       userAchievementService.createUserAchievement(userNo, achievementInfo.no());
-      userService.increaseCurrentAccumulationPoint(userNo, achievementInfo.point());
+      memberExternalPort.increaseCurrentAccumulationPoint(userNo, achievementInfo.point());
 
       applicationEventPublisher.publishEvent(
           new AlarmEvent(this, userNo,

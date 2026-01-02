@@ -14,8 +14,8 @@ import kr.modernworld.modernworldv2.growth.domain.rsp.RSP;
 import kr.modernworld.modernworldv2.growth.domain.rsp.RSPChoice;
 import kr.modernworld.modernworldv2.growth.domain.rsp.port.RSPQueryRepository;
 import kr.modernworld.modernworldv2.growth.domain.rsp.port.RSPRepository;
+import kr.modernworld.modernworldv2.growth.infrastructure.external.GrowthMemberExternalPort;
 import kr.modernworld.modernworldv2.growth.presentation.rsp.dto.res.RSPResponseDTO;
-import kr.modernworld.modernworldv2.member.application.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -27,8 +27,9 @@ public class RSPService {
 
   private final RSPQueryRepository rspQueryRepository;
   private final RSPRepository rspRepository;
-  private final UserService userService;
   private final ApplicationEventPublisher eventPublisher;
+
+  private final GrowthMemberExternalPort memberExternalPort;
 
   @Transactional(readOnly = true)
   public List<RSPResponseDTO> get(Long userNo, LocalDate date) {
@@ -61,7 +62,7 @@ public class RSPService {
       eventPublisher.publishEvent(new AlarmEvent(this, userNo, eventMessage, AlarmTitle.GAME));
     }
 
-    userService.processGameResult(userNo, pointToAdd);
+    memberExternalPort.processGameResult(userNo, pointToAdd);
 
     return new RSPResponseDTO(saved.getNo(), saved.getUserNo(), saved.getUserChoice(),
         saved.getComputerChoice(), saved.getResult(), saved.getCreatedAt());
