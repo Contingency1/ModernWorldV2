@@ -9,10 +9,10 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import kr.modernworld.modernworldv2.asset.application.present.dto.GetPresentDTO;
+import kr.modernworld.modernworldv2.asset.application.present.dto.PresentItemDTO;
+import kr.modernworld.modernworldv2.asset.application.present.dto.PresentUserDTO;
 import kr.modernworld.modernworldv2.asset.application.present.port.PresentQueryRepository;
-import kr.modernworld.modernworldv2.asset.presentation.present.dto.res.GetPresentResponseDTO;
-import kr.modernworld.modernworldv2.asset.presentation.present.dto.res.PresentItemDTO;
-import kr.modernworld.modernworldv2.asset.presentation.present.dto.res.PresentUserDTO;
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.QUserJPAEntity;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class PresentQueryRepositoryImpl implements PresentQueryRepository {
   private final JPAQueryFactory queryFactory;
 
   @Override
-  public List<GetPresentResponseDTO> getPresents(Long userNo, SenderReceiverNoField type) {
+  public List<GetPresentDTO> getPresents(Long userNo, SenderReceiverNoField type) {
     QUserJPAEntity sender = new QUserJPAEntity("sender");
     QUserJPAEntity receiver = new QUserJPAEntity("receiver");
 
@@ -41,7 +41,7 @@ public class PresentQueryRepositoryImpl implements PresentQueryRepository {
   }
 
   @Override
-  public GetPresentResponseDTO getOnePresent(Long presentNo) {
+  public GetPresentDTO getOnePresent(Long presentNo) {
     QUserJPAEntity sender = new QUserJPAEntity("sender");
     QUserJPAEntity receiver = new QUserJPAEntity("receiver");
 
@@ -56,9 +56,9 @@ public class PresentQueryRepositoryImpl implements PresentQueryRepository {
 
   }
 
-  private static ConstructorExpression<GetPresentResponseDTO> presentSelect(QUserJPAEntity sender,
+  private static ConstructorExpression<GetPresentDTO> presentSelect(QUserJPAEntity sender,
       QUserJPAEntity receiver) {
-    return Projections.constructor(GetPresentResponseDTO.class,
+    return Projections.constructor(GetPresentDTO.class,
         presentJPAEntity.no,
         presentJPAEntity.status,
         presentJPAEntity.createdAt,

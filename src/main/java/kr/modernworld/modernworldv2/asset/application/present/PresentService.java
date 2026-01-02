@@ -5,12 +5,12 @@ import kr.modernworld.modernworldv2.asset.application.inventory.InventoryService
 import kr.modernworld.modernworldv2.asset.application.inventory.port.InventoryQueryRepository;
 import kr.modernworld.modernworldv2.asset.application.item.ItemService;
 import kr.modernworld.modernworldv2.asset.application.item.dto.ItemNameAndPriceDTO;
+import kr.modernworld.modernworldv2.asset.application.present.dto.GetPresentDTO;
 import kr.modernworld.modernworldv2.asset.application.present.port.PresentQueryRepository;
 import kr.modernworld.modernworldv2.asset.domain.external.member.MemberExternalPort;
 import kr.modernworld.modernworldv2.asset.domain.present.Present;
 import kr.modernworld.modernworldv2.asset.domain.present.port.PresentRepository;
 import kr.modernworld.modernworldv2.asset.presentation.present.HandlePresentStatus;
-import kr.modernworld.modernworldv2.asset.presentation.present.dto.res.GetPresentResponseDTO;
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
@@ -36,7 +36,7 @@ public class PresentService {
   private final MemberExternalPort memberExternalPort;
 
   @Transactional
-  public GetPresentResponseDTO getOnePresent(Long userNo, Long presentNo) {
+  public GetPresentDTO getOnePresent(Long userNo, Long presentNo) {
     Present present = presentRepository.findByNoForUpdate(userNo, presentNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.PRESENT_NOT_FOUND));
 
@@ -57,7 +57,7 @@ public class PresentService {
   }
 
   @Transactional(readOnly = true)
-  public List<GetPresentResponseDTO> getUserPresents(Long userNo, SenderReceiverNoField type) {
+  public List<GetPresentDTO> getUserPresents(Long userNo, SenderReceiverNoField type) {
 
     return presentQueryRepository.getPresents(userNo, type);
   }

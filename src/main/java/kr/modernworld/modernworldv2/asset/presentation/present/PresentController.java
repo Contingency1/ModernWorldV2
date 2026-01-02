@@ -3,6 +3,7 @@ package kr.modernworld.modernworldv2.asset.presentation.present;
 import jakarta.validation.Valid;
 import java.util.List;
 import kr.modernworld.modernworldv2.asset.application.present.PresentService;
+import kr.modernworld.modernworldv2.asset.application.present.dto.GetPresentDTO;
 import kr.modernworld.modernworldv2.asset.domain.present.Present;
 import kr.modernworld.modernworldv2.asset.presentation.present.dto.req.ItemNoRequestDTO;
 import kr.modernworld.modernworldv2.asset.presentation.present.dto.res.GetPresentResponseDTO;
@@ -33,15 +34,19 @@ public class PresentController {
       @AuthenticationPrincipal TokenUserInfoDTO user,
       SenderReceiverNoField type
   ) {
-    return new ResponseEntity<>(presentService.getUserPresents(user.userNo(), type), HttpStatus.OK);
+    List<GetPresentDTO> response = presentService.getUserPresents(user.userNo(), type);
+    
+    return new ResponseEntity<>(
+        response.stream().map(GetPresentResponseDTO::from).toList(),
+        HttpStatus.OK);
   }
 
   @GetMapping("/my/presents/{presentNo}")
   public ResponseEntity<GetPresentResponseDTO> getMyOnePresent(
       @AuthenticationPrincipal TokenUserInfoDTO user, @PathVariable Long presentNo) {
+    GetPresentDTO response = presentService.getOnePresent(user.userNo(), presentNo);
 
-    return new ResponseEntity<>(presentService.getOnePresent(user.userNo(), presentNo),
-        HttpStatus.OK);
+    return new ResponseEntity<>(GetPresentResponseDTO.from(response), HttpStatus.OK);
   }
 
   @PatchMapping("/my/presents/{presentNo}")
