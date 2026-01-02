@@ -6,8 +6,8 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.Instant;
 import java.util.List;
+import kr.modernworld.modernworldv2.growth.application.rsp.dto.GetRSPDTO;
 import kr.modernworld.modernworldv2.growth.application.rsp.port.RSPQueryRepository;
-import kr.modernworld.modernworldv2.growth.presentation.rsp.dto.res.RSPResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -18,10 +18,10 @@ public class RSPQueryRepositoryImpl implements RSPQueryRepository {
   private final JPAQueryFactory queryFactory;
 
   @Override
-  public List<RSPResponseDTO> findAllByUserNoAndDate(Long userNo, Instant start,
+  public List<GetRSPDTO> findAllByUserNoAndDate(Long userNo, Instant start,
       Instant end) {
     return queryFactory
-        .select(Projections.constructor(RSPResponseDTO.class,
+        .select(Projections.constructor(GetRSPDTO.class,
             rspGameRecordJPAEntity.no,
             rspGameRecordJPAEntity.user.no,
             rspGameRecordJPAEntity.userChoice,

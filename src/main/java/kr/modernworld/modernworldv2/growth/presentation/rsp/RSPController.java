@@ -3,6 +3,7 @@ package kr.modernworld.modernworldv2.growth.presentation.rsp;
 import jakarta.validation.Valid;
 import java.util.List;
 import kr.modernworld.modernworldv2.growth.application.rsp.RSPService;
+import kr.modernworld.modernworldv2.growth.application.rsp.dto.GetRSPDTO;
 import kr.modernworld.modernworldv2.growth.presentation.rsp.dto.req.GetRSPRecordsRequestDTO;
 import kr.modernworld.modernworldv2.growth.presentation.rsp.dto.req.RSPRequestDTO;
 import kr.modernworld.modernworldv2.growth.presentation.rsp.dto.res.RSPResponseDTO;
@@ -27,18 +28,20 @@ public class RSPController {
   @GetMapping("/{userNo}/rock-scissors-paper")
   public ResponseEntity<List<RSPResponseDTO>> get(@PathVariable Long userNo,
       GetRSPRecordsRequestDTO query) {
-    List<RSPResponseDTO> response = rspService.get(userNo, query.date());
+    List<GetRSPDTO> response = rspService.get(userNo, query.date());
 
-    return new ResponseEntity<>(response, HttpStatus.OK);
+    return new ResponseEntity<>(
+        response.stream().map(RSPResponseDTO::from).toList(),
+        HttpStatus.OK);
   }
 
   @PostMapping("/my/rock-scissors-paper")
   public ResponseEntity<RSPResponseDTO> create(
       @AuthenticationPrincipal TokenUserInfoDTO user,
       @Valid RSPRequestDTO body) {
-    RSPResponseDTO response = rspService.create(user.userNo(), body.choice());
+    GetRSPDTO response = rspService.create(user.userNo(), body.choice());
 
-    return new ResponseEntity<>(response, HttpStatus.CREATED);
+    return new ResponseEntity<>(RSPResponseDTO.from(response), HttpStatus.CREATED);
   }
 
 }

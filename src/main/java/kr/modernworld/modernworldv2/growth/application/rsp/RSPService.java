@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.util.List;
 import kr.modernworld.modernworldv2.global.common.RewardPoint;
 import kr.modernworld.modernworldv2.growth.application.alarm.event.AlarmEvent;
+import kr.modernworld.modernworldv2.growth.application.rsp.dto.GetRSPDTO;
 import kr.modernworld.modernworldv2.growth.application.rsp.port.RSPQueryRepository;
 import kr.modernworld.modernworldv2.growth.application.userachievement.LegendField;
 import kr.modernworld.modernworldv2.growth.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
@@ -15,7 +16,6 @@ import kr.modernworld.modernworldv2.growth.domain.rsp.GameResult;
 import kr.modernworld.modernworldv2.growth.domain.rsp.RSP;
 import kr.modernworld.modernworldv2.growth.domain.rsp.RSPChoice;
 import kr.modernworld.modernworldv2.growth.domain.rsp.port.RSPRepository;
-import kr.modernworld.modernworldv2.growth.presentation.rsp.dto.res.RSPResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class RSPService {
   private final MemberExternalPort memberExternalPort;
 
   @Transactional(readOnly = true)
-  public List<RSPResponseDTO> get(Long userNo, LocalDate date) {
+  public List<GetRSPDTO> get(Long userNo, LocalDate date) {
     ZoneId zoneId = ZoneId.of("Asia/Seoul");
 
     Instant startOfDay = date.atStartOfDay(zoneId).toInstant();
@@ -43,7 +43,7 @@ public class RSPService {
   }
 
   @Transactional
-  public RSPResponseDTO create(Long userNo, Integer choice) {
+  public GetRSPDTO create(Long userNo, Integer choice) {
     RSPChoice userChoice = RSPChoice.integerToRSPChoice(choice);
 
     RSP rspRecord = RSP.init(userNo, userChoice);
@@ -64,7 +64,7 @@ public class RSPService {
 
     memberExternalPort.processGameResult(userNo, pointToAdd);
 
-    return new RSPResponseDTO(saved.getNo(), saved.getUserNo(), saved.getUserChoice(),
+    return new GetRSPDTO(saved.getNo(), saved.getUserNo(), saved.getUserChoice(),
         saved.getComputerChoice(), saved.getResult(), saved.getCreatedAt());
   }
 

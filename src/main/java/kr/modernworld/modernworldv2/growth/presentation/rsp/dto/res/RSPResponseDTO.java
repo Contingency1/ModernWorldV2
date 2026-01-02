@@ -1,16 +1,26 @@
 package kr.modernworld.modernworldv2.growth.presentation.rsp.dto.res;
 
 import java.time.Instant;
-import kr.modernworld.modernworldv2.growth.domain.rsp.GameResult;
-import kr.modernworld.modernworldv2.growth.domain.rsp.RSPChoice;
+import kr.modernworld.modernworldv2.growth.application.rsp.dto.GetRSPDTO;
 
 public record RSPResponseDTO(
     Long no,
     Long userNo,
-    RSPChoice userChoice,
-    RSPChoice computerChoice,
-    GameResult result,
+    String userChoice,
+    String computerChoice,
+    String result,
     Instant createdAt
 ) {
+
+  public static RSPResponseDTO from(GetRSPDTO input) {
+    return new RSPResponseDTO(
+        input.no(),
+        input.userNo(),
+        input.userChoice().getName(),
+        input.computerChoice().getName(),
+        input.result().getResult(),
+        input.createdAt()
+    );
+  }
 
 }
