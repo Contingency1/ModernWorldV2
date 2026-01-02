@@ -6,8 +6,8 @@ import kr.modernworld.modernworldv2.asset.application.character.dto.CharacterApi
 import kr.modernworld.modernworldv2.asset.application.characterlocker.CharacterLockerService;
 import kr.modernworld.modernworldv2.asset.domain.character.CharacterSpecies;
 import kr.modernworld.modernworldv2.asset.domain.characterlocker.CharacterLocker;
+import kr.modernworld.modernworldv2.asset.domain.external.member.MemberExternalPort;
 import kr.modernworld.modernworldv2.asset.presentation.shop.character.dto.req.ShopCharacterRequestDTO;
-import kr.modernworld.modernworldv2.member.application.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,7 @@ public class CharacterShopService {
 
   private final CharacterLockerService characterLockerService;
   private final CharacterService characterService;
-  private final UserService userService;
+  private final MemberExternalPort memberExternalPort;
 
   @Transactional
   public CharacterLocker buyOneCharacter(Long userNo, Long characterNo) {
@@ -26,7 +26,7 @@ public class CharacterShopService {
 
     Long characterPrice = characterService.getPrice(characterNo);
 
-    userService.decreaseCurrentPoint(userNo, characterPrice);
+    memberExternalPort.decreaseCurrentPoint(userNo, characterPrice);
 
     return characterLockerService.addCharacter(userNo, characterNo);
   }
