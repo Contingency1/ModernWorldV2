@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import java.util.List;
 import kr.modernworld.modernworldv2.asset.application.inventory.InventoryService;
+import kr.modernworld.modernworldv2.asset.application.inventory.dto.GetInventoryDTO;
 import kr.modernworld.modernworldv2.asset.application.shop.ItemShopService;
 import kr.modernworld.modernworldv2.asset.domain.inventory.Inventory;
 import kr.modernworld.modernworldv2.asset.presentation.inventory.dto.request.BuyOneItemRequestDTO;
@@ -36,9 +37,11 @@ public class InventoryController {
       @PathVariable("userNo") @Min(1) Long userNo,
       GetInventoryRequestDTO query
   ) {
-    List<GetInventoryResponseDTO> response = inventoryService.getAllItems(userNo, query);
+    List<GetInventoryDTO> response = inventoryService.getAllItems(userNo, query.theme(),
+        query.status(), query.itemName());
 
-    return new ResponseEntity<>(response, HttpStatus.OK);
+    return new ResponseEntity<>(
+        response.stream().map(GetInventoryResponseDTO::from).toList(), HttpStatus.OK);
   }
 
   @PostMapping("/users/my/items")

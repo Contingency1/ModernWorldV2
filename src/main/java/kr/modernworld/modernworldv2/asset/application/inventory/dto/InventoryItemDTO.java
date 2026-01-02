@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.asset.presentation.inventory.dto.response;
+package kr.modernworld.modernworldv2.asset.application.inventory.dto;
 
 import kr.modernworld.modernworldv2.asset.domain.item.ItemType;
 

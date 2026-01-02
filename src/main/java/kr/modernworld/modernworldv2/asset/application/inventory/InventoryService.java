@@ -1,13 +1,12 @@
 package kr.modernworld.modernworldv2.asset.application.inventory;
 
 import java.util.List;
+import kr.modernworld.modernworldv2.asset.application.inventory.dto.GetInventoryDTO;
 import kr.modernworld.modernworldv2.asset.application.inventory.port.InventoryQueryRepository;
 import kr.modernworld.modernworldv2.asset.domain.inventory.Inventory;
 import kr.modernworld.modernworldv2.asset.domain.inventory.InventoryCollection;
 import kr.modernworld.modernworldv2.asset.domain.inventory.port.InventoryRepository;
 import kr.modernworld.modernworldv2.asset.domain.item.ItemType;
-import kr.modernworld.modernworldv2.asset.presentation.inventory.dto.request.GetInventoryRequestDTO;
-import kr.modernworld.modernworldv2.asset.presentation.inventory.dto.response.GetInventoryResponseDTO;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.growth.application.userachievement.LegendField;
@@ -25,10 +24,10 @@ public class InventoryService {
   private final InventoryQueryRepository inventoryQueryRepository;
   private final ApplicationEventPublisher applicationEventPublisher;
 
-  public List<GetInventoryResponseDTO> getAllItems(Long userNo,
-      GetInventoryRequestDTO query) {
-    return inventoryQueryRepository.getInventory(userNo, query.theme(), query.status(),
-        query.itemName());
+  public List<GetInventoryDTO> getAllItems(Long userNo,
+      String theme, Boolean status, String itemName) {
+    return inventoryQueryRepository.getInventory(userNo, theme, status,
+        itemName);
   }
 
   @Transactional

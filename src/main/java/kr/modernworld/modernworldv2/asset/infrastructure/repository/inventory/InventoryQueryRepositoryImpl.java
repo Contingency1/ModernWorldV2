@@ -9,13 +9,13 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.Optional;
+import kr.modernworld.modernworldv2.asset.application.inventory.dto.GetInventoryDTO;
+import kr.modernworld.modernworldv2.asset.application.inventory.dto.InventoryItemDTO;
 import kr.modernworld.modernworldv2.asset.application.inventory.port.InventoryQueryRepository;
 import kr.modernworld.modernworldv2.asset.domain.inventory.Inventory;
 import kr.modernworld.modernworldv2.asset.domain.inventory.InventoryCollection;
 import kr.modernworld.modernworldv2.asset.domain.item.ItemType;
 import kr.modernworld.modernworldv2.asset.infrastructure.mapper.InventoryMapper;
-import kr.modernworld.modernworldv2.asset.presentation.inventory.dto.response.GetInventoryResponseDTO;
-import kr.modernworld.modernworldv2.asset.presentation.inventory.dto.response.InventoryItemDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -30,7 +30,7 @@ public class InventoryQueryRepositoryImpl implements InventoryQueryRepository {
   private final InventoryMapper inventoryMapper;
 
   @Override
-  public List<GetInventoryResponseDTO> getInventory(Long userNo, String theme, Boolean status,
+  public List<GetInventoryDTO> getInventory(Long userNo, String theme, Boolean status,
       String itemName) {
     return queryFactory
         .select(inventorySelect())
@@ -45,8 +45,8 @@ public class InventoryQueryRepositoryImpl implements InventoryQueryRepository {
         .fetch();
   }
 
-  private static ConstructorExpression<GetInventoryResponseDTO> inventorySelect() {
-    return Projections.constructor(GetInventoryResponseDTO.class,
+  private static ConstructorExpression<GetInventoryDTO> inventorySelect() {
+    return Projections.constructor(GetInventoryDTO.class,
         inventoryJPAEntity.no,
         inventoryJPAEntity.user.no,
         inventoryJPAEntity.item.no,
