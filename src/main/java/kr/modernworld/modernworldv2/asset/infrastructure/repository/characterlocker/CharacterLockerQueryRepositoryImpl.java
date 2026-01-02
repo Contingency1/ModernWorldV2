@@ -8,13 +8,13 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import kr.modernworld.modernworldv2.asset.application.characterlocker.dto.CharacterInfoDTO;
+import kr.modernworld.modernworldv2.asset.application.characterlocker.dto.GetCharacterLockerDTO;
 import kr.modernworld.modernworldv2.asset.application.characterlocker.port.CharacterLockerQueryRepository;
 import kr.modernworld.modernworldv2.asset.domain.character.CharacterSpecies;
 import kr.modernworld.modernworldv2.asset.domain.characterlocker.CharacterLockerCollection;
 import kr.modernworld.modernworldv2.asset.infrastructure.mapper.CharacterLockerMapper;
 import kr.modernworld.modernworldv2.asset.infrastructure.persistence.entity.CharacterLockerJPAEntity;
-import kr.modernworld.modernworldv2.asset.presentation.characterlocker.dto.res.CharacterInfoDTO;
-import kr.modernworld.modernworldv2.asset.presentation.characterlocker.dto.res.GetCharacterLockerResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +28,7 @@ public class CharacterLockerQueryRepositoryImpl implements CharacterLockerQueryR
   private final JPAQueryFactory queryFactory;
 
   @Override
-  public List<GetCharacterLockerResponseDTO> getUserCharactersByCondition(Long userNo,
+  public List<GetCharacterLockerDTO> getUserCharactersByCondition(Long userNo,
       Boolean status, CharacterSpecies species) {
     return queryFactory
         .select(getProjections())
@@ -42,9 +42,9 @@ public class CharacterLockerQueryRepositoryImpl implements CharacterLockerQueryR
         .fetch();
   }
 
-  private ConstructorExpression<GetCharacterLockerResponseDTO> getProjections() {
+  private ConstructorExpression<GetCharacterLockerDTO> getProjections() {
     return Projections.constructor(
-        GetCharacterLockerResponseDTO.class,
+        GetCharacterLockerDTO.class,
         characterLockerJPAEntity.no,
         characterLockerJPAEntity.character.no,
         characterLockerJPAEntity.user.no,

@@ -1,12 +1,12 @@
 package kr.modernworld.modernworldv2.asset.application.characterlocker;
 
 import java.util.List;
+import kr.modernworld.modernworldv2.asset.application.characterlocker.dto.GetCharacterLockerDTO;
 import kr.modernworld.modernworldv2.asset.application.characterlocker.port.CharacterLockerQueryRepository;
 import kr.modernworld.modernworldv2.asset.domain.character.CharacterSpecies;
 import kr.modernworld.modernworldv2.asset.domain.characterlocker.CharacterLocker;
 import kr.modernworld.modernworldv2.asset.domain.characterlocker.CharacterLockerCollection;
 import kr.modernworld.modernworldv2.asset.domain.characterlocker.port.CharacterLockerRepository;
-import kr.modernworld.modernworldv2.asset.presentation.characterlocker.dto.res.GetCharacterLockerResponseDTO;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class CharacterLockerService {
   private final CharacterLockerQueryRepository characterLockerQueryRepository;
 
   @Transactional(readOnly = true)
-  public List<GetCharacterLockerResponseDTO> getUserCharacters(Long userNo, Boolean status,
+  public List<GetCharacterLockerDTO> getUserCharacters(Long userNo, Boolean status,
       CharacterSpecies species) {
     return characterLockerQueryRepository.getUserCharactersByCondition(userNo, status, species);
   }
