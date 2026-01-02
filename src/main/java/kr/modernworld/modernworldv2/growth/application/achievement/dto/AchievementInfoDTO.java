@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.growth.application.achievement.api;
+package kr.modernworld.modernworldv2.growth.application.achievement.dto;
 
 public record AchievementInfoDTO(
     Long no,

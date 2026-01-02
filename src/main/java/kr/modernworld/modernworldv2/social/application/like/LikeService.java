@@ -9,7 +9,7 @@ import kr.modernworld.modernworldv2.growth.application.userachievement.LegendFie
 import kr.modernworld.modernworldv2.growth.application.userachievement.event.DecrementLegendEvent;
 import kr.modernworld.modernworldv2.growth.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
 import kr.modernworld.modernworldv2.growth.domain.alarm.AlarmTitle;
-import kr.modernworld.modernworldv2.member.application.user.UserService;
+import kr.modernworld.modernworldv2.social.domain.external.MemberExternalPort;
 import kr.modernworld.modernworldv2.social.domain.like.Like;
 import kr.modernworld.modernworldv2.social.domain.like.port.LikeQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.like.port.LikeRepository;
@@ -27,7 +27,7 @@ public class LikeService {
   private final ApplicationEventPublisher eventPublisher;
   private final LikeRepository likeRepository;
   private final LikeQueryRepository likeQueryRepository;
-  private final UserService userService;
+  private final MemberExternalPort memberExternalPort;
 
   @Transactional(readOnly = true)
   public List<? extends LikeResponseDTO> getAll(Long userNo, SenderReceiverNoField type) {
@@ -37,7 +37,7 @@ public class LikeService {
 
   @Transactional
   public CreateLikeResponseDTO createOne(Long senderNo, Long receiverNo) {
-    userService.isPresent(receiverNo);
+    memberExternalPort.validateUser(receiverNo);
 
     Boolean exists = likeQueryRepository.existsBySenderNoAndReceiverNo(senderNo, receiverNo);
     if (exists) {

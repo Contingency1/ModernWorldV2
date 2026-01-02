@@ -8,7 +8,7 @@ import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.growth.application.alarm.event.AlarmEvent;
 import kr.modernworld.modernworldv2.growth.domain.alarm.AlarmTitle;
-import kr.modernworld.modernworldv2.member.application.user.UserService;
+import kr.modernworld.modernworldv2.social.domain.external.MemberExternalPort;
 import kr.modernworld.modernworldv2.social.domain.neighbor.Neighbor;
 import kr.modernworld.modernworldv2.social.domain.neighbor.port.NeighborQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.neighbor.port.NeighborRepository;
@@ -26,8 +26,7 @@ public class NeighborService {
 
   private final NeighborQueryRepository neighborQueryRepository;
   private final NeighborRepository neighborRepository;
-
-  private final UserService userService;
+  private final MemberExternalPort memberExternalPort;
 
   private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -63,7 +62,7 @@ public class NeighborService {
           " reason: " + e.getMessage());
     }
 
-    userService.isPresent(receiverNo);
+    memberExternalPort.validateUser(receiverNo);
 
     Boolean myRequest = neighborQueryRepository.findOneRequestThatStatusIsFalse(
         senderNo, receiverNo);

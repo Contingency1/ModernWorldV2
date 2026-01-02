@@ -9,10 +9,10 @@ import kr.modernworld.modernworldv2.growth.application.alarm.event.AlarmEvent;
 import kr.modernworld.modernworldv2.growth.application.userachievement.LegendField;
 import kr.modernworld.modernworldv2.growth.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
 import kr.modernworld.modernworldv2.growth.domain.alarm.AlarmTitle;
-import kr.modernworld.modernworldv2.member.application.user.UserService;
 import kr.modernworld.modernworldv2.social.domain.comment.Comment;
 import kr.modernworld.modernworldv2.social.domain.comment.port.CommentQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.comment.port.CommentRepository;
+import kr.modernworld.modernworldv2.social.domain.external.MemberExternalPort;
 import kr.modernworld.modernworldv2.social.presentation.comment.dto.req.GetCommentsRequestDTO;
 import kr.modernworld.modernworldv2.social.presentation.comment.dto.res.CommentResponseDTO;
 import kr.modernworld.modernworldv2.social.presentation.comment.dto.res.GetCommentResponseDTO;
@@ -27,7 +27,7 @@ public class CommentService {
 
   private final CommentRepository commentRepository;
   private final CommentQueryRepository commentQueryRepository;
-  private final UserService userService;
+  private final MemberExternalPort memberExternalPort;
   private final ApplicationEventPublisher eventPublisher;
 
   @Transactional(readOnly = true)
@@ -47,7 +47,7 @@ public class CommentService {
 
   @Transactional
   public CommentResponseDTO create(Long senderNo, Long receiverNo, String content) {
-    userService.isPresent(receiverNo);
+    memberExternalPort.validateUser(receiverNo);
 
     Comment comment = Comment.init(senderNo, receiverNo, content);
 

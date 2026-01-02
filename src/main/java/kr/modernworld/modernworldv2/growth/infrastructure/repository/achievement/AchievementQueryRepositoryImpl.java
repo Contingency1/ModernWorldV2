@@ -1,11 +1,11 @@
-package kr.modernworld.modernworldv2.growth.infrastructure.repository;
+package kr.modernworld.modernworldv2.growth.infrastructure.repository.achievement;
 
 import static kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.QAchievementJPAEntity.achievementJPAEntity;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
-import kr.modernworld.modernworldv2.growth.application.achievement.api.AchievementInfoDTO;
+import kr.modernworld.modernworldv2.growth.application.achievement.dto.AchievementInfoDTO;
 import kr.modernworld.modernworldv2.growth.domain.achievement.port.AchievementQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

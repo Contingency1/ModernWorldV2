@@ -1,8 +1,8 @@
 package kr.modernworld.modernworldv2.growth.application.userachievement;
 
-import kr.modernworld.modernworldv2.growth.application.achievement.api.AchievementInfoDTO;
+import kr.modernworld.modernworldv2.growth.application.achievement.AchievementService;
+import kr.modernworld.modernworldv2.growth.application.achievement.dto.AchievementInfoDTO;
 import kr.modernworld.modernworldv2.growth.application.alarm.event.AlarmEvent;
-import kr.modernworld.modernworldv2.growth.domain.achievement.port.AchievementApi;
 import kr.modernworld.modernworldv2.growth.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.growth.domain.legend.Legend;
 import kr.modernworld.modernworldv2.growth.domain.userachievement.port.UserAchievementQueryRepository;
@@ -18,7 +18,7 @@ public class AchievementUnlockService {
 
   private final UserAchievementService userAchievementService;
   private final UserAchievementQueryRepository userAchievementQueryRepository;
-  private final AchievementApi achievementApi;
+  private final AchievementService achievementService;
   private final UserService userService;
   private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -45,7 +45,7 @@ public class AchievementUnlockService {
         .existsByUserNoAndAchievementName(userNo, achievementName);
 
     if (!achievementExists) {
-      AchievementInfoDTO achievementInfo = achievementApi.getAchievementInfo(achievementName);
+      AchievementInfoDTO achievementInfo = achievementService.getAchievementInfo(achievementName);
 
       userAchievementService.createUserAchievement(userNo, achievementInfo.no());
       userService.increaseCurrentAccumulationPoint(userNo, achievementInfo.point());

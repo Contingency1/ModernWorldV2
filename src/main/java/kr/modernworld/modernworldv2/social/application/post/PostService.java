@@ -5,7 +5,7 @@ import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.growth.application.alarm.event.AlarmEvent;
 import kr.modernworld.modernworldv2.growth.domain.alarm.AlarmTitle;
-import kr.modernworld.modernworldv2.member.application.user.UserService;
+import kr.modernworld.modernworldv2.social.domain.external.MemberExternalPort;
 import kr.modernworld.modernworldv2.social.domain.post.Post;
 import kr.modernworld.modernworldv2.social.domain.post.port.PostQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.post.port.PostRepository;
@@ -22,7 +22,7 @@ public class PostService {
 
   private final PostQueryRepository postQueryRepository;
   private final PostRepository postRepository;
-  private final UserService userService;
+  private final MemberExternalPort memberExternalPort;
   private final ApplicationEventPublisher eventPublisher;
 
   public List<PostResponseDTO> getAll(Long userNo, GetAllPostsRequestDTO query) {
@@ -48,7 +48,7 @@ public class PostService {
 
   @Transactional
   public PostResponseDTO create(Long senderNo, Long receiverNo, String content) {
-    userService.isPresent(receiverNo);
+    memberExternalPort.validateUser(receiverNo);
 
     Post post;
 

@@ -4,6 +4,7 @@ import java.util.List;
 import kr.modernworld.modernworldv2.asset.application.inventory.InventoryService;
 import kr.modernworld.modernworldv2.asset.application.item.ItemService;
 import kr.modernworld.modernworldv2.asset.application.item.dto.ItemNameAndPriceDTO;
+import kr.modernworld.modernworldv2.asset.domain.external.member.MemberExternalPort;
 import kr.modernworld.modernworldv2.asset.domain.inventory.port.InventoryQueryRepository;
 import kr.modernworld.modernworldv2.asset.domain.present.Present;
 import kr.modernworld.modernworldv2.asset.domain.present.port.PresentQueryRepository;
@@ -17,7 +18,6 @@ import kr.modernworld.modernworldv2.growth.application.alarm.event.AlarmEvent;
 import kr.modernworld.modernworldv2.growth.application.userachievement.LegendField;
 import kr.modernworld.modernworldv2.growth.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
 import kr.modernworld.modernworldv2.growth.domain.alarm.AlarmTitle;
-import kr.modernworld.modernworldv2.member.application.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -32,8 +32,8 @@ public class PresentService {
   private final InventoryQueryRepository inventoryQueryRepository;
   private final ItemService itemService;
   private final InventoryService inventoryService;
-  private final UserService userService;
   private final ApplicationEventPublisher applicationEventPublisher;
+  private final MemberExternalPort memberExternalPort;
 
   @Transactional
   public GetPresentResponseDTO getOnePresent(Long userNo, Long presentNo) {
@@ -64,7 +64,7 @@ public class PresentService {
 
   @Transactional
   public Present createOnePresent(Long senderNo, Long receiverNo, Long itemNo) {
-    userService.isPresent(receiverNo);
+    memberExternalPort.validateUser(receiverNo);
 
     Present present;
 
@@ -88,7 +88,7 @@ public class PresentService {
     applicationEventPublisher.publishEvent(
         new AlarmEvent(this, receiverNo, eventMessage, AlarmTitle.PRESENT));
 
-    userService.decreaseCurrentPoint(senderNo, itemPrice);
+    memberExternalPort.decreaseCurrentPoint(senderNo, itemPrice);
     return presentRepository.save(present);
   }
 
@@ -146,7 +146,7 @@ public class PresentService {
       applicationEventPublisher.publishEvent(
           new AlarmEvent(this, userNo, evenetMessage, AlarmTitle.PRESENT));
 
-      userService.increaseCurrentAccumulationPoint(userNo, itemHalfPrice);
+      memberExternalPort.increaseCurrentAccumulationPoint(userNo, itemHalfPrice);
 
       return presentRepository.save(present);
     }
