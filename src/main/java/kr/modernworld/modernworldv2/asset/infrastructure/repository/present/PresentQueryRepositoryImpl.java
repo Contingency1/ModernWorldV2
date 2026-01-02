@@ -9,7 +9,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
-import kr.modernworld.modernworldv2.asset.domain.present.port.PresentQueryRepository;
+import kr.modernworld.modernworldv2.asset.application.present.port.PresentQueryRepository;
 import kr.modernworld.modernworldv2.asset.presentation.present.dto.res.GetPresentResponseDTO;
 import kr.modernworld.modernworldv2.asset.presentation.present.dto.res.PresentItemDTO;
 import kr.modernworld.modernworldv2.asset.presentation.present.dto.res.PresentUserDTO;

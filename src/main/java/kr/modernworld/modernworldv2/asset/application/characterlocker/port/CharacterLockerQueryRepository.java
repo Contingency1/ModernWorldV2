@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.asset.domain.characterlocker.port;
+package kr.modernworld.modernworldv2.asset.application.characterlocker.port;
 
 import java.util.List;
 import kr.modernworld.modernworldv2.asset.domain.character.CharacterSpecies;

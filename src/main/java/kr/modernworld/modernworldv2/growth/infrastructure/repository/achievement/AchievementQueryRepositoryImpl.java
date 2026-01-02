@@ -6,7 +6,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import kr.modernworld.modernworldv2.growth.application.achievement.dto.AchievementInfoDTO;
-import kr.modernworld.modernworldv2.growth.domain.achievement.port.AchievementQueryRepository;
+import kr.modernworld.modernworldv2.growth.application.achievement.port.AchievementQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

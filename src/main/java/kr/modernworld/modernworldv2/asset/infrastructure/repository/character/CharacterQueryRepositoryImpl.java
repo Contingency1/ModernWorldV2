@@ -9,8 +9,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.Optional;
 import kr.modernworld.modernworldv2.asset.application.character.dto.CharacterApiDTO;
+import kr.modernworld.modernworldv2.asset.application.character.port.CharacterQueryRepository;
 import kr.modernworld.modernworldv2.asset.domain.character.CharacterSpecies;
-import kr.modernworld.modernworldv2.asset.domain.character.port.CharacterQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

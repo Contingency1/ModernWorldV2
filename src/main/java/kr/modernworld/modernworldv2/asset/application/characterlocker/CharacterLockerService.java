@@ -1,10 +1,10 @@
 package kr.modernworld.modernworldv2.asset.application.characterlocker;
 
 import java.util.List;
+import kr.modernworld.modernworldv2.asset.application.characterlocker.port.CharacterLockerQueryRepository;
 import kr.modernworld.modernworldv2.asset.domain.character.CharacterSpecies;
 import kr.modernworld.modernworldv2.asset.domain.characterlocker.CharacterLocker;
 import kr.modernworld.modernworldv2.asset.domain.characterlocker.CharacterLockerCollection;
-import kr.modernworld.modernworldv2.asset.domain.characterlocker.port.CharacterLockerQueryRepository;
 import kr.modernworld.modernworldv2.asset.domain.characterlocker.port.CharacterLockerRepository;
 import kr.modernworld.modernworldv2.asset.presentation.characterlocker.dto.res.GetCharacterLockerResponseDTO;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;

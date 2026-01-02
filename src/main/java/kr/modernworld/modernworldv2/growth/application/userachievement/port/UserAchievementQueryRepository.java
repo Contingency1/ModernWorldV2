@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.growth.domain.userachievement.port;
+package kr.modernworld.modernworldv2.growth.application.userachievement.port;
 
 import java.util.List;
 import kr.modernworld.modernworldv2.growth.presentation.userachievement.dto.res.UserAchievementResponseDTO;

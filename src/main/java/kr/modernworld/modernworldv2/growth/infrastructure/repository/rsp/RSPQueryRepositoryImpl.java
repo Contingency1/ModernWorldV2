@@ -6,7 +6,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.Instant;
 import java.util.List;
-import kr.modernworld.modernworldv2.growth.domain.rsp.port.RSPQueryRepository;
+import kr.modernworld.modernworldv2.growth.application.rsp.port.RSPQueryRepository;
 import kr.modernworld.modernworldv2.growth.presentation.rsp.dto.res.RSPResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

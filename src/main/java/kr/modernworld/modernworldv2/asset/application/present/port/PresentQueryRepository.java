@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.asset.domain.present.port;
+package kr.modernworld.modernworldv2.asset.application.present.port;
 
 import java.util.List;
 import kr.modernworld.modernworldv2.asset.presentation.present.dto.res.GetPresentResponseDTO;

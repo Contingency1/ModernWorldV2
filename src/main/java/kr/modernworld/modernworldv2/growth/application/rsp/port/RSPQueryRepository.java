@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.growth.domain.rsp.port;
+package kr.modernworld.modernworldv2.growth.application.rsp.port;
 
 import java.time.Instant;
 import java.util.List;

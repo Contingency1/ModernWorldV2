@@ -2,8 +2,8 @@ package kr.modernworld.modernworldv2.asset.application.character;
 
 import java.util.List;
 import kr.modernworld.modernworldv2.asset.application.character.dto.CharacterApiDTO;
+import kr.modernworld.modernworldv2.asset.application.character.port.CharacterQueryRepository;
 import kr.modernworld.modernworldv2.asset.domain.character.CharacterSpecies;
-import kr.modernworld.modernworldv2.asset.domain.character.port.CharacterQueryRepository;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
 import lombok.RequiredArgsConstructor;

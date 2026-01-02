@@ -2,12 +2,12 @@ package kr.modernworld.modernworldv2.asset.application.present;
 
 import java.util.List;
 import kr.modernworld.modernworldv2.asset.application.inventory.InventoryService;
+import kr.modernworld.modernworldv2.asset.application.inventory.port.InventoryQueryRepository;
 import kr.modernworld.modernworldv2.asset.application.item.ItemService;
 import kr.modernworld.modernworldv2.asset.application.item.dto.ItemNameAndPriceDTO;
+import kr.modernworld.modernworldv2.asset.application.present.port.PresentQueryRepository;
 import kr.modernworld.modernworldv2.asset.domain.external.member.MemberExternalPort;
-import kr.modernworld.modernworldv2.asset.domain.inventory.port.InventoryQueryRepository;
 import kr.modernworld.modernworldv2.asset.domain.present.Present;
-import kr.modernworld.modernworldv2.asset.domain.present.port.PresentQueryRepository;
 import kr.modernworld.modernworldv2.asset.domain.present.port.PresentRepository;
 import kr.modernworld.modernworldv2.asset.presentation.present.HandlePresentStatus;
 import kr.modernworld.modernworldv2.asset.presentation.present.dto.res.GetPresentResponseDTO;

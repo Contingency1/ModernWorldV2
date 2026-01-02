@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import kr.modernworld.modernworldv2.asset.application.item.dto.ItemApiDTO;
 import kr.modernworld.modernworldv2.asset.application.item.dto.ItemNameAndPriceDTO;
-import kr.modernworld.modernworldv2.asset.domain.item.port.ItemQueryRepository;
+import kr.modernworld.modernworldv2.asset.application.item.port.ItemQueryRepository;
 import kr.modernworld.modernworldv2.asset.infrastructure.persistence.entity.ItemJPAEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
