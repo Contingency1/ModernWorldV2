@@ -2,6 +2,7 @@ package kr.modernworld.modernworldv2.growth.presentation.userachievement;
 
 import java.util.List;
 import kr.modernworld.modernworldv2.growth.application.userachievement.UserAchievementService;
+import kr.modernworld.modernworldv2.growth.application.userachievement.dto.GetUserAchievementDTO;
 import kr.modernworld.modernworldv2.growth.domain.userachievement.UserAchievement;
 import kr.modernworld.modernworldv2.growth.presentation.userachievement.dto.req.GetUserAchievementRequestDTO;
 import kr.modernworld.modernworldv2.growth.presentation.userachievement.dto.req.UpdateUserAchievementStatusDTO;
@@ -28,10 +29,14 @@ public class UserAchievementController {
   public ResponseEntity<List<UserAchievementResponseDTO>> getAchievements(
       @AuthenticationPrincipal TokenUserInfoDTO user,
       GetUserAchievementRequestDTO query) {
-    List<UserAchievementResponseDTO> response = userAchievementService.getUserAchievements(
-        user.userNo(), query);
+    List<GetUserAchievementDTO> response = userAchievementService.getUserAchievements(
+        user.userNo(), query.title(), query.category());
 
-    return new ResponseEntity<>(response, HttpStatus.OK);
+    return new ResponseEntity<>(
+        response.stream()
+            .map(UserAchievementResponseDTO::from)
+            .toList(),
+        HttpStatus.OK);
   }
 
   @PatchMapping("/achievements/{achievementNo}")

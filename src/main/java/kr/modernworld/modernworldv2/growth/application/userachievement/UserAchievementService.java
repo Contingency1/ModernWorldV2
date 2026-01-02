@@ -4,11 +4,10 @@ import java.util.List;
 import java.util.Optional;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
+import kr.modernworld.modernworldv2.growth.application.userachievement.dto.GetUserAchievementDTO;
 import kr.modernworld.modernworldv2.growth.application.userachievement.port.UserAchievementQueryRepository;
 import kr.modernworld.modernworldv2.growth.domain.userachievement.UserAchievement;
 import kr.modernworld.modernworldv2.growth.domain.userachievement.port.UserAchievementRepository;
-import kr.modernworld.modernworldv2.growth.presentation.userachievement.dto.req.GetUserAchievementRequestDTO;
-import kr.modernworld.modernworldv2.growth.presentation.userachievement.dto.res.UserAchievementResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +20,11 @@ public class UserAchievementService {
   private final UserAchievementRepository userAchievementRepository;
 
   @Transactional(readOnly = true)
-  public List<UserAchievementResponseDTO> getUserAchievements(Long userNo,
-      GetUserAchievementRequestDTO query) {
+  public List<GetUserAchievementDTO> getUserAchievements(Long userNo,
+      String title, String category) {
 
     return userAchievementQueryRepository.getUserAchievements(
-        userNo, query.title(), query.category());
+        userNo, title, category);
   }
 
   @Transactional

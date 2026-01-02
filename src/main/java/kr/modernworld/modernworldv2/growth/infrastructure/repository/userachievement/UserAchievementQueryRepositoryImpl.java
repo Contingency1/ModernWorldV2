@@ -8,9 +8,9 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import kr.modernworld.modernworldv2.growth.application.userachievement.dto.GetUserAchievementDTO;
 import kr.modernworld.modernworldv2.growth.application.userachievement.port.UserAchievementQueryRepository;
 import kr.modernworld.modernworldv2.growth.presentation.userachievement.dto.res.AchievementDetail;
-import kr.modernworld.modernworldv2.growth.presentation.userachievement.dto.res.UserAchievementResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -21,7 +21,7 @@ public class UserAchievementQueryRepositoryImpl implements UserAchievementQueryR
   private final JPAQueryFactory queryFactory;
 
   @Override
-  public List<UserAchievementResponseDTO> getUserAchievements(Long userNo, String title,
+  public List<GetUserAchievementDTO> getUserAchievements(Long userNo, String title,
       String category) {
 
     return queryFactory
@@ -46,8 +46,8 @@ public class UserAchievementQueryRepositoryImpl implements UserAchievementQueryR
     return exists != null;
   }
 
-  private static ConstructorExpression<UserAchievementResponseDTO> userAchievementSelect() {
-    return Projections.constructor(UserAchievementResponseDTO.class,
+  private static ConstructorExpression<GetUserAchievementDTO> userAchievementSelect() {
+    return Projections.constructor(GetUserAchievementDTO.class,
         userAchievementJPAEntity.no,
         userAchievementJPAEntity.user.no,
         userAchievementJPAEntity.achievement.no,
