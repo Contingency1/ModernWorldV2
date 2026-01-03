@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.social.presentation.comment.dto.res;
+package kr.modernworld.modernworldv2.social.application.comment.dto;
 
 public record CommentUserDTO(
     Long no,

@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Optional;
 import kr.modernworld.modernworldv2.global.common.OrderBy;
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
+import kr.modernworld.modernworldv2.social.application.comment.dto.CommentDTO;
+import kr.modernworld.modernworldv2.social.application.comment.dto.CommentUserDTO;
+import kr.modernworld.modernworldv2.social.application.comment.dto.GetCommentDTO;
+import kr.modernworld.modernworldv2.social.application.comment.dto.GetCommentReplyCountDTO;
 import kr.modernworld.modernworldv2.social.domain.comment.port.CommentQueryRepository;
-import kr.modernworld.modernworldv2.social.presentation.comment.dto.res.CommentResponseDTO;
-import kr.modernworld.modernworldv2.social.presentation.comment.dto.res.CommentUserDTO;
-import kr.modernworld.modernworldv2.social.presentation.comment.dto.res.GetCommentReplyCountDTO;
-import kr.modernworld.modernworldv2.social.presentation.comment.dto.res.GetCommentResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,10 +29,10 @@ public class CommentQueryRepositoryImpl implements CommentQueryRepository {
 
   @Override
   @Transactional(readOnly = true)
-  public Optional<CommentResponseDTO> findByNo(Long commentNo) {
-    CommentResponseDTO response = queryFactory
+  public Optional<CommentDTO> findByNo(Long commentNo) {
+    CommentDTO response = queryFactory
         .select(Projections.constructor(
-            CommentResponseDTO.class,
+            CommentDTO.class,
             commentJPAEntity.no,
             commentJPAEntity.content,
             commentJPAEntity.createdAt,
@@ -59,10 +59,10 @@ public class CommentQueryRepositoryImpl implements CommentQueryRepository {
   }
 
   @Override
-  public Optional<GetCommentResponseDTO> findByNoWithReplyCount(Long commentNo) {
-    GetCommentResponseDTO response = queryFactory
+  public Optional<GetCommentDTO> findByNoWithReplyCount(Long commentNo) {
+    GetCommentDTO response = queryFactory
         .select(Projections.constructor(
-            GetCommentResponseDTO.class,
+            GetCommentDTO.class,
             commentJPAEntity.no,
             commentJPAEntity.content,
             commentJPAEntity.createdAt,
@@ -100,12 +100,12 @@ public class CommentQueryRepositoryImpl implements CommentQueryRepository {
   }
 
   @Override
-  public List<GetCommentResponseDTO> findAll(Long userNo, Long skip, Long take, OrderBy orderBy,
+  public List<GetCommentDTO> findAll(Long userNo, Long skip, Long take, OrderBy orderBy,
       SenderReceiverNoField type) {
 
     return queryFactory
         .select(Projections.constructor(
-            GetCommentResponseDTO.class,
+            GetCommentDTO.class,
             commentJPAEntity.no,
             commentJPAEntity.content,
             commentJPAEntity.createdAt,

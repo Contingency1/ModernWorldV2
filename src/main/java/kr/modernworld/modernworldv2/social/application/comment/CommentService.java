@@ -1,6 +1,8 @@
 package kr.modernworld.modernworldv2.social.application.comment;
 
 import java.util.List;
+import kr.modernworld.modernworldv2.global.common.OrderBy;
+import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.global.common.dto.PageMetaDTO;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
@@ -9,13 +11,12 @@ import kr.modernworld.modernworldv2.growth.application.userachievement.LegendFie
 import kr.modernworld.modernworldv2.growth.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
 import kr.modernworld.modernworldv2.notification.application.alarm.event.AlarmEvent;
 import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
+import kr.modernworld.modernworldv2.social.application.comment.dto.CommentDTO;
+import kr.modernworld.modernworldv2.social.application.comment.dto.GetCommentDTO;
 import kr.modernworld.modernworldv2.social.domain.comment.Comment;
 import kr.modernworld.modernworldv2.social.domain.comment.port.CommentQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.comment.port.CommentRepository;
 import kr.modernworld.modernworldv2.social.domain.external.MemberExternalPort;
-import kr.modernworld.modernworldv2.social.presentation.comment.dto.req.GetCommentsRequestDTO;
-import kr.modernworld.modernworldv2.social.presentation.comment.dto.res.CommentResponseDTO;
-import kr.modernworld.modernworldv2.social.presentation.comment.dto.res.GetCommentResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -31,29 +32,31 @@ public class CommentService {
   private final ApplicationEventPublisher eventPublisher;
 
   @Transactional(readOnly = true)
-  public PageResponseDTO<GetCommentResponseDTO> getAll(Long userNo, GetCommentsRequestDTO query) {
-    Long skip = query.take() * (query.page() - 1);
+  public PageResponseDTO<GetCommentDTO> getAll(Long userNo,
+      Long page, Long take,
+      OrderBy orderBy, SenderReceiverNoField type) {
+    Long skip = take * (page - 1);
 
-    List<GetCommentResponseDTO> data =
-        commentQueryRepository.findAll(userNo, skip, query.take(), query.orderBy(), query.type());
+    List<GetCommentDTO> data =
+        commentQueryRepository.findAll(userNo, skip, take, orderBy, type);
 
-    Long totalCount = commentQueryRepository.countByUserNo(userNo, query.type());
-    Long totalPage = (long) Math.ceil((double) totalCount / query.take());
+    Long totalCount = commentQueryRepository.countByUserNo(userNo, type);
+    Long totalPage = (long) Math.ceil((double) totalCount / take);
 
-    PageMetaDTO meta = new PageMetaDTO(query.page(), query.take(), totalCount, totalPage);
+    PageMetaDTO meta = new PageMetaDTO(page, take, totalCount, totalPage);
 
     return new PageResponseDTO<>(data, meta);
   }
 
   @Transactional
-  public CommentResponseDTO create(Long senderNo, Long receiverNo, String content) {
+  public CommentDTO create(Long senderNo, Long receiverNo, String content) {
     memberExternalPort.validateUser(receiverNo);
 
     Comment comment = Comment.init(senderNo, receiverNo, content);
 
     Comment savedComment = commentRepository.save(comment);
 
-    CommentResponseDTO response = commentQueryRepository.findByNo(savedComment.getNo())
+    CommentDTO response = commentQueryRepository.findByNo(savedComment.getNo())
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.COMMENT_NOT_FOUND));
 
     String messageForReceiver = String.format("%s님이 방명록을 남겼습니다.",
@@ -69,7 +72,7 @@ public class CommentService {
   }
 
   @Transactional
-  public CommentResponseDTO update(Long userNo, Long commentNo, String content) {
+  public CommentDTO update(Long userNo, Long commentNo, String content) {
     Comment comment = commentRepository.findByNoForUpdate(commentNo)
         .orElseThrow(() -> new BusinessException(
             BusinessErrorCode.COMMENT_NOT_FOUND));
@@ -100,7 +103,7 @@ public class CommentService {
     commentRepository.save(comment);
   }
 
-  public GetCommentResponseDTO getOne(Long commentNo) {
+  public GetCommentDTO getOne(Long commentNo) {
     return commentQueryRepository.findByNoWithReplyCount(commentNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.COMMENT_NOT_FOUND));
   }
