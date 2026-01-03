@@ -29,7 +29,8 @@ public class CharacterController {
 
   @GetMapping
   public ResponseEntity<List<ShopCharacterResponseDTO>> getAll(ShopCharacterRequestDTO query) {
-    List<CharacterApiDTO> response = characterShopService.getCharacters(query);
+    List<CharacterApiDTO> response = characterShopService.getCharacters(query.species(),
+        query.characterName());
 
     return new ResponseEntity<>(
         response.stream().map(ShopCharacterResponseDTO::from).toList(),

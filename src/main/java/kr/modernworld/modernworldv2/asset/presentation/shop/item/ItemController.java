@@ -29,7 +29,7 @@ public class ItemController {
 
   @GetMapping
   public ResponseEntity<List<ShopItemResponseDTO>> getAll(ItemRequestDTO query) {
-    List<ItemApiDTO> response = itemShopService.getAll(query);
+    List<ItemApiDTO> response = itemShopService.getAll(query.theme(), query.itemName());
 
     return new ResponseEntity<>(
         response.stream()

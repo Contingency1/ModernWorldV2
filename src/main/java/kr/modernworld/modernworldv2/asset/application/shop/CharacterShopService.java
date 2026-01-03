@@ -7,7 +7,6 @@ import kr.modernworld.modernworldv2.asset.application.characterlocker.CharacterL
 import kr.modernworld.modernworldv2.asset.domain.character.CharacterSpecies;
 import kr.modernworld.modernworldv2.asset.domain.characterlocker.CharacterLocker;
 import kr.modernworld.modernworldv2.asset.domain.external.member.MemberExternalPort;
-import kr.modernworld.modernworldv2.asset.presentation.shop.character.dto.req.ShopCharacterRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,10 +36,9 @@ public class CharacterShopService {
   }
 
   @Transactional(readOnly = true)
-  public List<CharacterApiDTO> getCharacters(ShopCharacterRequestDTO query) {
-    CharacterSpecies species = CharacterSpecies.stringToCharacterSpecies(query.species());
-    String characterName = query.characterName();
+  public List<CharacterApiDTO> getCharacters(String species, String characterName) {
+    CharacterSpecies querySpecies = CharacterSpecies.stringToCharacterSpecies(species);
 
-    return characterService.getAll(species, characterName);
+    return characterService.getAll(querySpecies, characterName);
   }
 }

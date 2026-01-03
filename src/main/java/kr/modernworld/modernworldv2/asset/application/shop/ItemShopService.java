@@ -7,7 +7,6 @@ import kr.modernworld.modernworldv2.asset.application.item.dto.ItemApiDTO;
 import kr.modernworld.modernworldv2.asset.application.item.dto.ItemNameAndPriceDTO;
 import kr.modernworld.modernworldv2.asset.domain.external.member.MemberExternalPort;
 import kr.modernworld.modernworldv2.asset.domain.inventory.Inventory;
-import kr.modernworld.modernworldv2.asset.presentation.shop.item.dto.req.ItemRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +36,7 @@ public class ItemShopService {
   }
 
   @Transactional(readOnly = true)
-  public List<ItemApiDTO> getAll(ItemRequestDTO query) {
-    return itemService.getAll(query.theme(), query.itemName());
+  public List<ItemApiDTO> getAll(String theme, String itemName) {
+    return itemService.getAll(theme, itemName);
   }
 }
