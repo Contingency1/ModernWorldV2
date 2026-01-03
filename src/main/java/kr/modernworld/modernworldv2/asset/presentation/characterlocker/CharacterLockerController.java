@@ -2,6 +2,7 @@ package kr.modernworld.modernworldv2.asset.presentation.characterlocker;
 
 import java.util.List;
 import kr.modernworld.modernworldv2.asset.application.characterlocker.CharacterLockerService;
+import kr.modernworld.modernworldv2.asset.application.characterlocker.dto.GetCharacterLockerDTO;
 import kr.modernworld.modernworldv2.asset.application.shop.CharacterShopService;
 import kr.modernworld.modernworldv2.asset.domain.characterlocker.CharacterLocker;
 import kr.modernworld.modernworldv2.asset.presentation.characterlocker.dto.req.CharacterNoRequestDTO;
@@ -32,11 +33,12 @@ public class CharacterLockerController {
   public ResponseEntity<List<GetCharacterLockerResponseDTO>> getUserCharacters(
       @PathVariable Long userNo,
       GetCharacterRequestDTO characterInfo) {
-    List<GetCharacterLockerResponseDTO> response = characterLockerService.getUserCharacters(
+    List<GetCharacterLockerDTO> response = characterLockerService.getUserCharacters(
         userNo, characterInfo.status(), characterInfo.species());
 
-    return new ResponseEntity<>(response, HttpStatus.OK);
-
+    return new ResponseEntity<>(
+        response.stream().map(GetCharacterLockerResponseDTO::from).toList(),
+        HttpStatus.OK);
   }
 
   @PostMapping("/my/characters")
