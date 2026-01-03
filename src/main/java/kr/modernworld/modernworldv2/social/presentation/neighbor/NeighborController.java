@@ -1,9 +1,11 @@
 package kr.modernworld.modernworldv2.social.presentation.neighbor;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
 import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.social.application.neighbor.NeighborService;
+import kr.modernworld.modernworldv2.social.application.neighbor.dto.get.GetNeighborDTO;
 import kr.modernworld.modernworldv2.social.presentation.neighbor.dto.req.GetNeighborsRequestDTO;
 import kr.modernworld.modernworldv2.social.presentation.neighbor.dto.res.NeighborResponseDTO;
 import kr.modernworld.modernworldv2.social.presentation.neighbor.dto.res.get.GetNeighborResponseDTO;
@@ -30,20 +32,28 @@ public class NeighborController {
   public ResponseEntity<PageResponseDTO<GetNeighborResponseDTO>> getMyNeighbors(
       @AuthenticationPrincipal TokenUserInfoDTO user,
       @Valid GetNeighborsRequestDTO query) {
-    return new ResponseEntity<>(neighborService.getAll(user.userNo(), query), HttpStatus.OK);
+    PageResponseDTO<GetNeighborDTO> response = neighborService.getAll(user.userNo(),
+        query.page(), query.take(), query.orderBy(), query.status(), query.type());
+
+    List<GetNeighborResponseDTO> data = response.data().stream().map(GetNeighborResponseDTO::from)
+        .toList();
+    
+    return new ResponseEntity<>(new PageResponseDTO<>(data, response.meta()), HttpStatus.OK);
   }
 
   @PostMapping("/{userNo}/neighbors")
   public ResponseEntity<NeighborResponseDTO> create(@AuthenticationPrincipal TokenUserInfoDTO user,
       @PathVariable("userNo") Long receiver) {
-    return new ResponseEntity<>(neighborService.create(user.userNo(), receiver),
+    return new ResponseEntity<>(
+        NeighborResponseDTO.from(neighborService.create(user.userNo(), receiver)),
         HttpStatus.CREATED);
   }
 
   @PatchMapping("/my/neighbors/{neighborNo}")
   public ResponseEntity<NeighborResponseDTO> patchNeighbor(
       @AuthenticationPrincipal TokenUserInfoDTO user, @PathVariable Long neighborNo) {
-    return new ResponseEntity<>(neighborService.update(user.userNo(), neighborNo), HttpStatus.OK);
+    return new ResponseEntity<>(
+        NeighborResponseDTO.from(neighborService.update(user.userNo(), neighborNo)), HttpStatus.OK);
   }
 
   @DeleteMapping("/my/neighbors/{neighborNo}")

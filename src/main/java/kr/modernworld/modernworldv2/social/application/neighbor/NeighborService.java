@@ -2,19 +2,20 @@ package kr.modernworld.modernworldv2.social.application.neighbor;
 
 import java.util.List;
 import java.util.Optional;
+import kr.modernworld.modernworldv2.global.common.OrderBy;
+import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.global.common.dto.PageMetaDTO;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.notification.application.alarm.event.AlarmEvent;
 import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
+import kr.modernworld.modernworldv2.social.application.neighbor.dto.NeighborDTO;
+import kr.modernworld.modernworldv2.social.application.neighbor.dto.get.GetNeighborDTO;
 import kr.modernworld.modernworldv2.social.domain.external.MemberExternalPort;
 import kr.modernworld.modernworldv2.social.domain.neighbor.Neighbor;
 import kr.modernworld.modernworldv2.social.domain.neighbor.port.NeighborQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.neighbor.port.NeighborRepository;
-import kr.modernworld.modernworldv2.social.presentation.neighbor.dto.req.GetNeighborsRequestDTO;
-import kr.modernworld.modernworldv2.social.presentation.neighbor.dto.res.NeighborResponseDTO;
-import kr.modernworld.modernworldv2.social.presentation.neighbor.dto.res.get.GetNeighborResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -31,22 +32,23 @@ public class NeighborService {
   private final ApplicationEventPublisher applicationEventPublisher;
 
   @Transactional(readOnly = true)
-  public PageResponseDTO<GetNeighborResponseDTO> getAll(Long userNo, GetNeighborsRequestDTO query) {
-    Long skip = (query.page() - 1) * query.take();
-    Long totalCount = neighborQueryRepository.count(userNo, query.status(), query.type());
-    Long totalPage = (long) Math.ceil((double) totalCount / query.take());
+  public PageResponseDTO<GetNeighborDTO> getAll(Long userNo, Long page, Long take,
+      OrderBy orderBy, Boolean status, SenderReceiverNoField type) {
+    Long skip = (page - 1) * take;
+    Long totalCount = neighborQueryRepository.count(userNo, status, type);
+    Long totalPage = (long) Math.ceil((double) totalCount / take);
 
-    List<GetNeighborResponseDTO> data = neighborQueryRepository.findAll(userNo, skip, query.take(),
-        query.orderBy(), query.status(),
-        query.type());
+    List<GetNeighborDTO> data = neighborQueryRepository.findAll(userNo, skip, take,
+        orderBy, status,
+        type);
 
-    PageMetaDTO meta = new PageMetaDTO(query.page(), query.take(), totalCount, totalPage);
+    PageMetaDTO meta = new PageMetaDTO(page, take, totalCount, totalPage);
 
     return new PageResponseDTO<>(data, meta);
   }
 
   @Transactional
-  public NeighborResponseDTO create(Long senderNo, Long receiverNo) {
+  public NeighborDTO create(Long senderNo, Long receiverNo) {
     Boolean alreadyNeighbor = neighborQueryRepository.isAlreadyNeighbor(senderNo, receiverNo);
 
     if (alreadyNeighbor) {
@@ -83,11 +85,11 @@ public class NeighborService {
 
     Neighbor saved = neighborRepository.save(neighbor);
 
-    NeighborResponseDTO response = neighborQueryRepository.findOneByNo(saved.getNo())
+    NeighborDTO response = neighborQueryRepository.findOneByNo(saved.getNo())
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.NEIGHBOR_NOT_FOUND));
 
-    Long receiverNumber = response.neighborReceiverNo().no();
-    String senderName = response.neighborSenderNo().nickname();
+    Long receiverNumber = response.receiver().no();
+    String senderName = response.sender().nickname();
 
     String messageForReceiver = String.format("%s님에게 이웃 요청이 왔습니다.", senderName);
     applicationEventPublisher.publishEvent(
@@ -97,7 +99,7 @@ public class NeighborService {
   }
 
   @Transactional
-  public NeighborResponseDTO update(Long receiverNo, Long neighborNo) {
+  public NeighborDTO update(Long receiverNo, Long neighborNo) {
     Neighbor neighbor = neighborRepository.findByNoAndReceiverNoForUpdate(neighborNo, receiverNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.NEIGHBOR_NOT_FOUND));
 
@@ -130,17 +132,17 @@ public class NeighborService {
     throw new BusinessException(BusinessErrorCode.NEIGHBOR_NOT_FOUND);
   }
 
-  private NeighborResponseDTO setNeighborStatusTrue(Neighbor neighbor) {
+  private NeighborDTO setNeighborStatusTrue(Neighbor neighbor) {
     neighbor.makeStatusTrue();
     Neighbor saved = neighborRepository.save(neighbor);
 
-    NeighborResponseDTO neighborDetail = neighborQueryRepository.findOneByNo(saved.getNo())
+    NeighborDTO neighborDetail = neighborQueryRepository.findOneByNo(saved.getNo())
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.NEIGHBOR_NOT_FOUND));
 
-    Long senderNo = neighborDetail.neighborSenderNo().no();
-    Long receiverNo = neighborDetail.neighborReceiverNo().no();
-    String senderName = neighborDetail.neighborSenderNo().nickname();
-    String receiverName = neighborDetail.neighborReceiverNo().nickname();
+    Long senderNo = neighborDetail.sender().no();
+    Long receiverNo = neighborDetail.receiver().no();
+    String senderName = neighborDetail.sender().nickname();
+    String receiverName = neighborDetail.receiver().nickname();
 
     String messageForSender = String.format("%s님과 이웃이 되었습니다.", receiverName);
     String messageForReceiver = String.format("%s님과 이웃이 되었습니다.", senderName);

@@ -12,14 +12,14 @@ import kr.modernworld.modernworldv2.global.common.OrderBy;
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.UserAchievementJPAEntity;
 import kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.UserJPAEntity;
+import kr.modernworld.modernworldv2.social.application.neighbor.dto.NeighborDTO;
+import kr.modernworld.modernworldv2.social.application.neighbor.dto.NeighborUserDTO;
+import kr.modernworld.modernworldv2.social.application.neighbor.dto.get.GetNeighborDTO;
+import kr.modernworld.modernworldv2.social.application.neighbor.dto.get.GetNeighborUserDTO;
+import kr.modernworld.modernworldv2.social.application.neighbor.dto.get.NeighborUserAchievementDTO;
+import kr.modernworld.modernworldv2.social.application.neighbor.dto.get.UserAchievementWrapperDTO;
 import kr.modernworld.modernworldv2.social.domain.neighbor.port.NeighborQueryRepository;
 import kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.NeighborJPAEntity;
-import kr.modernworld.modernworldv2.social.presentation.neighbor.dto.res.NeighborResponseDTO;
-import kr.modernworld.modernworldv2.social.presentation.neighbor.dto.res.NeighborUserInfoDTO;
-import kr.modernworld.modernworldv2.social.presentation.neighbor.dto.res.get.GetNeighborResponseDTO;
-import kr.modernworld.modernworldv2.social.presentation.neighbor.dto.res.get.NeighborUserAchievementInfoDTO;
-import kr.modernworld.modernworldv2.social.presentation.neighbor.dto.res.get.NeighborUserDTO;
-import kr.modernworld.modernworldv2.social.presentation.neighbor.dto.res.get.UserAchievementWrapperDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -43,7 +43,7 @@ public class NeighborQueryRepositoryImpl implements NeighborQueryRepository {
   }
 
   @Override
-  public List<GetNeighborResponseDTO> findAll(Long userNo, Long skip, Long take, OrderBy orderBy,
+  public List<GetNeighborDTO> findAll(Long userNo, Long skip, Long take, OrderBy orderBy,
       Boolean status, SenderReceiverNoField senderReceiver) {
     List<NeighborJPAEntity> neighbors = queryFactory
         .selectFrom(neighborJPAEntity)
@@ -77,18 +77,18 @@ public class NeighborQueryRepositoryImpl implements NeighborQueryRepository {
   }
 
   @Override
-  public Optional<NeighborResponseDTO> findOneByNo(Long neighborNo) {
-    NeighborResponseDTO response = queryFactory
+  public Optional<NeighborDTO> findOneByNo(Long neighborNo) {
+    NeighborDTO response = queryFactory
         .select(Projections.constructor(
-            NeighborResponseDTO.class,
+            NeighborDTO.class,
             neighborJPAEntity.no,
             Projections.constructor(
-                NeighborUserInfoDTO.class,
+                NeighborUserDTO.class,
                 neighborJPAEntity.sender.no,
                 neighborJPAEntity.sender.nickname
             ),
             Projections.constructor(
-                NeighborUserInfoDTO.class,
+                NeighborUserDTO.class,
                 neighborJPAEntity.receiver.no,
                 neighborJPAEntity.receiver.nickname
             ),
@@ -171,7 +171,7 @@ public class NeighborQueryRepositoryImpl implements NeighborQueryRepository {
     return neighborJPAEntity.createdAt.desc();
   }
 
-  private GetNeighborResponseDTO mapToDTO(NeighborJPAEntity entity, Long userNo) {
+  private GetNeighborDTO mapToDTO(NeighborJPAEntity entity, Long userNo) {
     UserJPAEntity targetUser;
 
     if (entity.getSender().getNo().equals(userNo)) {
@@ -183,12 +183,12 @@ public class NeighborQueryRepositoryImpl implements NeighborQueryRepository {
     List<UserAchievementWrapperDTO> achievements = targetUser.getUserAchievements().stream()
         .filter(UserAchievementJPAEntity::getStatus)
         .map(userAchieve -> new UserAchievementWrapperDTO(
-            new NeighborUserAchievementInfoDTO(userAchieve.getAchievement().getName(),
+            new NeighborUserAchievementDTO(userAchieve.getAchievement().getName(),
                 userAchieve.getAchievement().getLevel().toString())
         ))
         .toList();
 
-    NeighborUserDTO userDTO = new NeighborUserDTO(
+    GetNeighborUserDTO userDTO = new GetNeighborUserDTO(
         targetUser.getNo(),
         targetUser.getNickname(),
         targetUser.getImage(),
@@ -196,7 +196,7 @@ public class NeighborQueryRepositoryImpl implements NeighborQueryRepository {
         achievements
     );
 
-    return new GetNeighborResponseDTO(
+    return new GetNeighborDTO(
         entity.getNo(),
         entity.getCreatedAt(),
         entity.getStatus(),

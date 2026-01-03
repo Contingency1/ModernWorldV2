@@ -1,8 +1,8 @@
-package kr.modernworld.modernworldv2.social.presentation.neighbor.dto.res.get;
+package kr.modernworld.modernworldv2.social.application.neighbor.dto.get;
 
 import java.util.List;
 
-public record NeighborUserDTO(
+public record GetNeighborUserDTO(
     Long no,
     String nickname,
     String image,
