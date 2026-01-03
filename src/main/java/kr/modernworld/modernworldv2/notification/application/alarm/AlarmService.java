@@ -1,14 +1,13 @@
-package kr.modernworld.modernworldv2.growth.application.alarm;
+package kr.modernworld.modernworldv2.notification.application.alarm;
 
+import kr.modernworld.modernworldv2.global.common.OrderBy;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
-import kr.modernworld.modernworldv2.growth.domain.alarm.Alarm;
-import kr.modernworld.modernworldv2.growth.domain.alarm.AlarmTitle;
-import kr.modernworld.modernworldv2.growth.domain.alarm.port.AlarmQueryRepository;
-import kr.modernworld.modernworldv2.growth.domain.alarm.port.AlarmRepository;
-import kr.modernworld.modernworldv2.growth.presentation.alarm.dto.req.AlarmRequestDTO;
-import kr.modernworld.modernworldv2.growth.presentation.alarm.dto.res.AlarmResponseDTO;
+import kr.modernworld.modernworldv2.notification.application.alarm.port.AlarmQueryRepository;
+import kr.modernworld.modernworldv2.notification.domain.alarm.Alarm;
+import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
+import kr.modernworld.modernworldv2.notification.domain.alarm.port.AlarmRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,9 +27,10 @@ public class AlarmService {
   }
 
   @Transactional(readOnly = true)
-  public PageResponseDTO<AlarmResponseDTO> getAllAlarms(Long userNo, AlarmRequestDTO query) {
-    return alarmQueryRepository.getAllAlarmsWithMeta(userNo, query.page(), query.take(),
-        query.orderBy());
+  public PageResponseDTO<Alarm> getAllAlarms(Long userNo, Long page, Long take,
+      OrderBy orderBy) {
+    return alarmQueryRepository.getAllAlarmsWithMeta(userNo, page, take,
+        orderBy);
   }
 
   @Transactional

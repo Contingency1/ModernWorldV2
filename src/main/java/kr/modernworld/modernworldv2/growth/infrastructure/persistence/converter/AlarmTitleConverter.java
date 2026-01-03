@@ -2,7 +2,7 @@ package kr.modernworld.modernworldv2.growth.infrastructure.persistence.converter
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import kr.modernworld.modernworldv2.growth.domain.alarm.AlarmTitle;
+import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
 
 @Converter(autoApply = true)
 public class AlarmTitleConverter implements AttributeConverter<AlarmTitle, String> {

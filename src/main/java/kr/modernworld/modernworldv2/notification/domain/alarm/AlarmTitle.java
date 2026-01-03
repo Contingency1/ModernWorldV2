@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.growth.domain.alarm;
+package kr.modernworld.modernworldv2.notification.domain.alarm;
 
 import lombok.Getter;
 

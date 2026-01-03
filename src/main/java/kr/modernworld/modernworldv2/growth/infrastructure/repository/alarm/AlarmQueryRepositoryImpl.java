@@ -10,11 +10,10 @@ import java.util.Optional;
 import kr.modernworld.modernworldv2.global.common.OrderBy;
 import kr.modernworld.modernworldv2.global.common.dto.PageMetaDTO;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
-import kr.modernworld.modernworldv2.growth.domain.alarm.Alarm;
-import kr.modernworld.modernworldv2.growth.domain.alarm.port.AlarmQueryRepository;
 import kr.modernworld.modernworldv2.growth.infrastructure.mapper.AlarmMapper;
 import kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.AlarmJPAEntity;
-import kr.modernworld.modernworldv2.growth.presentation.alarm.dto.res.AlarmResponseDTO;
+import kr.modernworld.modernworldv2.notification.application.alarm.port.AlarmQueryRepository;
+import kr.modernworld.modernworldv2.notification.domain.alarm.Alarm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,11 +28,11 @@ public class AlarmQueryRepositoryImpl implements AlarmQueryRepository {
 
   @Override
   @Transactional(readOnly = true)
-  public PageResponseDTO<AlarmResponseDTO> getAllAlarmsWithMeta(Long userNo, Long page, Long take,
+  public PageResponseDTO<Alarm> getAllAlarmsWithMeta(Long userNo, Long page, Long take,
       OrderBy orderBy) {
 
-    List<AlarmResponseDTO> data = queryFactory
-        .select(Projections.constructor(AlarmResponseDTO.class,
+    List<Alarm> data = queryFactory
+        .select(Projections.constructor(Alarm.class,
             alarmJPAEntity.no,
             alarmJPAEntity.user.no,
             alarmJPAEntity.title,

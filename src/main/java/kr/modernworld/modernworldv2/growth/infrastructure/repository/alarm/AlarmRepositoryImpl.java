@@ -2,10 +2,10 @@ package kr.modernworld.modernworldv2.growth.infrastructure.repository.alarm;
 
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
-import kr.modernworld.modernworldv2.growth.domain.alarm.Alarm;
-import kr.modernworld.modernworldv2.growth.domain.alarm.port.AlarmRepository;
 import kr.modernworld.modernworldv2.growth.infrastructure.mapper.AlarmMapper;
 import kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.AlarmJPAEntity;
+import kr.modernworld.modernworldv2.notification.domain.alarm.Alarm;
+import kr.modernworld.modernworldv2.notification.domain.alarm.port.AlarmRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

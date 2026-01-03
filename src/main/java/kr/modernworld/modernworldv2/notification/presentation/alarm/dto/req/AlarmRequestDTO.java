@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.growth.presentation.alarm.dto.req;
+package kr.modernworld.modernworldv2.notification.presentation.alarm.dto.req;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

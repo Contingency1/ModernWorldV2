@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.growth.domain.alarm.port;
+package kr.modernworld.modernworldv2.notification.application.sse.port;
 
 import java.util.Map;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;

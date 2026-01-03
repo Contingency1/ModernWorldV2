@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.growth.domain.alarm;
+package kr.modernworld.modernworldv2.notification.domain.alarm;
 
 import java.time.Instant;
 import lombok.Builder;
@@ -7,17 +7,17 @@ import lombok.Getter;
 @Getter
 public class Alarm {
 
-  private Long no;
+  private final Long no;
 
-  private Long userNo;
+  private final Long userNo;
 
-  private AlarmTitle title;
+  private final AlarmTitle title;
 
-  private String content;
+  private final String content;
 
   private Boolean status;
 
-  private Instant createdAt;
+  private final Instant createdAt;
 
   public void makeStatusTrue() {
     if (!status) {

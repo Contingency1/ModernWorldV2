@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.growth.presentation.sse;
+package kr.modernworld.modernworldv2.notification.presentation.sse;
 
 import kr.modernworld.modernworldv2.growth.application.sse.SseEmitterService;
 import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;

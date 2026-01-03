@@ -1,10 +1,10 @@
-package kr.modernworld.modernworldv2.growth.application.alarm.listener;
+package kr.modernworld.modernworldv2.notification.application.alarm.listener;
 
-import kr.modernworld.modernworldv2.growth.application.alarm.AlarmService;
-import kr.modernworld.modernworldv2.growth.application.alarm.event.AlarmEvent;
 import kr.modernworld.modernworldv2.growth.application.sse.SseEmitterService;
 import kr.modernworld.modernworldv2.growth.application.sse.SseEvent;
-import kr.modernworld.modernworldv2.growth.domain.alarm.AlarmTitle;
+import kr.modernworld.modernworldv2.notification.application.alarm.AlarmService;
+import kr.modernworld.modernworldv2.notification.application.alarm.event.AlarmEvent;
+import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;

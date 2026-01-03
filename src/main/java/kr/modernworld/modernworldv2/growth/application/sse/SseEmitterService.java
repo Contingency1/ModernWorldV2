@@ -2,7 +2,7 @@ package kr.modernworld.modernworldv2.growth.application.sse;
 
 import java.io.IOException;
 import java.util.Map;
-import kr.modernworld.modernworldv2.growth.domain.alarm.port.SseEmitterRepository;
+import kr.modernworld.modernworldv2.notification.application.sse.port.SseEmitterRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

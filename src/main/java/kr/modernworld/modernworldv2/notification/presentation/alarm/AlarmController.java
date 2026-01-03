@@ -1,11 +1,13 @@
-package kr.modernworld.modernworldv2.growth.presentation.alarm;
+package kr.modernworld.modernworldv2.notification.presentation.alarm;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
-import kr.modernworld.modernworldv2.growth.application.alarm.AlarmService;
-import kr.modernworld.modernworldv2.growth.presentation.alarm.dto.req.AlarmRequestDTO;
-import kr.modernworld.modernworldv2.growth.presentation.alarm.dto.res.AlarmResponseDTO;
 import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
+import kr.modernworld.modernworldv2.notification.application.alarm.AlarmService;
+import kr.modernworld.modernworldv2.notification.domain.alarm.Alarm;
+import kr.modernworld.modernworldv2.notification.presentation.alarm.dto.req.AlarmRequestDTO;
+import kr.modernworld.modernworldv2.notification.presentation.alarm.dto.res.AlarmResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +31,12 @@ public class AlarmController {
       @AuthenticationPrincipal TokenUserInfoDTO user,
       @Valid AlarmRequestDTO query
   ) {
-    PageResponseDTO<AlarmResponseDTO> response = alarmService.getAllAlarms(user.userNo(), query);
+    PageResponseDTO<Alarm> response = alarmService.getAllAlarms(
+        user.userNo(), query.page(), query.take(), query.orderBy());
 
-    return new ResponseEntity<>(response, HttpStatus.OK);
+    List<AlarmResponseDTO> data = response.data().stream().map(AlarmResponseDTO::from).toList();
+
+    return new ResponseEntity<>(new PageResponseDTO<>(data, response.meta()), HttpStatus.OK);
   }
 
   @PatchMapping("/{alarmNo}")
