@@ -10,7 +10,6 @@ import kr.modernworld.modernworldv2.asset.application.present.port.PresentQueryR
 import kr.modernworld.modernworldv2.asset.domain.external.member.MemberExternalPort;
 import kr.modernworld.modernworldv2.asset.domain.present.Present;
 import kr.modernworld.modernworldv2.asset.domain.present.port.PresentRepository;
-import kr.modernworld.modernworldv2.asset.presentation.present.HandlePresentStatus;
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
