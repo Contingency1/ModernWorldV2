@@ -3,9 +3,9 @@ package kr.modernworld.modernworldv2.social.presentation.like;
 import java.util.List;
 import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.social.application.like.LikeService;
+import kr.modernworld.modernworldv2.social.application.like.port.LikeDTO;
 import kr.modernworld.modernworldv2.social.presentation.like.dto.req.GetLikeRequestDTO;
-import kr.modernworld.modernworldv2.social.presentation.like.dto.res.CreateLikeResponseDTO;
-import kr.modernworld.modernworldv2.social.presentation.like.dto.res.get.LikeResponseDTO;
+import kr.modernworld.modernworldv2.social.presentation.like.dto.res.LikeResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,20 +25,22 @@ public class LikeController {
   private final LikeService likeService;
 
   @GetMapping("/{userNo}/likes")
-  public ResponseEntity<List<? extends LikeResponseDTO>> getAll(@PathVariable Long userNo,
+  public ResponseEntity<List<? extends kr.modernworld.modernworldv2.social.presentation.like.dto.res.get.LikeResponseDTO>> getAll(
+      @PathVariable Long userNo,
       GetLikeRequestDTO query) {
-    List<? extends LikeResponseDTO> response = likeService.getAll(userNo, query.type());
+    List<? extends kr.modernworld.modernworldv2.social.presentation.like.dto.res.get.LikeResponseDTO> response = likeService.getAll(
+        userNo, query.type());
 
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @PostMapping("/{userNo}/likes")
-  public ResponseEntity<CreateLikeResponseDTO> create(
+  public ResponseEntity<LikeResponseDTO> create(
       @AuthenticationPrincipal TokenUserInfoDTO sender,
       @PathVariable("userNo") Long receiverNo) {
-    CreateLikeResponseDTO response = likeService.createOne(sender.userNo(), receiverNo);
+    LikeDTO response = likeService.createOne(sender.userNo(), receiverNo);
 
-    return new ResponseEntity<>(response, HttpStatus.CREATED);
+    return new ResponseEntity<>(LikeResponseDTO.from(response), HttpStatus.CREATED);
   }
 
   @DeleteMapping("/{userNo}/likes")

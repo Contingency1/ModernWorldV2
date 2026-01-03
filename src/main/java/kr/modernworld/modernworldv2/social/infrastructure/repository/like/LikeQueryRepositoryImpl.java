@@ -7,9 +7,9 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
+import kr.modernworld.modernworldv2.social.application.like.port.LikeDTO;
+import kr.modernworld.modernworldv2.social.application.like.port.LikeUserDTO;
 import kr.modernworld.modernworldv2.social.domain.like.port.LikeQueryRepository;
-import kr.modernworld.modernworldv2.social.presentation.like.dto.res.CreateLikeResponseDTO;
-import kr.modernworld.modernworldv2.social.presentation.like.dto.res.CreateLikeUserInfoDTO;
 import kr.modernworld.modernworldv2.social.presentation.like.dto.res.get.GetLikeUserInfoDTO;
 import kr.modernworld.modernworldv2.social.presentation.like.dto.res.get.GivenLikeResponse;
 import kr.modernworld.modernworldv2.social.presentation.like.dto.res.get.LikeResponseDTO;
@@ -37,17 +37,17 @@ public class LikeQueryRepositoryImpl implements LikeQueryRepository {
   }
 
   @Override
-  public CreateLikeResponseDTO findByNo(Long likeNo) {
+  public LikeDTO findByNo(Long likeNo) {
     return queryFactory
         .select(Projections.constructor(
-            CreateLikeResponseDTO.class,
+            LikeDTO.class,
             likeJPAEntity.no,
             Projections.constructor(
-                CreateLikeUserInfoDTO.class,
+                LikeUserDTO.class,
                 likeJPAEntity.sender.no,
                 likeJPAEntity.sender.nickname),
             Projections.constructor(
-                CreateLikeUserInfoDTO.class,
+                LikeUserDTO.class,
                 likeJPAEntity.receiver.no,
                 likeJPAEntity.receiver.nickname
             )
@@ -58,7 +58,8 @@ public class LikeQueryRepositoryImpl implements LikeQueryRepository {
   }
 
   @Override
-  public List<? extends LikeResponseDTO> findAllByUserNo(Long userNo, SenderReceiverNoField type) {
+  public List<? extends LikeResponseDTO> findAllByUserNo(
+      Long userNo, SenderReceiverNoField type) {
 
     if (type.equals(SenderReceiverNoField.RECEIVER_NO)) {
       return queryFactory
