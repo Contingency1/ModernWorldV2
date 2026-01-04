@@ -1,5 +1,7 @@
 package kr.modernworld.modernworldv2.notification.application.alarm.listener;
 
+import kr.modernworld.modernworldv2.asset.domain.present.event.PresentCreatedEvent;
+import kr.modernworld.modernworldv2.asset.domain.present.event.PresentItemRefundedEvent;
 import kr.modernworld.modernworldv2.global.common.RewardPoint;
 import kr.modernworld.modernworldv2.growth.application.sse.SseEmitterService;
 import kr.modernworld.modernworldv2.growth.application.sse.SseEvent;
@@ -42,5 +44,35 @@ public class AlarmEventListener {
 
     alarmService.create(userNo, AlarmTitle.GAME, message);
     sseEmitterService.send(userNo, new SseEvent(AlarmTitle.GAME.getTitle(), message));
+  }
+
+  @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public void givePresent(PresentCreatedEvent event) {
+    Long senderNo = event.senderNo();
+    Long receiverNo = event.receiverNo();
+    String itemName = event.itemName();
+
+    String message = String.format("%s님이 %s을(를) 선물로 보냈습니다.", "익명",
+        itemName);
+
+    alarmService.create(receiverNo, AlarmTitle.PRESENT, message);
+    sseEmitterService.send(receiverNo, new SseEvent(AlarmTitle.PRESENT.getTitle(), message));
+  }
+
+  @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public void handlePresentRefund(PresentItemRefundedEvent event) {
+    Long userNo = event.userNo();
+    String itemName = event.itemName();
+    Long refundedPoint = event.refundedPoint();
+    
+    String message = String.format(
+        "%s은(는) 이미 보유중인 아이템 입니다. 아이템 가격의 50%%, [%d]포인트로 반환되었습니다.",
+        itemName, refundedPoint
+    );
+
+    alarmService.create(userNo, AlarmTitle.PRESENT, message);
+    sseEmitterService.send(userNo, new SseEvent(AlarmTitle.PRESENT.getTitle(), message));
   }
 }

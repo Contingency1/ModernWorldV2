@@ -9,14 +9,12 @@ import kr.modernworld.modernworldv2.asset.application.present.dto.GetPresentDTO;
 import kr.modernworld.modernworldv2.asset.application.present.port.PresentQueryRepository;
 import kr.modernworld.modernworldv2.asset.domain.external.member.MemberExternalPort;
 import kr.modernworld.modernworldv2.asset.domain.present.Present;
+import kr.modernworld.modernworldv2.asset.domain.present.event.PresentCreatedEvent;
+import kr.modernworld.modernworldv2.asset.domain.present.event.PresentItemRefundedEvent;
 import kr.modernworld.modernworldv2.asset.domain.present.port.PresentRepository;
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
-import kr.modernworld.modernworldv2.growth.application.userachievement.LegendField;
-import kr.modernworld.modernworldv2.growth.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
-import kr.modernworld.modernworldv2.notification.application.alarm.event.AlarmEvent;
-import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -31,7 +29,7 @@ public class PresentService {
   private final InventoryQueryRepository inventoryQueryRepository;
   private final ItemService itemService;
   private final InventoryService inventoryService;
-  private final ApplicationEventPublisher applicationEventPublisher;
+  private final ApplicationEventPublisher eventPublisher;
   private final MemberExternalPort memberExternalPort;
 
   @Transactional
@@ -78,14 +76,7 @@ public class PresentService {
     Long itemPrice = itemNameAndPrice.price();
     String itemName = itemNameAndPrice.name();
 
-    applicationEventPublisher.publishEvent(
-        new IncrementLegendAndCheckAchievementEvent(this, senderNo, LegendField.PRESENT_COUNT));
-
-    // ============================== 추후에 익명 바꿀것. =============================
-    String eventMessage = String.format("%s님이 %s을(를) 선물로 보냈습니다.", "익명",
-        itemName);
-    applicationEventPublisher.publishEvent(
-        new AlarmEvent(this, receiverNo, eventMessage, AlarmTitle.PRESENT));
+    eventPublisher.publishEvent(new PresentCreatedEvent(senderNo, receiverNo, itemName));
 
     memberExternalPort.decreaseCurrentPoint(senderNo, itemPrice);
     return presentRepository.save(present);
@@ -137,15 +128,12 @@ public class PresentService {
       Long itemPrice = nameAndPrice.price();
       String itemName = nameAndPrice.name();
 
-      Long itemHalfPrice = itemPrice / 2;
+      Long refundedPrice = itemPrice / 2;
 
-      String evenetMessage = String.format(
-          "%s은(는) 이미 보유중인 아이템 입니다. 아이템 가격의 50%%, [%s]포인트로 반환되었습니다.",
-          itemName, itemHalfPrice);
-      applicationEventPublisher.publishEvent(
-          new AlarmEvent(this, userNo, evenetMessage, AlarmTitle.PRESENT));
+      eventPublisher.publishEvent(
+          new PresentItemRefundedEvent(userNo, itemName, refundedPrice));
 
-      memberExternalPort.increaseCurrentAccumulationPoint(userNo, itemHalfPrice);
+      memberExternalPort.increaseCurrentAccumulationPoint(userNo, refundedPrice);
 
       return presentRepository.save(present);
     }

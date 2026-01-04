@@ -1,6 +1,7 @@
 package kr.modernworld.modernworldv2.growth.application.userachievement.listener;
 
 import kr.modernworld.modernworldv2.asset.domain.inventory.event.InventoryCreatedEvent;
+import kr.modernworld.modernworldv2.asset.domain.present.event.PresentCreatedEvent;
 import kr.modernworld.modernworldv2.growth.application.legend.LegendService;
 import kr.modernworld.modernworldv2.growth.application.userachievement.AchievementUnlockService;
 import kr.modernworld.modernworldv2.growth.application.userachievement.LegendField;
@@ -29,6 +30,13 @@ public class LegendEventListener {
     Long userNo = event.userNo();
 
     incrementLegendAndCheckAchievement(userNo, LegendField.RSP_WIN_COUNT);
+  }
+
+  @EventListener
+  public void createOnePresent(PresentCreatedEvent event) {
+    Long userNo = event.senderNo();
+
+    incrementLegendAndCheckAchievement(userNo, LegendField.PRESENT_COUNT);
   }
 
   private void incrementLegendAndCheckAchievement(Long userNo, LegendField field) {
