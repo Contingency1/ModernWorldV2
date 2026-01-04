@@ -14,9 +14,9 @@ import java.util.Optional;
 import kr.modernworld.modernworldv2.global.common.OrderBy;
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.QUserJPAEntity;
-import kr.modernworld.modernworldv2.social.domain.post.port.PostQueryRepository;
-import kr.modernworld.modernworldv2.social.presentation.post.dto.res.PostResponseDTO;
-import kr.modernworld.modernworldv2.social.presentation.post.dto.res.PostUserInfoDTO;
+import kr.modernworld.modernworldv2.social.application.post.dto.PostDTO;
+import kr.modernworld.modernworldv2.social.application.post.dto.PostUserDTO;
+import kr.modernworld.modernworldv2.social.application.post.port.PostQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -27,7 +27,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
   private final JPAQueryFactory queryFactory;
 
   @Override
-  public List<PostResponseDTO> findAll(Long userNo,
+  public List<PostDTO> findAll(Long userNo,
       SenderReceiverNoField senderReceiverNoField,
       OrderBy orderBy) {
     QUserJPAEntity sender = new QUserJPAEntity("sender");
@@ -44,11 +44,11 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
   }
 
   @Override
-  public Optional<PostResponseDTO> findOne(Long userNo, Long postNo) {
+  public Optional<PostDTO> findOne(Long userNo, Long postNo) {
     QUserJPAEntity sender = new QUserJPAEntity("sender");
     QUserJPAEntity receiver = new QUserJPAEntity("receiver");
 
-    PostResponseDTO response = queryFactory
+    PostDTO response = queryFactory
         .select(getSelect(sender, receiver))
         .from(postJPAEntity)
         .leftJoin(postJPAEntity.sender, sender)
@@ -63,19 +63,19 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     return Optional.of(response);
   }
 
-  private static ConstructorExpression<PostResponseDTO> getSelect(QUserJPAEntity sender,
+  private static ConstructorExpression<PostDTO> getSelect(QUserJPAEntity sender,
       QUserJPAEntity receiver) {
     return Projections.constructor(
-        PostResponseDTO.class,
+        PostDTO.class,
         postJPAEntity.no,
         postJPAEntity.content,
         postJPAEntity.createdAt,
         postJPAEntity.check,
         Projections.constructor(
-            PostUserInfoDTO.class, sender.no, sender.nickname
+            PostUserDTO.class, sender.no, sender.nickname
         ),
         Projections.constructor(
-            PostUserInfoDTO.class, receiver.no, receiver.nickname
+            PostUserDTO.class, receiver.no, receiver.nickname
         )
     );
   }

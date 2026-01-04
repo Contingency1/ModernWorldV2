@@ -1,11 +1,11 @@
-package kr.modernworld.modernworldv2.social.presentation.post.dto.res;
+package kr.modernworld.modernworldv2.social.application.post.dto;
 
-public record PostUserInfoDTO(
+public record PostUserDTO(
     Long no,
     String nickname
 ) {
 
-  public PostUserInfoDTO {
+  public PostUserDTO {
     if (nickname == null) {
       nickname = "Deleted User";
     }
@@ -14,4 +14,5 @@ public record PostUserInfoDTO(
       no = 0L;
     }
   }
+
 }

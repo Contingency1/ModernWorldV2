@@ -1,16 +1,17 @@
 package kr.modernworld.modernworldv2.social.application.post;
 
 import java.util.List;
+import kr.modernworld.modernworldv2.global.common.OrderBy;
+import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.notification.application.alarm.event.AlarmEvent;
 import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
+import kr.modernworld.modernworldv2.social.application.post.dto.PostDTO;
+import kr.modernworld.modernworldv2.social.application.post.port.PostQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.external.MemberExternalPort;
 import kr.modernworld.modernworldv2.social.domain.post.Post;
-import kr.modernworld.modernworldv2.social.domain.post.port.PostQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.post.port.PostRepository;
-import kr.modernworld.modernworldv2.social.presentation.post.dto.req.GetAllPostsRequestDTO;
-import kr.modernworld.modernworldv2.social.presentation.post.dto.res.PostResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -25,12 +26,13 @@ public class PostService {
   private final MemberExternalPort memberExternalPort;
   private final ApplicationEventPublisher eventPublisher;
 
-  public List<PostResponseDTO> getAll(Long userNo, GetAllPostsRequestDTO query) {
-    return postQueryRepository.findAll(userNo, query.senderReceiverNoField(), query.orderBy());
+  public List<PostDTO> getAll(Long userNo, SenderReceiverNoField senderReceiverNoField,
+      OrderBy orderBy) {
+    return postQueryRepository.findAll(userNo, senderReceiverNoField, orderBy);
   }
 
   @Transactional
-  public PostResponseDTO getOne(Long userNo, Long postNo) {
+  public PostDTO getOne(Long userNo, Long postNo) {
     Post post = postRepository.findOneByUserNoAndPostNoForUpdate(userNo, postNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.POST_NOT_FOUND));
 
@@ -47,7 +49,7 @@ public class PostService {
   }
 
   @Transactional
-  public PostResponseDTO create(Long senderNo, Long receiverNo, String content) {
+  public PostDTO create(Long senderNo, Long receiverNo, String content) {
     memberExternalPort.validateUser(receiverNo);
 
     Post post;

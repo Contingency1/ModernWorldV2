@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.social.application.post.PostService;
+import kr.modernworld.modernworldv2.social.application.post.dto.PostDTO;
 import kr.modernworld.modernworldv2.social.presentation.post.dto.req.CreateOnePostRequestDTO;
 import kr.modernworld.modernworldv2.social.presentation.post.dto.req.GetAllPostsRequestDTO;
 import kr.modernworld.modernworldv2.social.presentation.post.dto.res.PostResponseDTO;
@@ -30,25 +31,28 @@ public class PostController {
       @AuthenticationPrincipal TokenUserInfoDTO user,
       @Valid GetAllPostsRequestDTO query
   ) {
-    List<PostResponseDTO> response = postService.getAll(user.userNo(), query);
+    List<PostDTO> response = postService.getAll(user.userNo(), query.senderReceiverNoField(),
+        query.orderBy());
 
-    return new ResponseEntity<>(response, HttpStatus.OK);
+    return new ResponseEntity<>(
+        response.stream().map(PostResponseDTO::from).toList(),
+        HttpStatus.OK);
   }
 
   @GetMapping("/my/posts/{postNo}")
   public ResponseEntity<PostResponseDTO> getOne(@AuthenticationPrincipal TokenUserInfoDTO user,
       @PathVariable Long postNo) {
-    PostResponseDTO response = postService.getOne(user.userNo(), postNo);
+    PostDTO response = postService.getOne(user.userNo(), postNo);
 
-    return new ResponseEntity<>(response, HttpStatus.OK);
+    return new ResponseEntity<>(PostResponseDTO.from(response), HttpStatus.OK);
   }
 
   @PostMapping("/{userNo}/posts")
   public ResponseEntity<PostResponseDTO> create(@AuthenticationPrincipal TokenUserInfoDTO user,
       @PathVariable("userNo") Long receiverNo, @Valid CreateOnePostRequestDTO body) {
-    PostResponseDTO response = postService.create(user.userNo(), receiverNo, body.content());
+    PostDTO response = postService.create(user.userNo(), receiverNo, body.content());
 
-    return new ResponseEntity<>(response, HttpStatus.CREATED);
+    return new ResponseEntity<>(PostResponseDTO.from(response), HttpStatus.CREATED);
   }
 
   @DeleteMapping("/my/posts/{postNo}")
