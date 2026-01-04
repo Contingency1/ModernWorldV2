@@ -7,14 +7,11 @@ import kr.modernworld.modernworldv2.global.common.dto.PageMetaDTO;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
-import kr.modernworld.modernworldv2.growth.application.userachievement.LegendField;
-import kr.modernworld.modernworldv2.growth.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
-import kr.modernworld.modernworldv2.notification.application.alarm.event.AlarmEvent;
-import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.social.application.comment.dto.CommentDTO;
 import kr.modernworld.modernworldv2.social.application.comment.dto.GetCommentDTO;
 import kr.modernworld.modernworldv2.social.application.comment.port.CommentQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.comment.Comment;
+import kr.modernworld.modernworldv2.social.domain.comment.event.CommentCreatedEvent;
 import kr.modernworld.modernworldv2.social.domain.comment.port.CommentRepository;
 import kr.modernworld.modernworldv2.social.domain.external.MemberExternalPort;
 import lombok.RequiredArgsConstructor;
@@ -63,10 +60,7 @@ public class CommentService {
         response.commentSender().nickname());
 
     eventPublisher.publishEvent(
-        new IncrementLegendAndCheckAchievementEvent(this, senderNo, LegendField.COMMENT_COUNT));
-
-    eventPublisher.publishEvent(
-        new AlarmEvent(this, receiverNo, messageForReceiver, AlarmTitle.COMMENT));
+        new CommentCreatedEvent(senderNo, receiverNo, response.commentSender().nickname()));
 
     return response;
   }

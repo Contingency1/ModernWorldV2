@@ -9,6 +9,7 @@ import kr.modernworld.modernworldv2.notification.application.sse.SseEmitterServi
 import kr.modernworld.modernworldv2.notification.application.sse.SseEvent;
 import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.social.application.rsp.event.RSPWinEvent;
+import kr.modernworld.modernworldv2.social.domain.comment.event.CommentCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -74,5 +75,17 @@ public class AlarmEventListener {
 
     alarmService.create(userNo, AlarmTitle.PRESENT, message);
     sseEmitterService.send(userNo, new SseEvent(AlarmTitle.PRESENT.getTitle(), message));
+  }
+
+  @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public void createComment(CommentCreatedEvent event) {
+    Long receiverNo = event.receiverNo();
+    String senderName = event.senderName();
+
+    String message = String.format("%s님이 방명록을 남겼습니다.", senderName);
+
+    alarmService.create(receiverNo, AlarmTitle.COMMENT, message);
+    sseEmitterService.send(receiverNo, new SseEvent(AlarmTitle.COMMENT.getTitle(), message));
   }
 }
