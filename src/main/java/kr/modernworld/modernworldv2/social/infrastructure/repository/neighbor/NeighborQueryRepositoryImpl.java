@@ -18,7 +18,7 @@ import kr.modernworld.modernworldv2.social.application.neighbor.dto.get.GetNeigh
 import kr.modernworld.modernworldv2.social.application.neighbor.dto.get.GetNeighborUserDTO;
 import kr.modernworld.modernworldv2.social.application.neighbor.dto.get.NeighborUserAchievementDTO;
 import kr.modernworld.modernworldv2.social.application.neighbor.dto.get.UserAchievementWrapperDTO;
-import kr.modernworld.modernworldv2.social.domain.neighbor.port.NeighborQueryRepository;
+import kr.modernworld.modernworldv2.social.application.neighbor.port.NeighborQueryRepository;
 import kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.NeighborJPAEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.social.domain.neighbor.port;
+package kr.modernworld.modernworldv2.social.application.neighbor.port;
 
 import java.util.List;
 import java.util.Optional;

@@ -12,9 +12,9 @@ import kr.modernworld.modernworldv2.notification.application.alarm.event.AlarmEv
 import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.social.application.neighbor.dto.NeighborDTO;
 import kr.modernworld.modernworldv2.social.application.neighbor.dto.get.GetNeighborDTO;
+import kr.modernworld.modernworldv2.social.application.neighbor.port.NeighborQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.external.MemberExternalPort;
 import kr.modernworld.modernworldv2.social.domain.neighbor.Neighbor;
-import kr.modernworld.modernworldv2.social.domain.neighbor.port.NeighborQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.neighbor.port.NeighborRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
