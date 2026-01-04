@@ -3,10 +3,10 @@ package kr.modernworld.modernworldv2.notification.application.alarm.listener;
 import kr.modernworld.modernworldv2.asset.domain.present.event.PresentCreatedEvent;
 import kr.modernworld.modernworldv2.asset.domain.present.event.PresentItemRefundedEvent;
 import kr.modernworld.modernworldv2.global.common.RewardPoint;
-import kr.modernworld.modernworldv2.growth.application.sse.SseEmitterService;
-import kr.modernworld.modernworldv2.growth.application.sse.SseEvent;
 import kr.modernworld.modernworldv2.notification.application.alarm.AlarmService;
 import kr.modernworld.modernworldv2.notification.application.alarm.event.AlarmEvent;
+import kr.modernworld.modernworldv2.notification.application.sse.SseEmitterService;
+import kr.modernworld.modernworldv2.notification.application.sse.SseEvent;
 import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.social.application.rsp.event.RSPWinEvent;
 import lombok.RequiredArgsConstructor;
@@ -66,7 +66,7 @@ public class AlarmEventListener {
     Long userNo = event.userNo();
     String itemName = event.itemName();
     Long refundedPoint = event.refundedPoint();
-    
+
     String message = String.format(
         "%s은(는) 이미 보유중인 아이템 입니다. 아이템 가격의 50%%, [%d]포인트로 반환되었습니다.",
         itemName, refundedPoint

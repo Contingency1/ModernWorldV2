@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.growth.application.sse;
+package kr.modernworld.modernworldv2.notification.application.sse;
 
 import java.io.IOException;
 import java.util.Map;

@@ -1,7 +1,7 @@
 package kr.modernworld.modernworldv2.notification.presentation.sse;
 
-import kr.modernworld.modernworldv2.growth.application.sse.SseEmitterService;
 import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
+import kr.modernworld.modernworldv2.notification.application.sse.SseEmitterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
