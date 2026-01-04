@@ -4,15 +4,12 @@ import java.util.List;
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
-import kr.modernworld.modernworldv2.growth.application.userachievement.LegendField;
-import kr.modernworld.modernworldv2.growth.application.userachievement.event.DecrementLegendEvent;
-import kr.modernworld.modernworldv2.growth.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
-import kr.modernworld.modernworldv2.notification.application.alarm.event.AlarmEvent;
-import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.social.application.like.dto.LikeDTO;
 import kr.modernworld.modernworldv2.social.application.like.port.LikeQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.external.MemberExternalPort;
 import kr.modernworld.modernworldv2.social.domain.like.Like;
+import kr.modernworld.modernworldv2.social.domain.like.event.LikeCreatedEvent;
+import kr.modernworld.modernworldv2.social.domain.like.event.LikeDeletedEvent;
 import kr.modernworld.modernworldv2.social.domain.like.port.LikeRepository;
 import kr.modernworld.modernworldv2.social.presentation.like.dto.res.get.LikeResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -56,11 +53,8 @@ public class LikeService {
 
     LikeDTO response = likeQueryRepository.findByNo(saved.getNo());
 
-    String eventMessage = String.format("%s님이 좋아요를 눌렀습니다.", response.sender().nickname());
-
-    eventPublisher.publishEvent(new AlarmEvent(this, receiverNo, eventMessage, AlarmTitle.LIKE));
-    eventPublisher.publishEvent(new IncrementLegendAndCheckAchievementEvent(this, receiverNo,
-        LegendField.LIKE_COUNT));
+    eventPublisher.publishEvent(
+        new LikeCreatedEvent(senderNo, receiverNo, response.sender().nickname()));
 
     return response;
   }
@@ -78,7 +72,7 @@ public class LikeService {
     }
 
     likeRepository.delete(like);
-    eventPublisher.publishEvent(new DecrementLegendEvent(this, receiverNo, LegendField.LIKE_COUNT));
+    eventPublisher.publishEvent(new LikeDeletedEvent(receiverNo));
   }
 
   @Transactional(readOnly = true)
