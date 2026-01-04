@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.member.infrastructure.mapper;
+package kr.modernworld.modernworldv2.social.infrastructure.mapper;
 
 import kr.modernworld.modernworldv2.social.domain.like.Like;
 import kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.LikeJPAEntity;

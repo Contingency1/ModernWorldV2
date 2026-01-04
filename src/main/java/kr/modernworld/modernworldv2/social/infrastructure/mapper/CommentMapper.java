@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.member.infrastructure.mapper;
+package kr.modernworld.modernworldv2.social.infrastructure.mapper;
 
 import kr.modernworld.modernworldv2.social.domain.comment.Comment;
 import kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.CommentJPAEntity;

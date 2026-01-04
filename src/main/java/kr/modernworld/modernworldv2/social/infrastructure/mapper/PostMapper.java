@@ -1,24 +1,24 @@
-package kr.modernworld.modernworldv2.member.infrastructure.mapper;
+package kr.modernworld.modernworldv2.social.infrastructure.mapper;
 
-import kr.modernworld.modernworldv2.social.domain.neighbor.Neighbor;
-import kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.NeighborJPAEntity;
+import kr.modernworld.modernworldv2.social.domain.post.Post;
+import kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.PostJPAEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
-public interface NeighborMapper {
+public interface PostMapper {
 
   @Mapping(target = "senderNo", source = "sender.no")
   @Mapping(target = "receiverNo", source = "receiver.no")
-  Neighbor toDomain(NeighborJPAEntity entity);
+  Post toDomain(PostJPAEntity post);
 
   @Mapping(target = "sender.no", source = "senderNo")
   @Mapping(target = "receiver.no", source = "receiverNo")
-  NeighborJPAEntity toEntity(Neighbor domain);
+  PostJPAEntity toEntity(Post post);
 
   @Mapping(target = "no", ignore = true)
   @Mapping(target = "sender.no", source = "senderNo")
   @Mapping(target = "receiver.no", source = "receiverNo")
-  void updateEntityFromDomain(Neighbor entity, @MappingTarget NeighborJPAEntity domain);
+  void updateEntityFromDomain(Post post, @MappingTarget PostJPAEntity postJPAEntity);
 }
