@@ -3,7 +3,7 @@ package kr.modernworld.modernworldv2.social.presentation.like;
 import java.util.List;
 import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.social.application.like.LikeService;
-import kr.modernworld.modernworldv2.social.application.like.port.LikeDTO;
+import kr.modernworld.modernworldv2.social.application.like.dto.LikeDTO;
 import kr.modernworld.modernworldv2.social.presentation.like.dto.req.GetLikeRequestDTO;
 import kr.modernworld.modernworldv2.social.presentation.like.dto.res.LikeResponseDTO;
 import lombok.RequiredArgsConstructor;

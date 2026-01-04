@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.social.application.like.port;
+package kr.modernworld.modernworldv2.social.application.like.dto;
 
 public record LikeUserDTO(
     Long no,

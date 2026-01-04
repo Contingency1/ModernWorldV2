@@ -9,10 +9,10 @@ import kr.modernworld.modernworldv2.growth.application.userachievement.event.Dec
 import kr.modernworld.modernworldv2.growth.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
 import kr.modernworld.modernworldv2.notification.application.alarm.event.AlarmEvent;
 import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
-import kr.modernworld.modernworldv2.social.application.like.port.LikeDTO;
+import kr.modernworld.modernworldv2.social.application.like.dto.LikeDTO;
+import kr.modernworld.modernworldv2.social.application.like.port.LikeQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.external.MemberExternalPort;
 import kr.modernworld.modernworldv2.social.domain.like.Like;
-import kr.modernworld.modernworldv2.social.domain.like.port.LikeQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.like.port.LikeRepository;
 import kr.modernworld.modernworldv2.social.presentation.like.dto.res.get.LikeResponseDTO;
 import lombok.RequiredArgsConstructor;

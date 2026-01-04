@@ -1,8 +1,8 @@
-package kr.modernworld.modernworldv2.social.domain.like.port;
+package kr.modernworld.modernworldv2.social.application.like.port;
 
 import java.util.List;
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
-import kr.modernworld.modernworldv2.social.application.like.port.LikeDTO;
+import kr.modernworld.modernworldv2.social.application.like.dto.LikeDTO;
 import kr.modernworld.modernworldv2.social.presentation.like.dto.res.get.LikeResponseDTO;
 
 public interface LikeQueryRepository {

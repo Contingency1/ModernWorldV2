@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.social.presentation.like.dto.res;
 
-import kr.modernworld.modernworldv2.social.application.like.port.LikeDTO;
+import kr.modernworld.modernworldv2.social.application.like.dto.LikeDTO;
 
 public record LikeResponseDTO(
     Long no,
