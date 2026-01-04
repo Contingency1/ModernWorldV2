@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.growth.presentation.rsp.dto.req;
+package kr.modernworld.modernworldv2.social.presentation.rsp.dto.req;
 
 import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;

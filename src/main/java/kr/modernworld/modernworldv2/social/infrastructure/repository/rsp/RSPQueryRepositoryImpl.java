@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.growth.infrastructure.repository.rsp;
+package kr.modernworld.modernworldv2.social.infrastructure.repository.rsp;
 
 import static kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.QRspGameRecordJPAEntity.rspGameRecordJPAEntity;
 
@@ -6,8 +6,8 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.Instant;
 import java.util.List;
-import kr.modernworld.modernworldv2.growth.application.rsp.dto.GetRSPDTO;
-import kr.modernworld.modernworldv2.growth.application.rsp.port.RSPQueryRepository;
+import kr.modernworld.modernworldv2.social.application.rsp.dto.GetRSPDTO;
+import kr.modernworld.modernworldv2.social.application.rsp.port.RSPQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

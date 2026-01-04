@@ -1,13 +1,13 @@
-package kr.modernworld.modernworldv2.growth.presentation.rsp;
+package kr.modernworld.modernworldv2.social.presentation.rsp;
 
 import jakarta.validation.Valid;
 import java.util.List;
-import kr.modernworld.modernworldv2.growth.application.rsp.RSPService;
-import kr.modernworld.modernworldv2.growth.application.rsp.dto.GetRSPDTO;
-import kr.modernworld.modernworldv2.growth.presentation.rsp.dto.req.GetRSPRecordsRequestDTO;
-import kr.modernworld.modernworldv2.growth.presentation.rsp.dto.req.RSPRequestDTO;
-import kr.modernworld.modernworldv2.growth.presentation.rsp.dto.res.RSPResponseDTO;
 import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
+import kr.modernworld.modernworldv2.social.application.rsp.RSPService;
+import kr.modernworld.modernworldv2.social.application.rsp.dto.GetRSPDTO;
+import kr.modernworld.modernworldv2.social.presentation.rsp.dto.req.GetRSPRecordsRequestDTO;
+import kr.modernworld.modernworldv2.social.presentation.rsp.dto.req.RSPRequestDTO;
+import kr.modernworld.modernworldv2.social.presentation.rsp.dto.res.RSPResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

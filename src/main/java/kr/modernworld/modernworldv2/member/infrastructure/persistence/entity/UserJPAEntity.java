@@ -21,7 +21,7 @@ import java.util.Map;
 import kr.modernworld.modernworldv2.asset.infrastructure.persistence.entity.CharacterLockerJPAEntity;
 import kr.modernworld.modernworldv2.asset.infrastructure.persistence.entity.InventoryJPAEntity;
 import kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.AlarmJPAEntity;
-import kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.RspGameRecordJPAEntity;
+import kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.RspGameRecordJPAEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

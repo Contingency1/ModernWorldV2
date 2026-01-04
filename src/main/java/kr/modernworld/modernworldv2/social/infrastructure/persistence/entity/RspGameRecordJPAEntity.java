@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity;
+package kr.modernworld.modernworldv2.social.infrastructure.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,9 +12,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
-import kr.modernworld.modernworldv2.growth.domain.rsp.GameResult;
-import kr.modernworld.modernworldv2.growth.domain.rsp.RSPChoice;
 import kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.UserJPAEntity;
+import kr.modernworld.modernworldv2.social.domain.rsp.GameResult;
+import kr.modernworld.modernworldv2.social.domain.rsp.RSPChoice;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

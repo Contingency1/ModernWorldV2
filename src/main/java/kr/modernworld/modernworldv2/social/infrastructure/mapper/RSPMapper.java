@@ -1,7 +1,7 @@
-package kr.modernworld.modernworldv2.growth.infrastructure.mapper;
+package kr.modernworld.modernworldv2.social.infrastructure.mapper;
 
-import kr.modernworld.modernworldv2.growth.domain.rsp.RSP;
-import kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.RspGameRecordJPAEntity;
+import kr.modernworld.modernworldv2.social.domain.rsp.RSP;
+import kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.RspGameRecordJPAEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

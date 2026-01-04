@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.growth.presentation.rsp.dto.req;
+package kr.modernworld.modernworldv2.social.presentation.rsp.dto.req;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

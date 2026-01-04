@@ -1,21 +1,18 @@
-package kr.modernworld.modernworldv2.growth.application.rsp;
+package kr.modernworld.modernworldv2.social.application.rsp;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 import kr.modernworld.modernworldv2.global.common.RewardPoint;
-import kr.modernworld.modernworldv2.growth.application.rsp.dto.GetRSPDTO;
-import kr.modernworld.modernworldv2.growth.application.rsp.port.RSPQueryRepository;
-import kr.modernworld.modernworldv2.growth.application.userachievement.LegendField;
-import kr.modernworld.modernworldv2.growth.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
 import kr.modernworld.modernworldv2.growth.domain.external.MemberExternalPort;
-import kr.modernworld.modernworldv2.growth.domain.rsp.GameResult;
-import kr.modernworld.modernworldv2.growth.domain.rsp.RSP;
-import kr.modernworld.modernworldv2.growth.domain.rsp.RSPChoice;
-import kr.modernworld.modernworldv2.growth.domain.rsp.port.RSPRepository;
-import kr.modernworld.modernworldv2.notification.application.alarm.event.AlarmEvent;
-import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
+import kr.modernworld.modernworldv2.social.application.rsp.dto.GetRSPDTO;
+import kr.modernworld.modernworldv2.social.application.rsp.event.RSPWinEvent;
+import kr.modernworld.modernworldv2.social.application.rsp.port.RSPQueryRepository;
+import kr.modernworld.modernworldv2.social.domain.rsp.GameResult;
+import kr.modernworld.modernworldv2.social.domain.rsp.RSP;
+import kr.modernworld.modernworldv2.social.domain.rsp.RSPChoice;
+import kr.modernworld.modernworldv2.social.domain.rsp.port.RSPRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -54,12 +51,7 @@ public class RSPService {
     if (saved.getResult().equals(GameResult.WIN)) {
       pointToAdd = RewardPoint.WIN_GAME.getPoint();
 
-      eventPublisher.publishEvent(new IncrementLegendAndCheckAchievementEvent(this, userNo,
-          LegendField.RSP_WIN_COUNT));
-
-      String eventMessage = String.format("[가위 바위 보 게임]에서 승리하셨습니다! %d포인트를 획득하셨습니다!",
-          RewardPoint.WIN_GAME.getPoint());
-      eventPublisher.publishEvent(new AlarmEvent(this, userNo, eventMessage, AlarmTitle.GAME));
+      eventPublisher.publishEvent(new RSPWinEvent(userNo));
     }
 
     memberExternalPort.processGameResult(userNo, pointToAdd);

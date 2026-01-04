@@ -1,8 +1,8 @@
-package kr.modernworld.modernworldv2.growth.infrastructure.persistence.converter;
+package kr.modernworld.modernworldv2.social.infrastructure.persistence.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import kr.modernworld.modernworldv2.growth.domain.rsp.GameResult;
+import kr.modernworld.modernworldv2.social.domain.rsp.GameResult;
 
 @Converter(autoApply = true)
 public class RSPResultConverter implements AttributeConverter<GameResult, String> {

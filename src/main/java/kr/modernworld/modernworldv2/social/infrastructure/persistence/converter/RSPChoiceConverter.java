@@ -1,8 +1,8 @@
-package kr.modernworld.modernworldv2.growth.infrastructure.persistence.converter;
+package kr.modernworld.modernworldv2.social.infrastructure.persistence.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import kr.modernworld.modernworldv2.growth.domain.rsp.RSPChoice;
+import kr.modernworld.modernworldv2.social.domain.rsp.RSPChoice;
 
 @Converter(autoApply = true)
 public class RSPChoiceConverter implements AttributeConverter<RSPChoice, String> {

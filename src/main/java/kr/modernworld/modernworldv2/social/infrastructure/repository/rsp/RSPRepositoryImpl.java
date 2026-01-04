@@ -1,9 +1,9 @@
-package kr.modernworld.modernworldv2.growth.infrastructure.repository.rsp;
+package kr.modernworld.modernworldv2.social.infrastructure.repository.rsp;
 
-import kr.modernworld.modernworldv2.growth.domain.rsp.RSP;
-import kr.modernworld.modernworldv2.growth.domain.rsp.port.RSPRepository;
-import kr.modernworld.modernworldv2.growth.infrastructure.mapper.RSPMapper;
-import kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.RspGameRecordJPAEntity;
+import kr.modernworld.modernworldv2.social.domain.rsp.RSP;
+import kr.modernworld.modernworldv2.social.domain.rsp.port.RSPRepository;
+import kr.modernworld.modernworldv2.social.infrastructure.mapper.RSPMapper;
+import kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.RspGameRecordJPAEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

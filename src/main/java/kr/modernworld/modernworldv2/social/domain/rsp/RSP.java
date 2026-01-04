@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.growth.domain.rsp;
+package kr.modernworld.modernworldv2.social.domain.rsp;
 
 import java.time.Instant;
 import java.util.concurrent.ThreadLocalRandom;

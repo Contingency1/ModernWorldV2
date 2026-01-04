@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.growth.domain.rsp;
+package kr.modernworld.modernworldv2.social.domain.rsp;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;

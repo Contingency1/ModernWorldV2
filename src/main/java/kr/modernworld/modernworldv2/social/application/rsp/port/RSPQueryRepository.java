@@ -1,8 +1,8 @@
-package kr.modernworld.modernworldv2.growth.application.rsp.port;
+package kr.modernworld.modernworldv2.social.application.rsp.port;
 
 import java.time.Instant;
 import java.util.List;
-import kr.modernworld.modernworldv2.growth.application.rsp.dto.GetRSPDTO;
+import kr.modernworld.modernworldv2.social.application.rsp.dto.GetRSPDTO;
 
 public interface RSPQueryRepository {
 

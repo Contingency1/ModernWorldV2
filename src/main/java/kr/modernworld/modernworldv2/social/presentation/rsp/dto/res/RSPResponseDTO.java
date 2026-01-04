@@ -1,7 +1,7 @@
-package kr.modernworld.modernworldv2.growth.presentation.rsp.dto.res;
+package kr.modernworld.modernworldv2.social.presentation.rsp.dto.res;
 
 import java.time.Instant;
-import kr.modernworld.modernworldv2.growth.application.rsp.dto.GetRSPDTO;
+import kr.modernworld.modernworldv2.social.application.rsp.dto.GetRSPDTO;
 
 public record RSPResponseDTO(
     Long no,

@@ -1,6 +1,6 @@
-package kr.modernworld.modernworldv2.growth.infrastructure.repository.rsp;
+package kr.modernworld.modernworldv2.social.infrastructure.repository.rsp;
 
-import kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.RspGameRecordJPAEntity;
+import kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.RspGameRecordJPAEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
