@@ -6,12 +6,11 @@ import kr.modernworld.modernworldv2.global.common.dto.PageMetaDTO;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
-import kr.modernworld.modernworldv2.growth.application.userachievement.LegendField;
-import kr.modernworld.modernworldv2.growth.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
 import kr.modernworld.modernworldv2.social.application.comment.CommentService;
 import kr.modernworld.modernworldv2.social.application.reply.dto.ReplyDTO;
 import kr.modernworld.modernworldv2.social.application.reply.port.ReplyQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.reply.Reply;
+import kr.modernworld.modernworldv2.social.domain.reply.event.ReplyCreatedEvent;
 import kr.modernworld.modernworldv2.social.domain.reply.port.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -59,8 +58,7 @@ public class ReplyService {
 
     Reply saved = replyRepository.save(reply);
 
-    eventPublisher.publishEvent(
-        new IncrementLegendAndCheckAchievementEvent(this, userNo, LegendField.COMMENT_COUNT));
+    eventPublisher.publishEvent(new ReplyCreatedEvent(userNo));
 
     return saved.getContent();
   }
@@ -79,7 +77,7 @@ public class ReplyService {
     }
 
     Reply saved = replyRepository.save(reply);
-    
+
     return saved.getContent();
   }
 

@@ -8,6 +8,7 @@ import kr.modernworld.modernworldv2.growth.application.userachievement.LegendFie
 import kr.modernworld.modernworldv2.growth.domain.legend.Legend;
 import kr.modernworld.modernworldv2.social.application.rsp.event.RSPWinEvent;
 import kr.modernworld.modernworldv2.social.domain.comment.event.CommentCreatedEvent;
+import kr.modernworld.modernworldv2.social.domain.reply.event.ReplyCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -45,6 +46,13 @@ public class LegendEventListener {
     Long senderNo = event.senderNo();
 
     incrementLegendAndCheckAchievement(senderNo, LegendField.COMMENT_COUNT);
+  }
+
+  @EventListener
+  public void createOneReply(ReplyCreatedEvent event) {
+    Long userNo = event.userNo();
+
+    incrementLegendAndCheckAchievement(userNo, LegendField.COMMENT_COUNT);
   }
 
   private void incrementLegendAndCheckAchievement(Long userNo, LegendField field) {
