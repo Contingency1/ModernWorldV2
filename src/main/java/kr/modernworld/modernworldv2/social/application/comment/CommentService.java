@@ -13,8 +13,8 @@ import kr.modernworld.modernworldv2.notification.application.alarm.event.AlarmEv
 import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.social.application.comment.dto.CommentDTO;
 import kr.modernworld.modernworldv2.social.application.comment.dto.GetCommentDTO;
+import kr.modernworld.modernworldv2.social.application.comment.port.CommentQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.comment.Comment;
-import kr.modernworld.modernworldv2.social.domain.comment.port.CommentQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.comment.port.CommentRepository;
 import kr.modernworld.modernworldv2.social.domain.external.MemberExternalPort;
 import lombok.RequiredArgsConstructor;

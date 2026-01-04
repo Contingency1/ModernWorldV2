@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.social.domain.comment.port;
+package kr.modernworld.modernworldv2.social.application.comment.port;
 
 import java.util.List;
 import java.util.Optional;

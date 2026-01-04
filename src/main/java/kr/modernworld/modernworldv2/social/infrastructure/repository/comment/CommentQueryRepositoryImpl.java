@@ -16,7 +16,7 @@ import kr.modernworld.modernworldv2.social.application.comment.dto.CommentDTO;
 import kr.modernworld.modernworldv2.social.application.comment.dto.CommentUserDTO;
 import kr.modernworld.modernworldv2.social.application.comment.dto.GetCommentDTO;
 import kr.modernworld.modernworldv2.social.application.comment.dto.GetCommentReplyCountDTO;
-import kr.modernworld.modernworldv2.social.domain.comment.port.CommentQueryRepository;
+import kr.modernworld.modernworldv2.social.application.comment.port.CommentQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
