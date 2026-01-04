@@ -1,12 +1,14 @@
 package kr.modernworld.modernworldv2.social.presentation.reply;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
 import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.social.application.reply.ReplyService;
+import kr.modernworld.modernworldv2.social.application.reply.dto.ReplyDTO;
 import kr.modernworld.modernworldv2.social.presentation.reply.dto.req.CreateReplyRequestDTO;
 import kr.modernworld.modernworldv2.social.presentation.reply.dto.req.GetAllReplyRequestDTO;
-import kr.modernworld.modernworldv2.social.presentation.reply.dto.res.CreateResponseDTO;
+import kr.modernworld.modernworldv2.social.presentation.reply.dto.res.CreateReplyResponseDTO;
 import kr.modernworld.modernworldv2.social.presentation.reply.dto.res.ReplyResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,33 +29,38 @@ public class ReplyController {
 
   @GetMapping("/replies/{replyNo}")
   public ResponseEntity<ReplyResponseDTO> getOne(@PathVariable Long replyNo) {
-    ReplyResponseDTO response = replyService.getOne(replyNo);
+    ReplyDTO response = replyService.getOne(replyNo);
 
-    return new ResponseEntity<>(response, HttpStatus.OK);
+    return new ResponseEntity<>(ReplyResponseDTO.from(response), HttpStatus.OK);
   }
 
   @GetMapping("/comments/{commentNo}/replies")
   public ResponseEntity<PageResponseDTO<ReplyResponseDTO>> getAll(@PathVariable Long commentNo,
       @Valid GetAllReplyRequestDTO query) {
-    PageResponseDTO<ReplyResponseDTO> response = replyService.getAll(commentNo, query);
+    PageResponseDTO<ReplyDTO> response = replyService.getAll(commentNo, query.page(),
+        query.take(), query.orderBy());
+    List<ReplyResponseDTO> data = response.data().stream().map(ReplyResponseDTO::from).toList();
 
-    return new ResponseEntity<>(response, HttpStatus.OK);
+    return new ResponseEntity<>(new PageResponseDTO<>(data, response.meta()), HttpStatus.OK);
   }
 
   @PostMapping("/comments/{commentNo}/replies")
-  public ResponseEntity<CreateResponseDTO> create(@AuthenticationPrincipal TokenUserInfoDTO user,
+  public ResponseEntity<CreateReplyResponseDTO> create(
+      @AuthenticationPrincipal TokenUserInfoDTO user,
       @PathVariable Long commentNo, @Valid CreateReplyRequestDTO body) {
-    CreateResponseDTO response = replyService.create(user.userNo(), commentNo, body.content());
-    return new ResponseEntity<>(response, HttpStatus.CREATED);
+    String response = replyService.create(user.userNo(), commentNo, body.content());
+
+    return new ResponseEntity<>(new CreateReplyResponseDTO(response), HttpStatus.CREATED);
   }
 
   @PatchMapping("/comments/{commentNo}/replies/{replyNo}")
-  public ResponseEntity<CreateResponseDTO> updateOne(@AuthenticationPrincipal TokenUserInfoDTO user,
+  public ResponseEntity<CreateReplyResponseDTO> updateOne(
+      @AuthenticationPrincipal TokenUserInfoDTO user,
       @PathVariable Long commentNo, @PathVariable Long replyNo,
       @Valid CreateReplyRequestDTO body) {
-    CreateResponseDTO response = replyService.update(user.userNo(), replyNo, body.content());
+    String response = replyService.update(user.userNo(), replyNo, body.content());
 
-    return new ResponseEntity<>(response, HttpStatus.OK);
+    return new ResponseEntity<>(new CreateReplyResponseDTO(response), HttpStatus.OK);
   }
 
   @DeleteMapping("/comments/{commentNo}/replies/{replyNo}")

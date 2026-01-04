@@ -9,12 +9,10 @@ import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.growth.application.userachievement.LegendField;
 import kr.modernworld.modernworldv2.growth.application.userachievement.event.IncrementLegendAndCheckAchievementEvent;
 import kr.modernworld.modernworldv2.social.application.comment.CommentService;
+import kr.modernworld.modernworldv2.social.application.reply.dto.ReplyDTO;
+import kr.modernworld.modernworldv2.social.application.reply.port.ReplyQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.reply.Reply;
-import kr.modernworld.modernworldv2.social.domain.reply.port.ReplyQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.reply.port.ReplyRepository;
-import kr.modernworld.modernworldv2.social.presentation.reply.dto.req.GetAllReplyRequestDTO;
-import kr.modernworld.modernworldv2.social.presentation.reply.dto.res.CreateResponseDTO;
-import kr.modernworld.modernworldv2.social.presentation.reply.dto.res.ReplyResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -30,25 +28,23 @@ public class ReplyService {
   private final ApplicationEventPublisher eventPublisher;
 
   @Transactional(readOnly = true)
-  public ReplyResponseDTO getOne(Long replyNo) {
+  public ReplyDTO getOne(Long replyNo) {
     return replyQueryRepository.findOne(replyNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.REPLY_NOT_FOUND));
   }
 
   @Transactional(readOnly = true)
-  public PageResponseDTO<ReplyResponseDTO> getAll(Long commentNo, GetAllReplyRequestDTO query) {
+  public PageResponseDTO<ReplyDTO> getAll(Long commentNo,
+      Long page, Long take,
+      OrderBy orderBy) {
     commentService.isPresent(commentNo);
-
-    Long take = query.take();
-    Long page = query.page();
-    OrderBy orderBy = query.orderBy();
 
     Long skip = take * (page - 1);
     Long totalCount = replyQueryRepository.count(commentNo);
 
     Long totalPage = (long) Math.ceil((double) totalCount / take);
 
-    List<ReplyResponseDTO> data = replyQueryRepository.findByCommentNo(commentNo, skip, take,
+    List<ReplyDTO> data = replyQueryRepository.findByCommentNo(commentNo, skip, take,
         orderBy);
     PageMetaDTO meta = new PageMetaDTO(page, take, totalCount, totalPage);
 
@@ -56,7 +52,7 @@ public class ReplyService {
   }
 
   @Transactional
-  public CreateResponseDTO create(Long userNo, Long commentNo, String content) {
+  public String create(Long userNo, Long commentNo, String content) {
     commentService.isPresent(commentNo);
 
     Reply reply = Reply.init(commentNo, userNo, content);
@@ -66,11 +62,11 @@ public class ReplyService {
     eventPublisher.publishEvent(
         new IncrementLegendAndCheckAchievementEvent(this, userNo, LegendField.COMMENT_COUNT));
 
-    return new CreateResponseDTO(saved.getContent());
+    return saved.getContent();
   }
 
   @Transactional
-  public CreateResponseDTO update(Long userNo, Long replyNo, String content) {
+  public String update(Long userNo, Long replyNo, String content) {
     Reply reply = replyRepository.findOneForUpdate(replyNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.REPLY_NOT_FOUND));
 
@@ -83,8 +79,8 @@ public class ReplyService {
     }
 
     Reply saved = replyRepository.save(reply);
-
-    return new CreateResponseDTO(saved.getContent());
+    
+    return saved.getContent();
   }
 
   @Transactional

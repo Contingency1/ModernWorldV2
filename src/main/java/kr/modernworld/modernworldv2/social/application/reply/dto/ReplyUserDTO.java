@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.social.presentation.reply.dto.res;
+package kr.modernworld.modernworldv2.social.application.reply.dto;
 
 public record ReplyUserDTO(
     Long no,
@@ -6,7 +6,6 @@ public record ReplyUserDTO(
 ) {
 
   public ReplyUserDTO {
-
     if (no == null) {
       no = 0L;
     }

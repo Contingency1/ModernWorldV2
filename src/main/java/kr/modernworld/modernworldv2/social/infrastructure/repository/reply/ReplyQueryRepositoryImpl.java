@@ -8,9 +8,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.Optional;
 import kr.modernworld.modernworldv2.global.common.OrderBy;
-import kr.modernworld.modernworldv2.social.domain.reply.port.ReplyQueryRepository;
-import kr.modernworld.modernworldv2.social.presentation.reply.dto.res.ReplyResponseDTO;
-import kr.modernworld.modernworldv2.social.presentation.reply.dto.res.ReplyUserDTO;
+import kr.modernworld.modernworldv2.social.application.reply.dto.ReplyDTO;
+import kr.modernworld.modernworldv2.social.application.reply.dto.ReplyUserDTO;
+import kr.modernworld.modernworldv2.social.application.reply.port.ReplyQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -21,12 +21,12 @@ public class ReplyQueryRepositoryImpl implements ReplyQueryRepository {
   private final JPAQueryFactory queryFactory;
 
   @Override
-  public Optional<ReplyResponseDTO> findOne(Long replyNo) {
+  public Optional<ReplyDTO> findOne(Long replyNo) {
 
-    ReplyResponseDTO response = queryFactory
+    ReplyDTO response = queryFactory
         .select(
             Projections.constructor(
-                ReplyResponseDTO.class,
+                ReplyDTO.class,
                 replyJPAEntity.no,
                 replyJPAEntity.comment.no,
                 replyJPAEntity.content,
@@ -63,12 +63,12 @@ public class ReplyQueryRepositoryImpl implements ReplyQueryRepository {
   }
 
   @Override
-  public List<ReplyResponseDTO> findByCommentNo(Long commentNo, Long skip, Long take,
+  public List<ReplyDTO> findByCommentNo(Long commentNo, Long skip, Long take,
       OrderBy orderBy) {
     return queryFactory
         .select(
             Projections.constructor(
-                ReplyResponseDTO.class,
+                ReplyDTO.class,
                 replyJPAEntity.no,
                 replyJPAEntity.comment.no,
                 replyJPAEntity.content,
