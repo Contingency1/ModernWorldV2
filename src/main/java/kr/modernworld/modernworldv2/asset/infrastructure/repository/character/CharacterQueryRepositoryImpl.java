@@ -8,7 +8,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.Optional;
-import kr.modernworld.modernworldv2.asset.application.character.dto.CharacterApiDTO;
+import kr.modernworld.modernworldv2.asset.application.character.dto.CharacterDTO;
 import kr.modernworld.modernworldv2.asset.application.character.port.CharacterQueryRepository;
 import kr.modernworld.modernworldv2.asset.domain.character.CharacterSpecies;
 import lombok.RequiredArgsConstructor;
@@ -36,10 +36,10 @@ public class CharacterQueryRepositoryImpl implements CharacterQueryRepository {
   }
 
   @Override
-  public Optional<CharacterApiDTO> findOne(Long no) {
-    CharacterApiDTO record = queryFactory
+  public Optional<CharacterDTO> findOne(Long no) {
+    CharacterDTO record = queryFactory
         .select(Projections.constructor(
-            CharacterApiDTO.class,
+            CharacterDTO.class,
             characterJPAEntity.no,
             characterJPAEntity.name,
             characterJPAEntity.description,
@@ -59,10 +59,10 @@ public class CharacterQueryRepositoryImpl implements CharacterQueryRepository {
   }
 
   @Override
-  public List<CharacterApiDTO> findAll(CharacterSpecies species, String name) {
+  public List<CharacterDTO> findAll(CharacterSpecies species, String name) {
     return queryFactory
         .select(Projections.constructor(
-            CharacterApiDTO.class,
+            CharacterDTO.class,
             characterJPAEntity.no,
             characterJPAEntity.name,
             characterJPAEntity.description,

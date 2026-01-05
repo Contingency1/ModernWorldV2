@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.asset.presentation.shop.character.dto.res;
 
-import kr.modernworld.modernworldv2.asset.application.character.dto.CharacterApiDTO;
+import kr.modernworld.modernworldv2.asset.application.character.dto.CharacterDTO;
 
 public record ShopCharacterResponseDTO(
     Long no,
@@ -11,7 +11,7 @@ public record ShopCharacterResponseDTO(
     Long price
 ) {
 
-  public static ShopCharacterResponseDTO from(CharacterApiDTO info) {
+  public static ShopCharacterResponseDTO from(CharacterDTO info) {
     return new ShopCharacterResponseDTO(
         info.no(),
         info.name(),

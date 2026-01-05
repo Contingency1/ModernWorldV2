@@ -2,7 +2,7 @@ package kr.modernworld.modernworldv2.asset.application.shop;
 
 import java.util.List;
 import kr.modernworld.modernworldv2.asset.application.character.CharacterService;
-import kr.modernworld.modernworldv2.asset.application.character.dto.CharacterApiDTO;
+import kr.modernworld.modernworldv2.asset.application.character.dto.CharacterDTO;
 import kr.modernworld.modernworldv2.asset.application.characterlocker.CharacterLockerService;
 import kr.modernworld.modernworldv2.asset.domain.character.CharacterSpecies;
 import kr.modernworld.modernworldv2.asset.domain.characterlocker.CharacterLocker;
@@ -31,12 +31,12 @@ public class CharacterShopService {
   }
 
   @Transactional(readOnly = true)
-  public CharacterApiDTO getCharacter(Long characterNo) {
+  public CharacterDTO getCharacter(Long characterNo) {
     return characterService.getOne(characterNo);
   }
 
   @Transactional(readOnly = true)
-  public List<CharacterApiDTO> getCharacters(String species, String characterName) {
+  public List<CharacterDTO> getCharacters(String species, String characterName) {
     CharacterSpecies querySpecies = CharacterSpecies.stringToCharacterSpecies(species);
 
     return characterService.getAll(querySpecies, characterName);

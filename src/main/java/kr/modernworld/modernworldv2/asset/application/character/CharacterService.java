@@ -1,7 +1,7 @@
 package kr.modernworld.modernworldv2.asset.application.character;
 
 import java.util.List;
-import kr.modernworld.modernworldv2.asset.application.character.dto.CharacterApiDTO;
+import kr.modernworld.modernworldv2.asset.application.character.dto.CharacterDTO;
 import kr.modernworld.modernworldv2.asset.application.character.port.CharacterQueryRepository;
 import kr.modernworld.modernworldv2.asset.domain.character.CharacterSpecies;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
@@ -24,7 +24,7 @@ public class CharacterService {
   }
 
   @Transactional(readOnly = true)
-  public CharacterApiDTO getOne(Long characterNo) {
+  public CharacterDTO getOne(Long characterNo) {
     return characterQueryRepository.findOne(characterNo)
         .orElseThrow(
             () -> new BusinessException(BusinessErrorCode.CHARACTER_NOT_FOUND,
@@ -32,7 +32,7 @@ public class CharacterService {
   }
 
   @Transactional(readOnly = true)
-  public List<CharacterApiDTO> getAll(CharacterSpecies species, String characterName) {
+  public List<CharacterDTO> getAll(CharacterSpecies species, String characterName) {
     return characterQueryRepository.findAll(species, characterName);
   }
 }

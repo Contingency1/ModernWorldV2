@@ -34,7 +34,7 @@ public class CharacterLockerController {
       @PathVariable Long userNo,
       GetCharacterRequestDTO characterInfo) {
     List<GetCharacterLockerDTO> response = characterLockerService.getUserCharacters(
-        userNo, characterInfo.status(), characterInfo.species());
+        userNo, characterInfo.status(), characterInfo.toCharacterSpecies());
 
     return new ResponseEntity<>(
         response.stream().map(GetCharacterLockerResponseDTO::from).toList(),

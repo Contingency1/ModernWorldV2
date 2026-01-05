@@ -1,8 +1,8 @@
 package kr.modernworld.modernworldv2.asset.domain.character;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.Getter;
 
+@Getter
 public enum CharacterSpecies {
 
   DOG("dog"), CAT("cat");
@@ -13,7 +13,6 @@ public enum CharacterSpecies {
     this.name = name;
   }
 
-  @JsonCreator
   public static CharacterSpecies stringToCharacterSpecies(String str) {
     for (CharacterSpecies species : CharacterSpecies.values()) {
       if (species.name.equals(str)) {
@@ -24,8 +23,4 @@ public enum CharacterSpecies {
     throw new IllegalArgumentException("Invalid species: " + str);
   }
 
-  @JsonValue
-  public String getName() {
-    return this.name;
-  }
 }
