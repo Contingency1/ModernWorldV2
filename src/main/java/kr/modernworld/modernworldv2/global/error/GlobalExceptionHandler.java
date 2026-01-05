@@ -2,7 +2,7 @@ package kr.modernworld.modernworldv2.global.error;
 
 import jakarta.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
-import kr.modernworld.modernworldv2.user.infrastructure.auth.jwt.JwtValidationCustomException;
+import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.JwtValidationCustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

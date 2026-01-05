@@ -1,0 +1,82 @@
+package kr.modernworld.modernworldv2.growth.application.userachievement.listener;
+
+import kr.modernworld.modernworldv2.asset.domain.inventory.event.InventoryCreatedEvent;
+import kr.modernworld.modernworldv2.asset.domain.present.event.PresentCreatedEvent;
+import kr.modernworld.modernworldv2.growth.application.legend.LegendService;
+import kr.modernworld.modernworldv2.growth.application.userachievement.AchievementUnlockService;
+import kr.modernworld.modernworldv2.growth.application.userachievement.LegendField;
+import kr.modernworld.modernworldv2.growth.domain.legend.Legend;
+import kr.modernworld.modernworldv2.social.application.rsp.event.RSPWinEvent;
+import kr.modernworld.modernworldv2.social.domain.comment.event.CommentCreatedEvent;
+import kr.modernworld.modernworldv2.social.domain.like.event.LikeCreatedEvent;
+import kr.modernworld.modernworldv2.social.domain.like.event.LikeDeletedEvent;
+import kr.modernworld.modernworldv2.social.domain.reply.event.ReplyCreatedEvent;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+@Component
+@RequiredArgsConstructor
+@Transactional
+public class LegendEventListener {
+
+  private final LegendService legendService;
+  private final AchievementUnlockService achievementUnlockService;
+
+  @EventListener
+  public void createOneInventory(InventoryCreatedEvent event) {
+    Long userNo = event.userNo();
+
+    incrementLegendAndCheckAchievement(userNo, LegendField.ITEM_COUNT);
+  }
+
+  @EventListener
+  public void createOneRSPRecord(RSPWinEvent event) {
+    Long userNo = event.userNo();
+
+    incrementLegendAndCheckAchievement(userNo, LegendField.RSP_WIN_COUNT);
+  }
+
+  @EventListener
+  public void createOnePresent(PresentCreatedEvent event) {
+    Long userNo = event.senderNo();
+
+    incrementLegendAndCheckAchievement(userNo, LegendField.PRESENT_COUNT);
+  }
+
+  @EventListener
+  public void createOneComment(CommentCreatedEvent event) {
+    Long senderNo = event.senderNo();
+
+    incrementLegendAndCheckAchievement(senderNo, LegendField.COMMENT_COUNT);
+  }
+
+  @EventListener
+  public void createOneReply(ReplyCreatedEvent event) {
+    Long userNo = event.userNo();
+
+    incrementLegendAndCheckAchievement(userNo, LegendField.COMMENT_COUNT);
+  }
+
+  @EventListener
+  public void createOneLike(LikeCreatedEvent event) {
+    Long receiverNo = event.receiverNo();
+
+    incrementLegendAndCheckAchievement(receiverNo, LegendField.LIKE_COUNT);
+  }
+
+  @EventListener
+  public void deleteOneLike(LikeDeletedEvent event) {
+    Long receiverNo = event.receiver();
+
+    legendService.decrement(receiverNo, LegendField.LIKE_COUNT);
+  }
+
+
+  private void incrementLegendAndCheckAchievement(Long userNo, LegendField field) {
+    Legend legend = legendService.increment(userNo, field);
+
+    achievementUnlockService.unlockAchievement(userNo, legend, field);
+  }
+}
