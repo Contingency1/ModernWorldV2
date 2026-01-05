@@ -5,7 +5,6 @@ import kr.modernworld.modernworldv2.asset.domain.present.event.PresentItemRefund
 import kr.modernworld.modernworldv2.global.common.RewardPoint;
 import kr.modernworld.modernworldv2.growth.domain.userachievement.event.AchievementUnlockedEvent;
 import kr.modernworld.modernworldv2.notification.application.alarm.AlarmService;
-import kr.modernworld.modernworldv2.notification.application.alarm.event.AlarmEvent;
 import kr.modernworld.modernworldv2.notification.application.sse.SseEmitterService;
 import kr.modernworld.modernworldv2.notification.application.sse.SseEvent;
 import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
@@ -28,17 +27,6 @@ public class AlarmEventListener {
 
   private final AlarmService alarmService;
   private final SseEmitterService sseEmitterService;
-
-  @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public void onAlarmEvent(AlarmEvent event) {
-    Long userNo = event.getUserNo();
-    AlarmTitle title = event.getTitle();
-    String message = event.getMessage();
-
-    alarmService.create(userNo, title, message);
-    sseEmitterService.send(userNo, new SseEvent(title.getTitle(), message));
-  }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
   @Transactional(propagation = Propagation.REQUIRES_NEW)
