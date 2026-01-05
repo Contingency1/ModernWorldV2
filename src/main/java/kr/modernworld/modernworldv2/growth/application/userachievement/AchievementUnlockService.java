@@ -5,8 +5,7 @@ import kr.modernworld.modernworldv2.growth.application.achievement.dto.Achieveme
 import kr.modernworld.modernworldv2.growth.application.userachievement.port.UserAchievementQueryRepository;
 import kr.modernworld.modernworldv2.growth.domain.external.MemberExternalPort;
 import kr.modernworld.modernworldv2.growth.domain.legend.Legend;
-import kr.modernworld.modernworldv2.notification.application.alarm.event.AlarmEvent;
-import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
+import kr.modernworld.modernworldv2.growth.domain.userachievement.event.AchievementUnlockedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ public class AchievementUnlockService {
   private final UserAchievementService userAchievementService;
   private final UserAchievementQueryRepository userAchievementQueryRepository;
   private final AchievementService achievementService;
-  private final ApplicationEventPublisher applicationEventPublisher;
+  private final ApplicationEventPublisher eventPublisher;
 
   private final MemberExternalPort memberExternalPort;
 
@@ -51,11 +50,8 @@ public class AchievementUnlockService {
       userAchievementService.createUserAchievement(userNo, achievementInfo.no());
       memberExternalPort.increaseCurrentAccumulationPoint(userNo, achievementInfo.point());
 
-      applicationEventPublisher.publishEvent(
-          new AlarmEvent(this, userNo,
-              String.format("업적 [%s]을 달성했습니다! %s포인트를 흭득하셨습니다!",
-                  achievementInfo.title(), achievementInfo.point()),
-              AlarmTitle.ACHIEVEMENT));
+      eventPublisher.publishEvent(new AchievementUnlockedEvent(userNo, achievementInfo.title(),
+          achievementInfo.point()));
     }
 
   }

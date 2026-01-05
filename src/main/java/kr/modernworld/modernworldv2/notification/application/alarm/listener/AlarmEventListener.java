@@ -3,6 +3,7 @@ package kr.modernworld.modernworldv2.notification.application.alarm.listener;
 import kr.modernworld.modernworldv2.asset.domain.present.event.PresentCreatedEvent;
 import kr.modernworld.modernworldv2.asset.domain.present.event.PresentItemRefundedEvent;
 import kr.modernworld.modernworldv2.global.common.RewardPoint;
+import kr.modernworld.modernworldv2.growth.domain.userachievement.event.AchievementUnlockedEvent;
 import kr.modernworld.modernworldv2.notification.application.alarm.AlarmService;
 import kr.modernworld.modernworldv2.notification.application.alarm.event.AlarmEvent;
 import kr.modernworld.modernworldv2.notification.application.sse.SseEmitterService;
@@ -147,5 +148,19 @@ public class AlarmEventListener {
         new SseEvent(AlarmTitle.NEIGHBOR.getTitle(), messageForSender));
     sseEmitterService.send(receiverNo,
         new SseEvent(AlarmTitle.NEIGHBOR.getTitle(), messageForReceiver));
+  }
+
+  @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public void unlockAchievement(AchievementUnlockedEvent event) {
+    Long userNo = event.userNo();
+    String achievementTitle = event.achievementTitle();
+    Long rewardPoint = event.achievementRewardPoint();
+
+    String message = String.format("업적 [%s]을 달성했습니다! %s포인트를 흭득하셨습니다!",
+        achievementTitle, rewardPoint);
+
+    alarmService.create(userNo, AlarmTitle.ACHIEVEMENT, message);
+    sseEmitterService.send(userNo, new SseEvent(AlarmTitle.ACHIEVEMENT.getTitle(), message));
   }
 }
