@@ -47,7 +47,8 @@ public class PresentController {
       @AuthenticationPrincipal TokenUserInfoDTO user, @PathVariable Long presentNo) {
     GetPresentDTO response = presentService.getOnePresent(user.userNo(), presentNo);
 
-    return new ResponseEntity<>(GetPresentResponseDTO.from(response), HttpStatus.OK);
+    return new ResponseEntity<>(
+        GetPresentResponseDTO.from(response), HttpStatus.OK);
   }
 
   @PatchMapping("/my/presents/{presentNo}")
@@ -58,7 +59,7 @@ public class PresentController {
 
     return new ResponseEntity<>(
         new PresentResponseDTO(response.getNo(), response.getItemNo(), response.getSenderNo(),
-            response.getReceiverNo(), response.getCreatedAt(), response.getStatus()),
+            response.getReceiverNo(), response.getCreatedAt(), response.getStatus().toString()),
         HttpStatus.OK);
   }
 
@@ -80,7 +81,7 @@ public class PresentController {
 
     return new ResponseEntity<>(
         new PresentResponseDTO(response.getNo(), response.getItemNo(), response.getSenderNo(),
-            response.getReceiverNo(), response.getCreatedAt(), response.getStatus()),
+            response.getReceiverNo(), response.getCreatedAt(), response.getStatus().toString()),
         HttpStatus.CREATED);
   }
 
