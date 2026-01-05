@@ -5,12 +5,11 @@ import kr.modernworld.modernworldv2.global.common.OrderBy;
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
-import kr.modernworld.modernworldv2.notification.application.alarm.event.AlarmEvent;
-import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.social.application.post.dto.PostDTO;
 import kr.modernworld.modernworldv2.social.application.post.port.PostQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.external.MemberExternalPort;
 import kr.modernworld.modernworldv2.social.domain.post.Post;
+import kr.modernworld.modernworldv2.social.domain.post.event.PostCreatedEvent;
 import kr.modernworld.modernworldv2.social.domain.post.port.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -63,10 +62,8 @@ public class PostService {
 
     Post save = postRepository.save(post);
 
-    // ===================================== 나중에 익명 고칠것 ==============================
-    String alarmMessage = String.format("%s님이 쪽지를 보내셨습니다.", "익명");
-    // ===================================== 나중에 익명 고칠것 ==============================
-    eventPublisher.publishEvent(new AlarmEvent(this, receiverNo, alarmMessage, AlarmTitle.POST));
+    eventPublisher.publishEvent(new PostCreatedEvent(receiverNo, senderNo));
+
     return postQueryRepository.findOne(senderNo, save.getNo())
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.POST_NOT_FOUND));
   }

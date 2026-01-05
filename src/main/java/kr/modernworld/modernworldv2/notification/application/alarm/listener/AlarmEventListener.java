@@ -11,6 +11,7 @@ import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.social.application.rsp.event.RSPWinEvent;
 import kr.modernworld.modernworldv2.social.domain.comment.event.CommentCreatedEvent;
 import kr.modernworld.modernworldv2.social.domain.like.event.LikeCreatedEvent;
+import kr.modernworld.modernworldv2.social.domain.post.event.PostCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -100,5 +101,17 @@ public class AlarmEventListener {
 
     alarmService.create(receiverNo, AlarmTitle.LIKE, message);
     sseEmitterService.send(receiverNo, new SseEvent(AlarmTitle.LIKE.getTitle(), message));
+  }
+
+  @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public void createOnePost(PostCreatedEvent event) {
+    Long receiverNo = event.receiverNo();
+    Long senderNo = event.senderNo();
+
+    String message = String.format("%s님이 쪽지를 보내셨습니다.", "익명");
+
+    alarmService.create(receiverNo, AlarmTitle.POST, message);
+    sseEmitterService.send(receiverNo, new SseEvent(AlarmTitle.POST.getTitle(), message));
   }
 }
