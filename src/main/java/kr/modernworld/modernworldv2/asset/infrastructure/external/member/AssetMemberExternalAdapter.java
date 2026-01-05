@@ -25,4 +25,9 @@ public class AssetMemberExternalAdapter implements MemberExternalPort {
   public void increaseCurrentAccumulationPoint(Long userNo, Long amount) {
     userService.increaseCurrentAccumulationPoint(userNo, amount);
   }
+
+  @Override
+  public String getUserName(Long userNo) {
+    return userService.getUserNickname(userNo);
+  }
 }

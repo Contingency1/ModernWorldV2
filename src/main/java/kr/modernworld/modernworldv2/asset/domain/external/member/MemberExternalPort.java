@@ -7,4 +7,6 @@ public interface MemberExternalPort {
   void decreaseCurrentPoint(Long userNo, Long amount);
 
   void increaseCurrentAccumulationPoint(Long userNo, Long amount);
+
+  String getUserName(Long userNo);
 }

@@ -47,11 +47,11 @@ public class AlarmEventListener {
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void givePresent(PresentCreatedEvent event) {
-    Long senderNo = event.senderNo();
     Long receiverNo = event.receiverNo();
+    String senderName = event.senderName();
     String itemName = event.itemName();
 
-    String message = String.format("%s님이 %s을(를) 선물로 보냈습니다.", "익명",
+    String message = String.format("%s님이 %s을(를) 선물로 보냈습니다.", senderName,
         itemName);
 
     saveAlarmAndSendSSE(receiverNo, AlarmTitle.PRESENT, message);

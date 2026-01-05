@@ -11,4 +11,5 @@ public interface UserQueryRepository {
 
   Optional<User> findOneByUserNo(Long userNo);
 
+  Optional<String> findNameByUserNo(Long userNo);
 }

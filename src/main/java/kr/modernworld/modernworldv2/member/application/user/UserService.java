@@ -66,6 +66,12 @@ public class UserService {
     }
   }
 
+  @Transactional(readOnly = true)
+  public String getUserNickname(Long userNo) {
+    return userQueryRepository.findNameByUserNo(userNo).orElseThrow(
+        () -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND, " userNo: " + userNo));
+  }
+
   @Transactional
   public void processGameResult(Long userNo, Long pointToAdd) {
     User user = userRepository.findUserByUserNoForUpdate(userNo).orElseThrow(

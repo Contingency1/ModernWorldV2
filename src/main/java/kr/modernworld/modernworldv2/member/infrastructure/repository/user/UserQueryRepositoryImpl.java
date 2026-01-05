@@ -46,4 +46,19 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
 
     return Optional.of(userMapper.toDomain(entity.get()));
   }
+
+  @Override
+  public Optional<String> findNameByUserNo(Long userNo) {
+    String name = queryFactory
+        .select(userJPAEntity.nickname)
+        .from(userJPAEntity)
+        .where(userJPAEntity.no.eq(userNo))
+        .fetchFirst();
+
+    if (name == null) {
+      return Optional.empty();
+    }
+
+    return Optional.of(name);
+  }
 }
