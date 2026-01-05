@@ -5,6 +5,7 @@ import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.growth.application.legend.LegendService;
 import kr.modernworld.modernworldv2.member.application.auth.OAuthTokenDTO;
 import kr.modernworld.modernworldv2.member.application.auth.SocialUserInfoDTO;
+import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO;
 import kr.modernworld.modernworldv2.member.application.user.socialtoken.SocialTokenService;
 import kr.modernworld.modernworldv2.member.domain.auth.port.OAuthClient;
 import kr.modernworld.modernworldv2.member.domain.user.User;
@@ -23,6 +24,12 @@ public class UserService {
   private final UserQueryRepository userQueryRepository;
   private final LegendService legendService;
   private final SocialTokenService socialTokenService;
+
+  @Transactional(readOnly = true)
+  public UserDTO getOne(Long userNo) {
+    return userQueryRepository.findOne(userNo)
+        .orElseThrow(() -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND));
+  }
 
   @Transactional
   public User save(SocialUserInfoDTO socialUserInfo, OAuthClient client,

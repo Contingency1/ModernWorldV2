@@ -1,0 +1,50 @@
+package kr.modernworld.modernworldv2.member.application.user.dto;
+
+import java.util.List;
+
+public record UserDTO(
+    Long no,
+    String socialName,
+    String nickname,
+    String description,
+    Long currentPoint,
+    Long accumulationPoint,
+    String image,
+    UserLegendDTO legend,
+    List<UserCharacterLockerDTO> characterLocker,
+    List<UserAchievementDTO> userAchievement,
+    Long chance
+) {
+
+  public record UserLegendDTO(
+      Long likeCount
+  ) {
+
+  }
+
+  public record UserCharacterLockerDTO(
+      UserCharacterDTO character
+  ) {
+
+  }
+
+  public record UserCharacterDTO(
+      Long no,
+      String image
+  ) {
+
+  }
+
+  public record UserAchievementDTO(
+      UserAchievementDetailDTO achievement
+  ) {
+
+  }
+
+  public record UserAchievementDetailDTO(
+      String title,
+      String level
+  ) {
+
+  }
+}
