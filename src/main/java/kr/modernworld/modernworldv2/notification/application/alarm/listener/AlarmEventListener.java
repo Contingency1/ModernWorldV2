@@ -11,6 +11,8 @@ import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.social.application.rsp.event.RSPWinEvent;
 import kr.modernworld.modernworldv2.social.domain.comment.event.CommentCreatedEvent;
 import kr.modernworld.modernworldv2.social.domain.like.event.LikeCreatedEvent;
+import kr.modernworld.modernworldv2.social.domain.neighbor.event.NeighborConnectedEvent;
+import kr.modernworld.modernworldv2.social.domain.neighbor.event.NeighborSentEvent;
 import kr.modernworld.modernworldv2.social.domain.post.event.PostCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -113,5 +115,37 @@ public class AlarmEventListener {
 
     alarmService.create(receiverNo, AlarmTitle.POST, message);
     sseEmitterService.send(receiverNo, new SseEvent(AlarmTitle.POST.getTitle(), message));
+  }
+
+  @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public void sendOneNeighborRequest(NeighborSentEvent event) {
+    Long receiverNo = event.receiverNo();
+    String senderName = event.senderName();
+
+    String message = String.format("%s님에게 이웃 요청이 왔습니다.", senderName);
+
+    alarmService.create(receiverNo, AlarmTitle.NEIGHBOR, message);
+    sseEmitterService.send(receiverNo, new SseEvent(AlarmTitle.NEIGHBOR.getTitle(), message));
+  }
+
+  @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public void connectNeighbor(NeighborConnectedEvent event) {
+    Long senderNo = event.senderNo();
+    Long receiverNo = event.receiverNo();
+    String senderName = event.senderName();
+    String receiverName = event.receiverName();
+
+    String messageForSender = String.format("%s님과 이웃이 되었습니다.", receiverName);
+    String messageForReceiver = String.format("%s님과 이웃이 되었습니다.", senderName);
+
+    alarmService.create(senderNo, AlarmTitle.NEIGHBOR, messageForSender);
+    alarmService.create(receiverNo, AlarmTitle.NEIGHBOR, messageForReceiver);
+
+    sseEmitterService.send(senderNo,
+        new SseEvent(AlarmTitle.NEIGHBOR.getTitle(), messageForSender));
+    sseEmitterService.send(receiverNo,
+        new SseEvent(AlarmTitle.NEIGHBOR.getTitle(), messageForReceiver));
   }
 }

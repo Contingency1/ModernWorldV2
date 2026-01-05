@@ -8,13 +8,13 @@ import kr.modernworld.modernworldv2.global.common.dto.PageMetaDTO;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
-import kr.modernworld.modernworldv2.notification.application.alarm.event.AlarmEvent;
-import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
 import kr.modernworld.modernworldv2.social.application.neighbor.dto.NeighborDTO;
 import kr.modernworld.modernworldv2.social.application.neighbor.dto.get.GetNeighborDTO;
 import kr.modernworld.modernworldv2.social.application.neighbor.port.NeighborQueryRepository;
 import kr.modernworld.modernworldv2.social.domain.external.MemberExternalPort;
 import kr.modernworld.modernworldv2.social.domain.neighbor.Neighbor;
+import kr.modernworld.modernworldv2.social.domain.neighbor.event.NeighborConnectedEvent;
+import kr.modernworld.modernworldv2.social.domain.neighbor.event.NeighborSentEvent;
 import kr.modernworld.modernworldv2.social.domain.neighbor.port.NeighborRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -29,7 +29,7 @@ public class NeighborService {
   private final NeighborRepository neighborRepository;
   private final MemberExternalPort memberExternalPort;
 
-  private final ApplicationEventPublisher applicationEventPublisher;
+  private final ApplicationEventPublisher eventPublisher;
 
   @Transactional(readOnly = true)
   public PageResponseDTO<GetNeighborDTO> getAll(Long userNo, Long page, Long take,
@@ -88,12 +88,9 @@ public class NeighborService {
     NeighborDTO response = neighborQueryRepository.findOneByNo(saved.getNo())
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.NEIGHBOR_NOT_FOUND));
 
-    Long receiverNumber = response.receiver().no();
     String senderName = response.sender().nickname();
 
-    String messageForReceiver = String.format("%s님에게 이웃 요청이 왔습니다.", senderName);
-    applicationEventPublisher.publishEvent(
-        new AlarmEvent(this, receiverNumber, messageForReceiver, AlarmTitle.NEIGHBOR));
+    eventPublisher.publishEvent(new NeighborSentEvent(receiverNo, senderName));
 
     return response;
   }
@@ -144,16 +141,8 @@ public class NeighborService {
     String senderName = neighborDetail.sender().nickname();
     String receiverName = neighborDetail.receiver().nickname();
 
-    String messageForSender = String.format("%s님과 이웃이 되었습니다.", receiverName);
-    String messageForReceiver = String.format("%s님과 이웃이 되었습니다.", senderName);
-
-    applicationEventPublisher.publishEvent(
-        new AlarmEvent(this, senderNo, messageForSender,
-            AlarmTitle.NEIGHBOR));
-
-    applicationEventPublisher.publishEvent(
-        new AlarmEvent(this, receiverNo, messageForReceiver,
-            AlarmTitle.NEIGHBOR));
+    eventPublisher.publishEvent(
+        new NeighborConnectedEvent(senderNo, receiverNo, senderName, receiverName));
 
     return neighborDetail;
   }
