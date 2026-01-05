@@ -28,6 +28,11 @@ public class AlarmEventListener {
   private final AlarmService alarmService;
   private final SseEmitterService sseEmitterService;
 
+  private void saveAlarmAndSendSSE(Long userNo, AlarmTitle game, String message) {
+    alarmService.create(userNo, game, message);
+    sseEmitterService.send(userNo, new SseEvent(game.getTitle(), message));
+  }
+
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void RSPWin(RSPWinEvent event) {
@@ -36,8 +41,7 @@ public class AlarmEventListener {
     String message = String.format("[가위 바위 보 게임]에서 승리하셨습니다! %d포인트를 획득하셨습니다!",
         RewardPoint.WIN_GAME.getPoint());
 
-    alarmService.create(userNo, AlarmTitle.GAME, message);
-    sseEmitterService.send(userNo, new SseEvent(AlarmTitle.GAME.getTitle(), message));
+    saveAlarmAndSendSSE(userNo, AlarmTitle.GAME, message);
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -50,8 +54,7 @@ public class AlarmEventListener {
     String message = String.format("%s님이 %s을(를) 선물로 보냈습니다.", "익명",
         itemName);
 
-    alarmService.create(receiverNo, AlarmTitle.PRESENT, message);
-    sseEmitterService.send(receiverNo, new SseEvent(AlarmTitle.PRESENT.getTitle(), message));
+    saveAlarmAndSendSSE(receiverNo, AlarmTitle.PRESENT, message);
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -66,8 +69,7 @@ public class AlarmEventListener {
         itemName, refundedPoint
     );
 
-    alarmService.create(userNo, AlarmTitle.PRESENT, message);
-    sseEmitterService.send(userNo, new SseEvent(AlarmTitle.PRESENT.getTitle(), message));
+    saveAlarmAndSendSSE(userNo, AlarmTitle.PRESENT, message);
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -78,8 +80,7 @@ public class AlarmEventListener {
 
     String message = String.format("%s님이 방명록을 남겼습니다.", senderName);
 
-    alarmService.create(receiverNo, AlarmTitle.COMMENT, message);
-    sseEmitterService.send(receiverNo, new SseEvent(AlarmTitle.COMMENT.getTitle(), message));
+    saveAlarmAndSendSSE(receiverNo, AlarmTitle.COMMENT, message);
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -90,8 +91,7 @@ public class AlarmEventListener {
 
     String message = String.format("%s님이 좋아요를 눌렀습니다.", senderName);
 
-    alarmService.create(receiverNo, AlarmTitle.LIKE, message);
-    sseEmitterService.send(receiverNo, new SseEvent(AlarmTitle.LIKE.getTitle(), message));
+    saveAlarmAndSendSSE(receiverNo, AlarmTitle.LIKE, message);
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -102,8 +102,7 @@ public class AlarmEventListener {
 
     String message = String.format("%s님이 쪽지를 보내셨습니다.", "익명");
 
-    alarmService.create(receiverNo, AlarmTitle.POST, message);
-    sseEmitterService.send(receiverNo, new SseEvent(AlarmTitle.POST.getTitle(), message));
+    saveAlarmAndSendSSE(receiverNo, AlarmTitle.POST, message);
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -114,8 +113,7 @@ public class AlarmEventListener {
 
     String message = String.format("%s님에게 이웃 요청이 왔습니다.", senderName);
 
-    alarmService.create(receiverNo, AlarmTitle.NEIGHBOR, message);
-    sseEmitterService.send(receiverNo, new SseEvent(AlarmTitle.NEIGHBOR.getTitle(), message));
+    saveAlarmAndSendSSE(receiverNo, AlarmTitle.NEIGHBOR, message);
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -148,7 +146,6 @@ public class AlarmEventListener {
     String message = String.format("업적 [%s]을 달성했습니다! %s포인트를 흭득하셨습니다!",
         achievementTitle, rewardPoint);
 
-    alarmService.create(userNo, AlarmTitle.ACHIEVEMENT, message);
-    sseEmitterService.send(userNo, new SseEvent(AlarmTitle.ACHIEVEMENT.getTitle(), message));
+    saveAlarmAndSendSSE(userNo, AlarmTitle.ACHIEVEMENT, message);
   }
 }
