@@ -3,7 +3,7 @@ package kr.modernworld.modernworldv2.asset.application.shop;
 import java.util.List;
 import kr.modernworld.modernworldv2.asset.application.inventory.InventoryService;
 import kr.modernworld.modernworldv2.asset.application.item.ItemService;
-import kr.modernworld.modernworldv2.asset.application.item.dto.ItemApiDTO;
+import kr.modernworld.modernworldv2.asset.application.item.dto.ItemDTO;
 import kr.modernworld.modernworldv2.asset.application.item.dto.ItemNameAndPriceDTO;
 import kr.modernworld.modernworldv2.asset.domain.external.member.MemberExternalPort;
 import kr.modernworld.modernworldv2.asset.domain.inventory.Inventory;
@@ -31,12 +31,12 @@ public class ItemShopService {
   }
 
   @Transactional(readOnly = true)
-  public ItemApiDTO getOne(Long itemNo) {
+  public ItemDTO getOne(Long itemNo) {
     return itemService.getOne(itemNo);
   }
 
   @Transactional(readOnly = true)
-  public List<ItemApiDTO> getAll(String theme, String itemName) {
+  public List<ItemDTO> getAll(String theme, String itemName) {
     return itemService.getAll(theme, itemName);
   }
 }

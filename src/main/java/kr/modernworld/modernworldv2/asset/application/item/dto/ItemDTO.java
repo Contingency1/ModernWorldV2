@@ -2,7 +2,7 @@ package kr.modernworld.modernworldv2.asset.application.item.dto;
 
 import kr.modernworld.modernworldv2.asset.domain.item.ItemType;
 
-public record ItemApiDTO(
+public record ItemDTO(
     Long no,
     String name,
     String description,

@@ -1,7 +1,5 @@
 package kr.modernworld.modernworldv2.asset.domain.item;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 @Getter
@@ -16,7 +14,6 @@ public enum ItemType {
     this.str = str;
   }
 
-  @JsonCreator
   public static ItemType stringToItemType(String str) {
     for (ItemType itemType : ItemType.values()) {
       if (itemType.str.equals(str)) {
@@ -25,10 +22,5 @@ public enum ItemType {
       }
     }
     throw new IllegalArgumentException(str);
-  }
-
-  @JsonValue
-  public String getStr() {
-    return this.str;
   }
 }

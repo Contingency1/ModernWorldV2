@@ -1,7 +1,7 @@
 package kr.modernworld.modernworldv2.asset.presentation.shop.item;
 
 import java.util.List;
-import kr.modernworld.modernworldv2.asset.application.item.dto.ItemApiDTO;
+import kr.modernworld.modernworldv2.asset.application.item.dto.ItemDTO;
 import kr.modernworld.modernworldv2.asset.application.shop.ItemShopService;
 import kr.modernworld.modernworldv2.asset.presentation.shop.item.dto.req.ItemRequestDTO;
 import kr.modernworld.modernworldv2.asset.presentation.shop.item.dto.res.ShopItemResponseDTO;
@@ -22,14 +22,14 @@ public class ItemController {
 
   @GetMapping("/{itemNo}")
   public ResponseEntity<ShopItemResponseDTO> getOne(@PathVariable Long itemNo) {
-    ItemApiDTO response = itemShopService.getOne(itemNo);
+    ItemDTO response = itemShopService.getOne(itemNo);
 
     return new ResponseEntity<>(ShopItemResponseDTO.from(response), HttpStatus.OK);
   }
 
   @GetMapping
   public ResponseEntity<List<ShopItemResponseDTO>> getAll(ItemRequestDTO query) {
-    List<ItemApiDTO> response = itemShopService.getAll(query.theme(), query.itemName());
+    List<ItemDTO> response = itemShopService.getAll(query.theme(), query.itemName());
 
     return new ResponseEntity<>(
         response.stream()

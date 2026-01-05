@@ -1,6 +1,6 @@
 package kr.modernworld.modernworldv2.asset.presentation.shop.item.dto.res;
 
-import kr.modernworld.modernworldv2.asset.application.item.dto.ItemApiDTO;
+import kr.modernworld.modernworldv2.asset.application.item.dto.ItemDTO;
 
 public record ShopItemResponseDTO(
     Long no,
@@ -12,7 +12,7 @@ public record ShopItemResponseDTO(
     Long price
 ) {
 
-  public static ShopItemResponseDTO from(ItemApiDTO input) {
+  public static ShopItemResponseDTO from(ItemDTO input) {
     return new ShopItemResponseDTO(
         input.no(),
         input.name(),

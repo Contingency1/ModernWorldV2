@@ -7,7 +7,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.Optional;
-import kr.modernworld.modernworldv2.asset.application.item.dto.ItemApiDTO;
+import kr.modernworld.modernworldv2.asset.application.item.dto.ItemDTO;
 import kr.modernworld.modernworldv2.asset.application.item.dto.ItemNameAndPriceDTO;
 import kr.modernworld.modernworldv2.asset.application.item.port.ItemQueryRepository;
 import kr.modernworld.modernworldv2.asset.infrastructure.persistence.entity.ItemJPAEntity;
@@ -48,11 +48,11 @@ public class ItemQueryRepositoryImpl implements ItemQueryRepository {
   }
 
   @Override
-  public Optional<ItemApiDTO> findOne(Long itemNo) {
-    ItemApiDTO entity = queryFactory
+  public Optional<ItemDTO> findOne(Long itemNo) {
+    ItemDTO entity = queryFactory
         .select(
             Projections.constructor(
-                ItemApiDTO.class,
+                ItemDTO.class,
                 itemJPAEntity.no,
                 itemJPAEntity.name,
                 itemJPAEntity.description,
@@ -74,11 +74,11 @@ public class ItemQueryRepositoryImpl implements ItemQueryRepository {
   }
 
   @Override
-  public List<ItemApiDTO> findAll(String theme, String itemName) {
+  public List<ItemDTO> findAll(String theme, String itemName) {
     return queryFactory
         .select(
             Projections.constructor(
-                ItemApiDTO.class,
+                ItemDTO.class,
                 itemJPAEntity.no,
                 itemJPAEntity.name,
                 itemJPAEntity.description,
