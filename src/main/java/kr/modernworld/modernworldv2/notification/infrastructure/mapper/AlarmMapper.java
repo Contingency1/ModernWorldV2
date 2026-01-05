@@ -1,7 +1,7 @@
-package kr.modernworld.modernworldv2.growth.infrastructure.mapper;
+package kr.modernworld.modernworldv2.notification.infrastructure.mapper;
 
-import kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.AlarmJPAEntity;
 import kr.modernworld.modernworldv2.notification.domain.alarm.Alarm;
+import kr.modernworld.modernworldv2.notification.infrastructure.entity.AlarmJPAEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

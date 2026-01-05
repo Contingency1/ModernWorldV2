@@ -1,6 +1,6 @@
-package kr.modernworld.modernworldv2.growth.infrastructure.repository.alarm;
+package kr.modernworld.modernworldv2.notification.infrastructure.repository.alarm;
 
-import kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.AlarmJPAEntity;
+import kr.modernworld.modernworldv2.notification.infrastructure.entity.AlarmJPAEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

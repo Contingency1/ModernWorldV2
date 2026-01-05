@@ -1,19 +1,17 @@
-package kr.modernworld.modernworldv2.growth.infrastructure.repository.alarm;
+package kr.modernworld.modernworldv2.notification.infrastructure.repository.alarm;
 
-import static kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.QAlarmJPAEntity.alarmJPAEntity;
+
+import static kr.modernworld.modernworldv2.notification.infrastructure.entity.QAlarmJPAEntity.alarmJPAEntity;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
-import java.util.Optional;
 import kr.modernworld.modernworldv2.global.common.OrderBy;
 import kr.modernworld.modernworldv2.global.common.dto.PageMetaDTO;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
-import kr.modernworld.modernworldv2.growth.infrastructure.mapper.AlarmMapper;
-import kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.AlarmJPAEntity;
+import kr.modernworld.modernworldv2.notification.application.alarm.dto.AlarmDTO;
 import kr.modernworld.modernworldv2.notification.application.alarm.port.AlarmQueryRepository;
-import kr.modernworld.modernworldv2.notification.domain.alarm.Alarm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,15 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class AlarmQueryRepositoryImpl implements AlarmQueryRepository {
 
   private final JPAQueryFactory queryFactory;
-  private final AlarmMapper alarmMapper;
 
   @Override
   @Transactional(readOnly = true)
-  public PageResponseDTO<Alarm> getAllAlarmsWithMeta(Long userNo, Long page, Long take,
+  public PageResponseDTO<AlarmDTO> getAllAlarmsWithMeta(Long userNo, Long page, Long take,
       OrderBy orderBy) {
 
-    List<Alarm> data = queryFactory
-        .select(Projections.constructor(Alarm.class,
+    List<AlarmDTO> data = queryFactory
+        .select(Projections.constructor(AlarmDTO.class,
             alarmJPAEntity.no,
             alarmJPAEntity.user.no,
             alarmJPAEntity.title,
@@ -64,20 +61,6 @@ public class AlarmQueryRepositoryImpl implements AlarmQueryRepository {
     return new PageResponseDTO<>(data, meta);
   }
 
-  @Override
-  public Optional<Alarm> findOneByNo(Long alarmNo) {
-    AlarmJPAEntity entity = queryFactory
-        .select(alarmJPAEntity)
-        .from(alarmJPAEntity)
-        .where(alarmJPAEntity.no.eq(alarmNo))
-        .fetchOne();
-
-    if (entity == null) {
-      return Optional.empty();
-    }
-
-    return Optional.of(alarmMapper.toDomain(entity));
-  }
 
   private OrderSpecifier<?> createOrderSpecifier(OrderBy orderBy) {
     if (orderBy == OrderBy.ASC) {

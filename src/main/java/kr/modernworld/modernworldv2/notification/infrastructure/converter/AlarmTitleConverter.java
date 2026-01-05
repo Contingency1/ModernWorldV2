@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.growth.infrastructure.persistence.converter;
+package kr.modernworld.modernworldv2.notification.infrastructure.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

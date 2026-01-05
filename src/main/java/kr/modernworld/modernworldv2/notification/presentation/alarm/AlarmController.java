@@ -5,7 +5,7 @@ import java.util.List;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
 import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.notification.application.alarm.AlarmService;
-import kr.modernworld.modernworldv2.notification.domain.alarm.Alarm;
+import kr.modernworld.modernworldv2.notification.application.alarm.dto.AlarmDTO;
 import kr.modernworld.modernworldv2.notification.presentation.alarm.dto.req.AlarmRequestDTO;
 import kr.modernworld.modernworldv2.notification.presentation.alarm.dto.res.AlarmResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class AlarmController {
       @AuthenticationPrincipal TokenUserInfoDTO user,
       @Valid AlarmRequestDTO query
   ) {
-    PageResponseDTO<Alarm> response = alarmService.getAllAlarms(
+    PageResponseDTO<AlarmDTO> response = alarmService.getAllAlarms(
         user.userNo(), query.page(), query.take(), query.orderBy());
 
     List<AlarmResponseDTO> data = response.data().stream().map(AlarmResponseDTO::from).toList();

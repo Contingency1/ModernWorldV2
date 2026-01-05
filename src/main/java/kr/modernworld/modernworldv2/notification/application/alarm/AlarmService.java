@@ -4,6 +4,7 @@ import kr.modernworld.modernworldv2.global.common.OrderBy;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
+import kr.modernworld.modernworldv2.notification.application.alarm.dto.AlarmDTO;
 import kr.modernworld.modernworldv2.notification.application.alarm.port.AlarmQueryRepository;
 import kr.modernworld.modernworldv2.notification.domain.alarm.Alarm;
 import kr.modernworld.modernworldv2.notification.domain.alarm.AlarmTitle;
@@ -27,7 +28,7 @@ public class AlarmService {
   }
 
   @Transactional(readOnly = true)
-  public PageResponseDTO<Alarm> getAllAlarms(Long userNo, Long page, Long take,
+  public PageResponseDTO<AlarmDTO> getAllAlarms(Long userNo, Long page, Long take,
       OrderBy orderBy) {
     return alarmQueryRepository.getAllAlarmsWithMeta(userNo, page, take,
         orderBy);
@@ -35,7 +36,7 @@ public class AlarmService {
 
   @Transactional
   public void updateAlarmRead(Long userNo, Long alarmNo) {
-    Alarm alarm = alarmQueryRepository.findOneByNo(alarmNo)
+    Alarm alarm = alarmRepository.findOneByNoForUpdate(alarmNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.NO_SUCH_ALARM));
 
     try {
@@ -51,7 +52,7 @@ public class AlarmService {
 
   @Transactional
   public void deleteOne(Long userNo, Long alarmNo) {
-    Alarm alarm = alarmQueryRepository.findOneByNo(alarmNo)
+    Alarm alarm = alarmRepository.findOneByNoForUpdate(alarmNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.NO_SUCH_ALARM));
 
     try {
