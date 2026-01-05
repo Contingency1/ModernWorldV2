@@ -15,4 +15,9 @@ public class SocialMemberExternalAdapter implements MemberExternalPort {
   public void validateUser(Long userNo) {
     userService.isPresent(userNo);
   }
+
+  @Override
+  public String getUserName(Long userNo) {
+    return userService.getUserNickname(userNo);
+  }
 }

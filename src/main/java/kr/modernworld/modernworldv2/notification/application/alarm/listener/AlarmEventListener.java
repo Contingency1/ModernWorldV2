@@ -98,9 +98,9 @@ public class AlarmEventListener {
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void createOnePost(PostCreatedEvent event) {
     Long receiverNo = event.receiverNo();
-    Long senderNo = event.senderNo();
+    String senderName = event.senderName();
 
-    String message = String.format("%s님이 쪽지를 보내셨습니다.", "익명");
+    String message = String.format("%s님이 쪽지를 보내셨습니다.", senderName);
 
     saveAlarmAndSendSSE(receiverNo, AlarmTitle.POST, message);
   }

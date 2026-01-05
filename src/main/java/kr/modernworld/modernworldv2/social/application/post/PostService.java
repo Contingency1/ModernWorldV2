@@ -62,7 +62,9 @@ public class PostService {
 
     Post save = postRepository.save(post);
 
-    eventPublisher.publishEvent(new PostCreatedEvent(receiverNo, senderNo));
+    String senderName = memberExternalPort.getUserName(senderNo);
+
+    eventPublisher.publishEvent(new PostCreatedEvent(receiverNo, senderName));
 
     return postQueryRepository.findOne(senderNo, save.getNo())
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.POST_NOT_FOUND));
