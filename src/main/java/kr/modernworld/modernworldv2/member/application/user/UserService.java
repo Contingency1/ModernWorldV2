@@ -164,11 +164,15 @@ public class UserService {
     if (alreadyExistedName) {
       throw new BusinessException(BusinessErrorCode.USER_ALREADY_EXISTED_NAME);
     }
-    
+
     User user = userRepository.findUserByUserNoForUpdate(userNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND));
 
-    user.updateNickname(newNickname);
+    try {
+      user.updateNickname(newNickname);
+    } catch (IllegalStateException e) {
+      throw new BusinessException(BusinessErrorCode.USER_ALREADY_HAS_NAME);
+    }
 
     userRepository.save(user);
 
