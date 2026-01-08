@@ -3,7 +3,7 @@ package kr.modernworld.modernworldv2.member.presentation.user.dto.res;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserNicknameDTO;
 
 public record UserNicknameResponseDTO(
-    Long userNo,
+    Long no,
     String nickname
 ) {
 

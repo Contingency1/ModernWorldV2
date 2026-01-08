@@ -163,4 +163,8 @@ public class User {
 
     attendance.put(dayOfWeekNum, new ArrayList<>(List.of(number, point)));
   }
+
+  public void updateDescription(String newDescription) {
+    this.description = newDescription;
+  }
 }

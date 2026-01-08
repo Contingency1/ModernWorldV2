@@ -8,6 +8,7 @@ import kr.modernworld.modernworldv2.member.application.auth.OAuthTokenDTO;
 import kr.modernworld.modernworldv2.member.application.auth.SocialUserInfoDTO;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserAttendanceDTO;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO;
+import kr.modernworld.modernworldv2.member.application.user.dto.UserDescriptionDTO;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserNicknameDTO;
 import kr.modernworld.modernworldv2.member.application.user.event.UserAttendanceUpdatedEvent;
 import kr.modernworld.modernworldv2.member.application.user.socialtoken.SocialTokenService;
@@ -177,5 +178,16 @@ public class UserService {
     userRepository.save(user);
 
     return new UserNicknameDTO(user.getNo(), user.getNickname());
+  }
+
+  @Transactional
+  public UserDescriptionDTO updateDescription(Long userNo, String description) {
+    User user = userRepository.findUserByUserNoForUpdate(userNo)
+        .orElseThrow(() -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND));
+
+    user.updateDescription(description);
+    userRepository.save(user);
+
+    return new UserDescriptionDTO(userNo, description);
   }
 }
