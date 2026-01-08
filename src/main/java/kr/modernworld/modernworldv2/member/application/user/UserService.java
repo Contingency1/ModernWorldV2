@@ -8,6 +8,7 @@ import kr.modernworld.modernworldv2.member.application.auth.OAuthTokenDTO;
 import kr.modernworld.modernworldv2.member.application.auth.SocialUserInfoDTO;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserAttendanceDTO;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO;
+import kr.modernworld.modernworldv2.member.application.user.dto.UserNicknameDTO;
 import kr.modernworld.modernworldv2.member.application.user.event.UserAttendanceUpdatedEvent;
 import kr.modernworld.modernworldv2.member.application.user.socialtoken.SocialTokenService;
 import kr.modernworld.modernworldv2.member.domain.auth.port.OAuthClient;
@@ -154,5 +155,23 @@ public class UserService {
     userRepository.save(user);
 
     return new UserAttendanceDTO(user.getNickname(), user.getAttendance());
+  }
+
+  @Transactional
+  public UserNicknameDTO createUserNickname(Long userNo, String newNickname) {
+    Boolean alreadyExistedName = userQueryRepository.isAlreadyExistedName(newNickname);
+
+    if (alreadyExistedName) {
+      throw new BusinessException(BusinessErrorCode.USER_ALREADY_EXISTED_NAME);
+    }
+    
+    User user = userRepository.findUserByUserNoForUpdate(userNo)
+        .orElseThrow(() -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND));
+
+    user.updateNickname(newNickname);
+
+    userRepository.save(user);
+
+    return new UserNicknameDTO(user.getNo(), user.getNickname());
   }
 }

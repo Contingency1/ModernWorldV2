@@ -264,6 +264,17 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
     return Optional.of(data);
   }
 
+  @Override
+  public Boolean isAlreadyExistedName(String name) {
+    Integer i = queryFactory
+        .selectOne()
+        .from(userJPAEntity)
+        .where(userJPAEntity.nickname.eq(name))
+        .fetchFirst();
+
+    return i != null;
+  }
+
   private OrderSpecifier<?>[] createOrderSpecifier(OrderByField orderBy) {
     OrderSpecifier<?> first;
     OrderSpecifier<?> second = new OrderSpecifier<>(Order.DESC, userJPAEntity.no);

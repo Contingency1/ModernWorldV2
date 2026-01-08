@@ -22,4 +22,6 @@ public interface UserQueryRepository {
       String nickname);
 
   Optional<UserAttendanceDTO> findAttendance(Long userNo);
+
+  Boolean isAlreadyExistedName(String name);
 }

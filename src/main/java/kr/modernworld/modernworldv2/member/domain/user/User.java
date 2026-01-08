@@ -137,6 +137,14 @@ public class User {
     this.chance -= 1L;
   }
 
+  public void updateNickname(String newName) {
+    if (this.nickname != null) {
+      throw new IllegalStateException("Nickname is already set");
+    }
+
+    this.nickname = newName;
+  }
+
   public void updateAttendanceAndIncreasePoint(Integer number) {
     LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
     String dayOfWeekNum = "" + today.getDayOfWeek().getValue() % 7;

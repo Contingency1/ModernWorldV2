@@ -7,10 +7,13 @@ import kr.modernworld.modernworldv2.member.application.user.OrderByField;
 import kr.modernworld.modernworldv2.member.application.user.UserService;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserAttendanceDTO;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO;
+import kr.modernworld.modernworldv2.member.application.user.dto.UserNicknameDTO;
 import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
+import kr.modernworld.modernworldv2.member.presentation.user.dto.req.CreateUserNicknameRequestDTO;
 import kr.modernworld.modernworldv2.member.presentation.user.dto.req.GetUsersRequestDTO;
 import kr.modernworld.modernworldv2.member.presentation.user.dto.req.UpdateUserAttendanceRequestDTO;
 import kr.modernworld.modernworldv2.member.presentation.user.dto.res.UserAttendanceResponseDTO;
+import kr.modernworld.modernworldv2.member.presentation.user.dto.res.UserNicknameResponseDTO;
 import kr.modernworld.modernworldv2.member.presentation.user.dto.res.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +22,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -60,10 +64,18 @@ public class UserController {
     return new ResponseEntity<>(UserAttendanceResponseDTO.from(response), HttpStatus.OK);
   }
 
+  @PostMapping("/my/nickname")
+  public ResponseEntity<UserNicknameResponseDTO> createUserNickname(
+      @AuthenticationPrincipal TokenUserInfoDTO user, @Valid CreateUserNicknameRequestDTO body) {
+    UserNicknameDTO response = userService.createUserNickname(user.userNo(), body.nickname());
+
+    return new ResponseEntity<>(UserNicknameResponseDTO.from(response), HttpStatus.CREATED);
+  }
+
   @PatchMapping("/my/attendance")
   public ResponseEntity<UserAttendanceResponseDTO> updateAttendance(
       @AuthenticationPrincipal TokenUserInfoDTO user,
-      UpdateUserAttendanceRequestDTO body) {
+      @Valid UpdateUserAttendanceRequestDTO body) {
     UserAttendanceDTO response = userService.updateAttendance(user.userNo(),
         body.stickerNo());
 
