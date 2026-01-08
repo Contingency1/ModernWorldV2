@@ -26,6 +26,7 @@ import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
 import kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.QAchievementJPAEntity;
 import kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.QLegendJPAEntity;
 import kr.modernworld.modernworldv2.member.application.user.OrderByField;
+import kr.modernworld.modernworldv2.member.application.user.dto.UserAttendanceDTO;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO.UserAchievementDTO;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO.UserAchievementDetailDTO;
@@ -243,6 +244,24 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
     long totalPage = (long) Math.ceil((double) total / take);
 
     return new PageResponseDTO<>(finalContent, new PageMetaDTO(page, take, total, totalPage));
+  }
+
+  @Override
+  public Optional<UserAttendanceDTO> findAttendance(Long userNo) {
+    UserAttendanceDTO data = queryFactory
+        .select(
+            Projections.constructor(UserAttendanceDTO.class,
+                user.nickname,
+                user.attendance))
+        .from(user)
+        .where(user.no.eq(userNo))
+        .fetchOne();
+
+    if (data == null) {
+      return Optional.empty();
+    }
+
+    return Optional.of(data);
   }
 
   private OrderSpecifier<?>[] createOrderSpecifier(OrderByField orderBy) {

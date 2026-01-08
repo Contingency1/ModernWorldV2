@@ -59,6 +59,7 @@ public enum BusinessErrorCode {
   USER_NOT_HAS_ENOUGH_POINT(HttpStatus.FORBIDDEN, "User does not have enough point."),
   USER_NOT_FOUND(HttpStatus.FORBIDDEN, "User not found."),
   USER_NOT_HAS_ENOUGH_CHANCE(HttpStatus.FORBIDDEN, "You do not have enough chance."),
+  USER_ALREADY_ATTENDANCE(HttpStatus.CONFLICT, "User already attendance."),
 
   PRESENT_CANNOT_PRESENT_TO_YOURSELF(HttpStatus.FORBIDDEN, "You cannot send a post to yourself."),
   PRESENT_INVALID_STATE(HttpStatus.FORBIDDEN, "Present is not a valid state."),

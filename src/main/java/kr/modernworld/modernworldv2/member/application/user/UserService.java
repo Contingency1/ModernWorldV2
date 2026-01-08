@@ -6,7 +6,9 @@ import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.growth.application.legend.LegendService;
 import kr.modernworld.modernworldv2.member.application.auth.OAuthTokenDTO;
 import kr.modernworld.modernworldv2.member.application.auth.SocialUserInfoDTO;
+import kr.modernworld.modernworldv2.member.application.user.dto.UserAttendanceDTO;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO;
+import kr.modernworld.modernworldv2.member.application.user.event.UserAttendanceUpdatedEvent;
 import kr.modernworld.modernworldv2.member.application.user.socialtoken.SocialTokenService;
 import kr.modernworld.modernworldv2.member.domain.auth.port.OAuthClient;
 import kr.modernworld.modernworldv2.member.domain.user.User;
@@ -14,6 +16,7 @@ import kr.modernworld.modernworldv2.member.domain.user.UserSocialToken;
 import kr.modernworld.modernworldv2.member.domain.user.port.UserQueryRepository;
 import kr.modernworld.modernworldv2.member.domain.user.port.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,8 @@ public class UserService {
   private final UserQueryRepository userQueryRepository;
   private final LegendService legendService;
   private final SocialTokenService socialTokenService;
+
+  private final ApplicationEventPublisher eventPublisher;
 
   @Transactional(readOnly = true)
   public UserDTO getOne(Long userNo) {
@@ -126,5 +131,28 @@ public class UserService {
     user.increaseCurrentAccumulationPoint(price);
 
     userRepository.save(user);
+  }
+
+  @Transactional(readOnly = true)
+  public UserAttendanceDTO getUserAttendance(Long userNo) {
+    return userQueryRepository.findAttendance(userNo)
+        .orElseThrow(() -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND));
+  }
+
+  @Transactional
+  public UserAttendanceDTO updateAttendance(Long userNo, Integer attendanceStickerNumber) {
+    User user = userRepository.findUserByUserNoForUpdate(userNo)
+        .orElseThrow(() -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND));
+
+    try {
+      user.updateAttendanceAndIncreasePoint(attendanceStickerNumber);
+    } catch (IllegalStateException e) {
+      throw new BusinessException(BusinessErrorCode.USER_ALREADY_ATTENDANCE);
+    }
+
+    eventPublisher.publishEvent(new UserAttendanceUpdatedEvent(userNo));
+    userRepository.save(user);
+
+    return new UserAttendanceDTO(user.getNickname(), user.getAttendance());
   }
 }

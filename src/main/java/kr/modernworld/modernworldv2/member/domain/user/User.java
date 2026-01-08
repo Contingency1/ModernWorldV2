@@ -1,6 +1,8 @@
 package kr.modernworld.modernworldv2.member.domain.user;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -23,21 +25,21 @@ public class User {
 
   private Map<String, List<Integer>> attendance;
 
-  private Boolean status;
+  private final Boolean status;
 
   private final LocalDateTime createdAt;
 
   private LocalDateTime deletedAt;
 
-  private Boolean admin;
+  private final Boolean admin;
 
   private final String uniqueIdentifier;
 
-  private String socialName;
+  private final String socialName;
 
   private String image;
 
-  private UserDomain domain;
+  private final UserDomain domain;
 
   private Long chance;
 
@@ -133,5 +135,24 @@ public class User {
     }
 
     this.chance -= 1L;
+  }
+
+  public void updateAttendanceAndIncreasePoint(Integer number) {
+    LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+    String dayOfWeekNum = "" + today.getDayOfWeek().getValue() % 7;
+
+    List<Integer> integers = attendance.get(dayOfWeekNum);
+
+    Integer status = integers.get(0);
+
+    if (status == 1) {
+      throw new IllegalStateException("Attendance status is already set");
+    }
+
+    Integer point = integers.get(1);
+
+    increaseCurrentAccumulationPoint((long) point);
+
+    attendance.put(dayOfWeekNum, new ArrayList<>(List.of(number, point)));
   }
 }
