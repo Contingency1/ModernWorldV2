@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import kr.modernworld.modernworldv2.asset.infrastructure.persistence.entity.CharacterLockerJPAEntity;
 import kr.modernworld.modernworldv2.asset.infrastructure.persistence.entity.InventoryJPAEntity;
+import kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.LegendJPAEntity;
 import kr.modernworld.modernworldv2.notification.infrastructure.entity.AlarmJPAEntity;
 import kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.RspGameRecordJPAEntity;
 import lombok.AccessLevel;
@@ -112,6 +114,9 @@ public class UserJPAEntity {
   private Long chance;
 
   // User의 생명주기와 완전히 동일한 관계
+  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private LegendJPAEntity legend;
+
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<AlarmJPAEntity> alarms = new ArrayList<>();
 

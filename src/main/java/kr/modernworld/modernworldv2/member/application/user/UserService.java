@@ -1,5 +1,6 @@
 package kr.modernworld.modernworldv2.member.application.user;
 
+import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.growth.application.legend.LegendService;
@@ -29,6 +30,13 @@ public class UserService {
   public UserDTO getOne(Long userNo) {
     return userQueryRepository.findOne(userNo)
         .orElseThrow(() -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND));
+  }
+
+  @Transactional(readOnly = true)
+  public PageResponseDTO<UserDTO> getAll(Long page, Long take,
+      String animal, OrderByField orderByField, String nickname) {
+
+    return userQueryRepository.findAll(page, take, animal, orderByField, nickname);
   }
 
   @Transactional

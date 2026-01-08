@@ -1,5 +1,6 @@
 package kr.modernworld.modernworldv2.member.application.user.dto;
 
+import java.util.Collections;
 import java.util.List;
 
 public record UserDTO(
@@ -15,6 +16,21 @@ public record UserDTO(
     List<UserAchievementDTO> userAchievement,
     Long chance
 ) {
+
+  public UserDTO(
+      Long no,
+      String socialName,
+      String nickname,
+      String description,
+      Long currentPoint,
+      Long accumulationPoint,
+      String image,
+      UserLegendDTO legend,
+      Long chance
+  ) {
+    this(no, socialName, nickname, description, currentPoint, accumulationPoint, image, legend,
+        Collections.emptyList(), Collections.emptyList(), chance);
+  }
 
   public record UserLegendDTO(
       Long likeCount

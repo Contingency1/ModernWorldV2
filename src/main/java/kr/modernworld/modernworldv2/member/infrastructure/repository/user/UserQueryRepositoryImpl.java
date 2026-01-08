@@ -8,17 +8,28 @@ import static kr.modernworld.modernworldv2.member.infrastructure.persistence.ent
 import static kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.QUserJPAEntity.userJPAEntity;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.group.GroupBy;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import kr.modernworld.modernworldv2.asset.infrastructure.persistence.entity.QCharacterJPAEntity;
 import kr.modernworld.modernworldv2.asset.infrastructure.persistence.entity.QCharacterLockerJPAEntity;
+import kr.modernworld.modernworldv2.global.common.dto.PageMetaDTO;
+import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
 import kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.QAchievementJPAEntity;
 import kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.QLegendJPAEntity;
+import kr.modernworld.modernworldv2.member.application.user.OrderByField;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO.UserAchievementDTO;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO.UserAchievementDetailDTO;
+import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO.UserCharacterDTO;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO.UserCharacterLockerDTO;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO.UserLegendDTO;
 import kr.modernworld.modernworldv2.member.domain.user.User;
@@ -135,6 +146,138 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
             achievementList,
             userTuple.get(user.chance)
         ));
+  }
+
+  @Override
+  public PageResponseDTO<UserDTO> findAll(Long page, Long take, String animal,
+      OrderByField orderBy,
+      String nickname) {
+    List<UserDTO> baseUsers = queryFactory
+        .select(Projections.constructor(UserDTO.class,
+            user.no,
+            user.socialName,
+            user.nickname,
+            user.description,
+            user.currentPoint,
+            user.accumulationPoint,
+            user.image,
+            Projections.constructor(UserLegendDTO.class,
+                legendJPAEntity.likeCount),
+            user.chance
+        ))
+        .from(user)
+        .leftJoin(user.legend, legendJPAEntity)
+        .where(
+            eqNickname(nickname),
+            eqAnimal(animal),
+            user.deletedAt.isNull()
+        )
+        .orderBy(createOrderSpecifier(orderBy))
+        .offset((page - 1) * take)
+        .limit(take)
+        .fetch();
+
+    if (baseUsers.isEmpty()) {
+      return new PageResponseDTO<>(Collections.emptyList(), new PageMetaDTO(page, take, 0L, 0L));
+    }
+
+    List<Long> userIds = baseUsers.stream().map(UserDTO::no).toList();
+
+    Map<Long, List<UserCharacterLockerDTO>> lockerMap = queryFactory
+        .from(characterLocker)
+        .join(characterLocker.character, characterJPAEntity)
+        .where(
+            characterLocker.user.no.in(userIds),
+            characterLocker.status.isTrue()
+        )
+        .transform(
+            GroupBy.groupBy(characterLocker.user.no)
+                .as(GroupBy.list(
+                        Projections.constructor(UserCharacterLockerDTO.class,
+                            Projections.constructor(UserCharacterDTO.class,
+                                characterJPAEntity.no,
+                                characterJPAEntity.image
+                            )
+                        )
+                    )
+                )
+        );
+
+    Map<Long, List<UserAchievementDTO>> achievementMap = queryFactory
+        .from(userAchievement)
+        .join(userAchievement.achievement, achievementJPAEntity)
+        .where(
+            userAchievement.user.no.in(userIds),
+            userAchievement.status.isTrue())
+        .transform(
+            GroupBy.groupBy(userAchievement.user.no)
+                .as(GroupBy.list(
+                    Projections.constructor(UserAchievementDTO.class,
+                        Projections.constructor(UserAchievementDetailDTO.class,
+                            achievementJPAEntity.title,
+                            achievementJPAEntity.level.stringValue()
+                        )
+                    )
+                )));
+
+    List<UserDTO> finalContent = baseUsers.stream()
+        .map(u -> new UserDTO(
+            u.no(), u.socialName(), u.nickname(), u.description(),
+            u.currentPoint(), u.accumulationPoint(), u.image(), u.legend(),
+            lockerMap.getOrDefault(u.no(), Collections.emptyList()),
+            achievementMap.getOrDefault(u.no(), Collections.emptyList()),
+            u.chance()
+        ))
+        .toList();
+
+    Long total = queryFactory
+        .select(userJPAEntity.count())
+        .from(userJPAEntity)
+        .where(
+            eqNickname(nickname),
+            userJPAEntity.deletedAt.isNull(),
+            eqAnimal(animal)
+        )
+        .fetchOne();
+
+    long totalPage = (long) Math.ceil((double) total / take);
+
+    return new PageResponseDTO<>(finalContent, new PageMetaDTO(page, take, total, totalPage));
+  }
+
+  private OrderSpecifier<?>[] createOrderSpecifier(OrderByField orderBy) {
+    OrderSpecifier<?> first;
+    OrderSpecifier<?> second = new OrderSpecifier<>(Order.DESC, userJPAEntity.no);
+
+    if (orderBy != null && "like".equals(orderBy.getField())) {
+      first = new OrderSpecifier<>(Order.DESC, legendJPAEntity.likeCount);
+    } else if (orderBy != null && "accumulationPoint".equals(orderBy.getField())) {
+      first = new OrderSpecifier<>(Order.DESC, userJPAEntity.accumulationPoint);
+    } else {
+      first = new OrderSpecifier<>(Order.DESC, userJPAEntity.createdAt);
+    }
+
+    return new OrderSpecifier[]{first, second};
+  }
+
+  private BooleanExpression eqNickname(String nickname) {
+    return nickname != null ? userJPAEntity.nickname.contains(nickname) : null;
+  }
+
+  private BooleanExpression eqAnimal(String animal) {
+    if (animal == null) {
+      return null;
+    }
+
+    return JPAExpressions.selectOne()
+        .from(characterLocker)
+        .join(characterLocker.character, characterJPAEntity)
+        .where(
+            characterLocker.user.eq(userJPAEntity),
+            characterLocker.status.isTrue(),
+            characterJPAEntity.species.stringValue().eq(animal)
+        )
+        .exists();
   }
 
   @Override
