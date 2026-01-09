@@ -1,6 +1,8 @@
 package kr.modernworld.modernworldv2.member.presentation.scheduler;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -28,8 +30,13 @@ public class UserBatchScheduler {
   @Transactional
   public void deleteExpiredUsers() {
     log.info("[Scheduler] Start deleting expired users.");
-    LocalDateTime threshold = LocalDateTime.now().minusDays(30);
+
+    Instant threshold = LocalDateTime.now()
+        .minusDays(30)
+        .atZone(ZoneId.of("Asia/Seoul"))
+        .toInstant();
     Long count = userBatchRepository.deleteExpiredUsers(threshold);
+
     log.info("[Scheduler] Finished deleting expired users. deleted {} users", count);
   }
 

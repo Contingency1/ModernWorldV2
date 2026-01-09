@@ -4,7 +4,6 @@ import static kr.modernworld.modernworldv2.member.infrastructure.persistence.ent
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +16,10 @@ public class UserBatchRepositoryImpl implements UserBatchRepository {
   private final JPAQueryFactory queryFactory;
 
   @Override
-  public Long deleteExpiredUsers(LocalDateTime threshold) {
+  public Long deleteExpiredUsers(Instant threshold) {
     return queryFactory
         .delete(userJPAEntity)
-        .where(userJPAEntity.deletedAt.loe(Instant.from(threshold)))
+        .where(userJPAEntity.deletedAt.loe(threshold))
         .execute();
   }
 

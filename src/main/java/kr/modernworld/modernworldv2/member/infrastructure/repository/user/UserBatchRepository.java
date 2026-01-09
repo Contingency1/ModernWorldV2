@@ -1,12 +1,12 @@
 package kr.modernworld.modernworldv2.member.infrastructure.repository.user;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
 public interface UserBatchRepository {
 
-  Long deleteExpiredUsers(LocalDateTime threshold);
+  Long deleteExpiredUsers(Instant threshold);
 
   Long resetAllUserChance(Long count);
 
