@@ -4,6 +4,7 @@ package kr.modernworld.modernworldv2.growth.application.legend;
 import java.util.Optional;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
+import kr.modernworld.modernworldv2.growth.application.legend.dto.LegendDTO;
 import kr.modernworld.modernworldv2.growth.application.legend.port.LegendQueryRepository;
 import kr.modernworld.modernworldv2.growth.application.userachievement.LegendField;
 import kr.modernworld.modernworldv2.growth.domain.legend.Legend;
@@ -18,6 +19,12 @@ public class LegendService {
 
   private final LegendRepository legendRepository;
   private final LegendQueryRepository legendQueryRepository;
+
+  @Transactional(readOnly = true)
+  public LegendDTO getLegend(Long userNo) {
+    return legendQueryRepository.findOneByUserNo(userNo)
+        .orElseThrow(() -> new BusinessException(BusinessErrorCode.LEGEND_NOT_FOUND));
+  }
 
   @Transactional
   public void create(Long userNo) {

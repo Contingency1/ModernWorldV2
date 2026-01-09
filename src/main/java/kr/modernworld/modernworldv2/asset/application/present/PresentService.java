@@ -78,7 +78,7 @@ public class PresentService {
 
     String senderName = memberExternalPort.getUserName(senderNo);
     eventPublisher.publishEvent(
-        new PresentCreatedEvent(receiverNo, senderName, itemName));
+        new PresentCreatedEvent(senderNo, receiverNo, senderName, itemName));
 
     memberExternalPort.decreaseCurrentPoint(senderNo, itemPrice);
     return presentRepository.save(present);

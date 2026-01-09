@@ -6,6 +6,7 @@ import kr.modernworld.modernworldv2.growth.application.legend.LegendService;
 import kr.modernworld.modernworldv2.growth.application.userachievement.AchievementUnlockService;
 import kr.modernworld.modernworldv2.growth.application.userachievement.LegendField;
 import kr.modernworld.modernworldv2.growth.domain.legend.Legend;
+import kr.modernworld.modernworldv2.member.application.user.event.UserAttendanceUpdatedEvent;
 import kr.modernworld.modernworldv2.social.application.rsp.event.RSPWinEvent;
 import kr.modernworld.modernworldv2.social.domain.comment.event.CommentCreatedEvent;
 import kr.modernworld.modernworldv2.social.domain.like.event.LikeCreatedEvent;
@@ -73,6 +74,12 @@ public class LegendEventListener {
     legendService.decrement(receiverNo, LegendField.LIKE_COUNT);
   }
 
+  @EventListener
+  public void updateUserAttendance(UserAttendanceUpdatedEvent event) {
+    Long userNo = event.userNo();
+
+    incrementLegendAndCheckAchievement(userNo, LegendField.ATTENDANCE_COUNT);
+  }
 
   private void incrementLegendAndCheckAchievement(Long userNo, LegendField field) {
     Legend legend = legendService.increment(userNo, field);

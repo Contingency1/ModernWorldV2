@@ -1,10 +1,16 @@
 package kr.modernworld.modernworldv2.member.application.user;
 
+import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.growth.application.legend.LegendService;
 import kr.modernworld.modernworldv2.member.application.auth.OAuthTokenDTO;
 import kr.modernworld.modernworldv2.member.application.auth.SocialUserInfoDTO;
+import kr.modernworld.modernworldv2.member.application.user.dto.UserAttendanceDTO;
+import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO;
+import kr.modernworld.modernworldv2.member.application.user.dto.UserDescriptionDTO;
+import kr.modernworld.modernworldv2.member.application.user.dto.UserNicknameDTO;
+import kr.modernworld.modernworldv2.member.application.user.event.UserAttendanceUpdatedEvent;
 import kr.modernworld.modernworldv2.member.application.user.socialtoken.SocialTokenService;
 import kr.modernworld.modernworldv2.member.domain.auth.port.OAuthClient;
 import kr.modernworld.modernworldv2.member.domain.user.User;
@@ -12,6 +18,7 @@ import kr.modernworld.modernworldv2.member.domain.user.UserSocialToken;
 import kr.modernworld.modernworldv2.member.domain.user.port.UserQueryRepository;
 import kr.modernworld.modernworldv2.member.domain.user.port.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +30,21 @@ public class UserService {
   private final UserQueryRepository userQueryRepository;
   private final LegendService legendService;
   private final SocialTokenService socialTokenService;
+
+  private final ApplicationEventPublisher eventPublisher;
+
+  @Transactional(readOnly = true)
+  public UserDTO getOne(Long userNo) {
+    return userQueryRepository.findOne(userNo)
+        .orElseThrow(() -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND));
+  }
+
+  @Transactional(readOnly = true)
+  public PageResponseDTO<UserDTO> getAll(Long page, Long take,
+      String animal, OrderByField orderByField, String nickname) {
+
+    return userQueryRepository.findAll(page, take, animal, orderByField, nickname);
+  }
 
   @Transactional
   public User save(SocialUserInfoDTO socialUserInfo, OAuthClient client,
@@ -111,5 +133,61 @@ public class UserService {
     user.increaseCurrentAccumulationPoint(price);
 
     userRepository.save(user);
+  }
+
+  @Transactional(readOnly = true)
+  public UserAttendanceDTO getUserAttendance(Long userNo) {
+    return userQueryRepository.findAttendance(userNo)
+        .orElseThrow(() -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND));
+  }
+
+  @Transactional
+  public UserAttendanceDTO updateAttendance(Long userNo, Integer attendanceStickerNumber) {
+    User user = userRepository.findUserByUserNoForUpdate(userNo)
+        .orElseThrow(() -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND));
+
+    try {
+      user.updateAttendanceAndIncreasePoint(attendanceStickerNumber);
+    } catch (IllegalStateException e) {
+      throw new BusinessException(BusinessErrorCode.USER_ALREADY_ATTENDANCE);
+    }
+
+    eventPublisher.publishEvent(new UserAttendanceUpdatedEvent(userNo));
+    userRepository.save(user);
+
+    return new UserAttendanceDTO(user.getNickname(), user.getAttendance());
+  }
+
+  @Transactional
+  public UserNicknameDTO createUserNickname(Long userNo, String newNickname) {
+    Boolean alreadyExistedName = userQueryRepository.isAlreadyExistedName(newNickname);
+
+    if (alreadyExistedName) {
+      throw new BusinessException(BusinessErrorCode.USER_ALREADY_EXISTED_NAME);
+    }
+
+    User user = userRepository.findUserByUserNoForUpdate(userNo)
+        .orElseThrow(() -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND));
+
+    try {
+      user.updateNickname(newNickname);
+    } catch (IllegalStateException e) {
+      throw new BusinessException(BusinessErrorCode.USER_ALREADY_HAS_NAME);
+    }
+
+    userRepository.save(user);
+
+    return new UserNicknameDTO(user.getNo(), user.getNickname());
+  }
+
+  @Transactional
+  public UserDescriptionDTO updateDescription(Long userNo, String description) {
+    User user = userRepository.findUserByUserNoForUpdate(userNo)
+        .orElseThrow(() -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND));
+
+    user.updateDescription(description);
+    userRepository.save(user);
+
+    return new UserDescriptionDTO(userNo, description);
   }
 }
