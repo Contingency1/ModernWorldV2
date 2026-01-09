@@ -19,6 +19,7 @@ public interface UserMapper {
   @Mapping(target = "inventories", ignore = true)
   @Mapping(target = "characterLockers", ignore = true)
   @Mapping(target = "alarms", ignore = true)
+  @Mapping(target = "legend", ignore = true)
   UserJPAEntity toEntity(User user);
 
   @Mapping(target = "no", ignore = true)
@@ -27,5 +28,6 @@ public interface UserMapper {
   @Mapping(target = "inventories", ignore = true)
   @Mapping(target = "characterLockers", ignore = true)
   @Mapping(target = "alarms", ignore = true)
+  @Mapping(target = "legend", ignore = true)
   void updateEntityFromDomain(User user, @MappingTarget UserJPAEntity entity);
 }
