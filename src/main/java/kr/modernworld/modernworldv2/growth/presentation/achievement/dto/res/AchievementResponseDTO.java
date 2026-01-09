@@ -7,7 +7,7 @@ public record AchievementResponseDTO(
     String title,
     String description,
     String level,
-    Integer point
+    Long point
 ) {
 
   public static AchievementResponseDTO from(AchievementDTO dto) {

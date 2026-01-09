@@ -5,7 +5,7 @@ public record AchievementDTO(
     String title,
     String description,
     String level,
-    Integer point
+    Long point
 ) {
 
 }

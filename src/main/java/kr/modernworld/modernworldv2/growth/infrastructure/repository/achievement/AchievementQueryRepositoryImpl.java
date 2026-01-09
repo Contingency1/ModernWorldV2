@@ -44,7 +44,7 @@ public class AchievementQueryRepositoryImpl implements AchievementQueryRepositor
             achievementJPAEntity.no,
             achievementJPAEntity.title,
             achievementJPAEntity.description,
-            achievementJPAEntity.level,
+            achievementJPAEntity.level.stringValue(),
             achievementJPAEntity.point
         ))
         .from(achievementJPAEntity)
