@@ -2,8 +2,10 @@ package kr.modernworld.modernworldv2.growth.infrastructure.repository.legend;
 
 import static kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.QLegendJPAEntity.legendJPAEntity;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
+import kr.modernworld.modernworldv2.growth.application.legend.dto.LegendDTO;
 import kr.modernworld.modernworldv2.growth.application.legend.port.LegendQueryRepository;
 import kr.modernworld.modernworldv2.growth.domain.legend.Legend;
 import kr.modernworld.modernworldv2.growth.infrastructure.mapper.LegendMapper;
@@ -30,5 +32,27 @@ public class LegendQueryRepositoryImpl implements LegendQueryRepository {
     }
 
     return Optional.of(legendMapper.toDomain(entity));
+  }
+
+  @Override
+  public Optional<LegendDTO> findOneByUserNo(Long userNo) {
+    LegendDTO data = queryFactory
+        .select(Projections.constructor(LegendDTO.class,
+            legendJPAEntity.user.no,
+            legendJPAEntity.attendanceCount,
+            legendJPAEntity.commentCount,
+            legendJPAEntity.itemCount,
+            legendJPAEntity.presentCount,
+            legendJPAEntity.likeCount
+        ))
+        .from(legendJPAEntity)
+        .where(legendJPAEntity.no.eq(userNo))
+        .fetchOne();
+
+    if (data == null) {
+      return Optional.empty();
+    }
+
+    return Optional.of(data);
   }
 }
