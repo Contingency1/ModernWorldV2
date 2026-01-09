@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.member.presentation.scheduler;
+package kr.modernworld.modernworldv2.member.infrastructure.scheduler;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
