@@ -1,0 +1,28 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "develop" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    env:
+      DOCKER_IMAGE_NAME: ${{ secrets.DOCKER_IMAGE_NAME }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login Docker-hub
+        env:
+          DOCKER_USERNAME: ${{secrets.DOCKER_ID}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_RW_TOKEN}}
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+      - name: Build the Docker image
+        run: docker build -t no-tag .
+
+      - name: Tagging
+        run: docker tag no-tag:latest $DOCKER_IMAGE_NAME
+
+      - name: Push to Docker-hub
+        run: docker push $DOCKER_IMAGE_NAME
