@@ -70,3 +70,7 @@ logging:
     org.hibernate.SQL: debug # 실행된 SQL 문장
     org.hibernate.type.descriptor.sql.BasicBinder: trace # 쿼리의 PreparedStatement에 바인딩되는 실제 값들을 로그로 출력
     org.springframework.web: debug # 요청 처리 흐름 보기
+
+cors:
+  allowed-origins:
+    - "http://localhost:1234"
