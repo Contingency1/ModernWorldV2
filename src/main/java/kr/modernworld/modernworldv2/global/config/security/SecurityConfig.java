@@ -1,5 +1,7 @@
 package kr.modernworld.modernworldv2.global.config.security;
 
+import java.util.List;
+import kr.modernworld.modernworldv2.global.config.CorsConfigProperty;
 import kr.modernworld.modernworldv2.global.filter.ExceptionHandlingFilter;
 import kr.modernworld.modernworldv2.global.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,9 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -24,10 +29,12 @@ public class SecurityConfig {
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final AccessDeniedHandler accessDeniedHandler;
   private final AuthenticationEntryPoint authenticationEntryPoint;
+  private final CorsConfigProperty corsConfigProperty;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .csrf(csrf -> csrf.disable())
         .sessionManagement(session -> session
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -51,5 +58,20 @@ public class SecurityConfig {
         );
 
     return http.build();
+  }
+
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration config = new CorsConfiguration();
+
+    config.setAllowedOrigins(corsConfigProperty.allowedOrigins());
+
+    config.setAllowCredentials(true);
+    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+    config.setAllowedHeaders(List.of("*"));
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", config);
+    return source;
   }
 }
