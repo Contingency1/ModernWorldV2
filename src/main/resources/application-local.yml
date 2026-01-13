@@ -73,4 +73,6 @@ logging:
 
 cors:
   allowed-origins:
-    - "http://localhost:1234"
+    - "https://eomhunsick.kr"
+    - "https://www.eomhunsick.kr"
+    - "http://localhost:3000"
