@@ -11,4 +11,6 @@ public interface SseEmitterRepository {
 
   void deleteAll(String userNo);
 
+  void deleteById(String id);
+
 }

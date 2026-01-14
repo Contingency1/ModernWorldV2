@@ -17,12 +17,14 @@ public class SseEmitterService {
   private static final Long SSE_TTL = 30 * 60 * 1000L;
 
   public SseEmitter connect(Long userNo) {
-    String emitterName = userNo.toString() + "_" + System.currentTimeMillis();
+    sseEmitterRepository.deleteAll(String.valueOf(userNo));
+
+    String emitterName = userNo + "_" + System.currentTimeMillis();
     SseEmitter emitter = new SseEmitter(SSE_TTL);
 
-    emitter.onCompletion(() -> sseEmitterRepository.deleteAll(String.valueOf(userNo)));
-    emitter.onTimeout(() -> sseEmitterRepository.deleteAll(String.valueOf(userNo)));
-    emitter.onError((e) -> sseEmitterRepository.deleteAll(String.valueOf(userNo)));
+    emitter.onCompletion(() -> sseEmitterRepository.deleteById(emitterName));
+    emitter.onTimeout(() -> sseEmitterRepository.deleteById(emitterName));
+    emitter.onError((e) -> sseEmitterRepository.deleteById(emitterName));
 
     sseEmitterRepository.create(emitterName, emitter);
 
@@ -38,7 +40,6 @@ public class SseEmitterService {
     for (SseEmitter emitter : emitters.values()) {
       sendEvent(userNo, emitter, event);
     }
-
   }
 
   private void sendEvent(Long userNo, SseEmitter emitter, Object event) {
@@ -48,9 +49,8 @@ public class SseEmitterService {
           .name("message")
           .data(event));
     } catch (IOException e) {
-      log.error("SSE connection Error: {}", e.getMessage());
-      sseEmitterRepository.deleteAll(String.valueOf(userNo));
-      throw new RuntimeException(e);
+      log.error("UserNo: {}, SSE connection Error: {}", userNo, e.getMessage());
+      emitter.completeWithError(e);
     }
   }
 
