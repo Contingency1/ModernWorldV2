@@ -8,9 +8,9 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import kr.modernworld.modernworldv2.growth.application.userachievement.dto.GetAchievementDTO;
 import kr.modernworld.modernworldv2.growth.application.userachievement.dto.GetUserAchievementDTO;
 import kr.modernworld.modernworldv2.growth.application.userachievement.port.UserAchievementQueryRepository;
-import kr.modernworld.modernworldv2.growth.presentation.userachievement.dto.res.AchievementDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -54,7 +54,7 @@ public class UserAchievementQueryRepositoryImpl implements UserAchievementQueryR
         userAchievementJPAEntity.status,
         userAchievementJPAEntity.createdAt,
 
-        Projections.constructor(AchievementDetail.class,
+        Projections.constructor(GetAchievementDTO.class,
             achievementJPAEntity.title,
             achievementJPAEntity.description,
             achievementJPAEntity.level.stringValue(),
