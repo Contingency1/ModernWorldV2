@@ -99,4 +99,15 @@ public class CharacterLockerQueryRepositoryImpl implements CharacterLockerQueryR
 
     return exist != null;
   }
+
+  @Override
+  public Boolean userHasAnyCharacter(Long userNo) {
+    Integer exist = queryFactory
+        .selectOne()
+        .from(characterLockerJPAEntity)
+        .where(characterLockerJPAEntity.user.no.eq(userNo))
+        .fetchFirst();
+
+    return exist != null;
+  }
 }
