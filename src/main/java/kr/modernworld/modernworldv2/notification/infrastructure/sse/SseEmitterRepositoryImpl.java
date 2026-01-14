@@ -39,4 +39,9 @@ public class SseEmitterRepositoryImpl implements SseEmitterRepository {
       }
     }
   }
+
+  @Override
+  public void deleteById(String id) {
+    emitters.remove(id);
+  }
 }

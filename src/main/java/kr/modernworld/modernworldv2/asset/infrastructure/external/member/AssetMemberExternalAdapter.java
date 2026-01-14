@@ -12,6 +12,11 @@ public class AssetMemberExternalAdapter implements MemberExternalPort {
   private final UserService userService;
 
   @Override
+  public void lockUserByUserNo(Long userNo) {
+    userService.getUserForUpdate(userNo);
+  }
+
+  @Override
   public void validateUser(Long userNo) {
     userService.isPresent(userNo);
   }

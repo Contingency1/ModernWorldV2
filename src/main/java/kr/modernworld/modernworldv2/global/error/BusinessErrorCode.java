@@ -51,6 +51,8 @@ public enum BusinessErrorCode {
   CHARACTER_ALREADY_EXISTS(HttpStatus.CONFLICT, "User already owns the character."),
   CHARACTER_NOT_FOUND_IN_CHARACTER_LOCKER(HttpStatus.NOT_FOUND,
       "User does not have that character."),
+  NEW_USER_CAN_GET_ONLY_SPECIAL_CHARACTER(HttpStatus.FORBIDDEN,
+      "only new user can get special character"),
 
   ITEM_ALREADY_EXISTS_IN_INVENTORY(HttpStatus.CONFLICT, "User already owns the item."),
   ITEM_TYPE_NOT_FOUND_IN_INVENTORY(HttpStatus.NOT_FOUND, "There is no item type like that."),

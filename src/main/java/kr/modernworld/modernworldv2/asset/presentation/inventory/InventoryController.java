@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -46,7 +47,7 @@ public class InventoryController {
 
   @PostMapping("/users/my/items")
   public ResponseEntity<InventoryResponseDTO> createOneItemInInventory(
-      @AuthenticationPrincipal TokenUserInfoDTO user, @Valid BuyOneItemRequestDTO item
+      @AuthenticationPrincipal TokenUserInfoDTO user, @Valid @RequestBody BuyOneItemRequestDTO item
   ) {
     Inventory inventory = itemShopService.buyOneItem(user.userNo(), item.itemNo());
 
@@ -60,8 +61,8 @@ public class InventoryController {
   @PatchMapping("/users/my/items/{itemNo}")
   public ResponseEntity<InventoryResponseDTO> updateOneItemInInventory(
       @AuthenticationPrincipal TokenUserInfoDTO user,
-      @PathVariable("itemNo") @Min(1) Long itemNo,
-      @Valid UpdateInventoryRequestDTO item
+      @PathVariable @Min(1) Long itemNo,
+      @Valid @RequestBody UpdateInventoryRequestDTO item
   ) {
     Inventory inventory = inventoryService.updateItemEquipStatus(user.userNo(), itemNo,
         item.status());

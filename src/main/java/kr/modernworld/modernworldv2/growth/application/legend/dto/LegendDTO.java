@@ -6,7 +6,8 @@ public record LegendDTO(
     Long commentCount,
     Long itemCount,
     Long presentCount,
-    Long likeCount
+    Long likeCount,
+    Long rspWinCount
 ) {
 
 }

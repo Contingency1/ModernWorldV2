@@ -21,6 +21,14 @@ public class CharacterShopService {
 
   @Transactional
   public CharacterLocker buyOneCharacter(Long userNo, Long characterNo) {
+    memberExternalPort.lockUserByUserNo(userNo);
+
+    Boolean exist = characterLockerService.userHasAnyCharacter(userNo);
+
+    if (!exist) {
+      return characterLockerService.addCharacterForNewUser(userNo, characterNo);
+    }
+
     characterLockerService.validateCharacterExists(userNo, characterNo);
 
     Long characterPrice = characterService.getPrice(characterNo);

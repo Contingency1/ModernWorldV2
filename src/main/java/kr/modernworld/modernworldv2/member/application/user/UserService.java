@@ -190,4 +190,11 @@ public class UserService {
 
     return new UserDescriptionDTO(userNo, description);
   }
+
+  @Transactional
+  public User getUserForUpdate(Long userNo) {
+    return userRepository.findUserByUserNoForUpdate(userNo).orElseThrow(
+        () -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND, " userNo: " + userNo));
+
+  }
 }

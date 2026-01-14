@@ -40,6 +40,15 @@ public class CharacterLockerService {
   }
 
   @Transactional
+  public CharacterLocker addCharacterForNewUser(Long userNo, Long characterNo) {
+    if (characterNo >= 1 && characterNo <= 4) {
+      return characterLockerRepository.save(CharacterLocker.create(userNo, characterNo));
+    }
+
+    throw new BusinessException(BusinessErrorCode.NEW_USER_CAN_GET_ONLY_SPECIAL_CHARACTER);
+  }
+
+  @Transactional
   public CharacterLocker equip(Long userNo, Long characterNo) {
     if (!characterLockerQueryRepository.exists(userNo, characterNo)) {
       throw new BusinessException(BusinessErrorCode.CHARACTER_NOT_FOUND_IN_CHARACTER_LOCKER,
@@ -53,6 +62,10 @@ public class CharacterLockerService {
 
     characterLockerRepository.update(userCharacters);
     return equippedCharacterLocker;
+  }
 
+  @Transactional(readOnly = true)
+  public Boolean userHasAnyCharacter(Long userNo) {
+    return characterLockerQueryRepository.userHasAnyCharacter(userNo);
   }
 }

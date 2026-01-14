@@ -13,4 +13,6 @@ public interface CharacterLockerQueryRepository {
   CharacterLockerCollection getUserAllCharacters(Long userNo);
 
   Boolean exists(Long userNo, Long characterNo);
+
+  Boolean userHasAnyCharacter(Long userNo);
 }
