@@ -43,7 +43,8 @@ public class LegendQueryRepositoryImpl implements LegendQueryRepository {
             legendJPAEntity.commentCount,
             legendJPAEntity.itemCount,
             legendJPAEntity.presentCount,
-            legendJPAEntity.likeCount
+            legendJPAEntity.likeCount,
+            legendJPAEntity.rspWinCount
         ))
         .from(legendJPAEntity)
         .where(legendJPAEntity.no.eq(userNo))

@@ -8,7 +8,8 @@ public record LegendResponseDTO(
     Long commentCount,
     Long itemCount,
     Long presentCount,
-    Long likeCount
+    Long likeCount,
+    Long rspWinCount
 ) {
 
   public static LegendResponseDTO from(LegendDTO dto) {
@@ -18,7 +19,8 @@ public record LegendResponseDTO(
         dto.commentCount(),
         dto.itemCount(),
         dto.presentCount(),
-        dto.likeCount()
+        dto.likeCount(),
+        dto.rspWinCount()
     );
   }
 }
