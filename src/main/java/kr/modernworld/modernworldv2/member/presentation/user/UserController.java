@@ -50,7 +50,7 @@ public class UserController {
       @Valid GetUsersRequestDTO query) {
     PageResponseDTO<UserDTO> response = userService.getAll(query.page(), query.take(),
         query.animal(),
-        OrderByField.stringToOrderByField(query.orderBy()),
+        OrderByField.stringToOrderByField(query.orderByField()),
         query.nickname());
 
     List<UserResponseDTO> data = response.data()

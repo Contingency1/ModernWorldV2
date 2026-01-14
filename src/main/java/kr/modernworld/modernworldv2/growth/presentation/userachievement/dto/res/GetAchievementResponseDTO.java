@@ -2,15 +2,15 @@ package kr.modernworld.modernworldv2.growth.presentation.userachievement.dto.res
 
 import kr.modernworld.modernworldv2.growth.application.userachievement.dto.GetAchievementDTO;
 
-public record AchievementDetail(
+public record GetAchievementResponseDTO(
     String title,
     String description,
     String level,
     String category
 ) {
 
-  public static AchievementDetail from(GetAchievementDTO achievementDetail) {
-    return new AchievementDetail(
+  public static GetAchievementResponseDTO from(GetAchievementDTO achievementDetail) {
+    return new GetAchievementResponseDTO(
         achievementDetail.title(),
         achievementDetail.description(),
         achievementDetail.level(),

@@ -42,7 +42,7 @@ public class CharacterLockerService {
   @Transactional
   public CharacterLocker addCharacterForNewUser(Long userNo, Long characterNo) {
     if (characterNo >= 1 && characterNo <= 4) {
-      return characterLockerRepository.save(CharacterLocker.create(userNo, characterNo));
+      return characterLockerRepository.save(CharacterLocker.createForNewUser(userNo, characterNo));
     }
 
     throw new BusinessException(BusinessErrorCode.NEW_USER_CAN_GET_ONLY_SPECIAL_CHARACTER);

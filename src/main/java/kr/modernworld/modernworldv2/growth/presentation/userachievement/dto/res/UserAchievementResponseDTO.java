@@ -9,7 +9,7 @@ public record UserAchievementResponseDTO(
     Long achievementNo,
     Boolean status,
     Instant createdAt,
-    AchievementDetail achievement
+    GetAchievementResponseDTO achievement
 ) {
 
   public static UserAchievementResponseDTO from(GetUserAchievementDTO achievement) {
@@ -18,6 +18,6 @@ public record UserAchievementResponseDTO(
         achievement.achievementNo(),
         achievement.status(),
         achievement.createdAt(),
-        AchievementDetail.from(achievement.achievement()));
+        GetAchievementResponseDTO.from(achievement.achievement()));
   }
 }
