@@ -6,11 +6,11 @@ import lombok.Getter;
 @Getter
 public class CharacterLocker {
 
-  private Long no;
+  private final Long no;
 
-  private Long userNo;
+  private final Long userNo;
 
-  private Long characterNo;
+  private final Long characterNo;
 
   private Boolean status;
 
@@ -32,5 +32,9 @@ public class CharacterLocker {
 
   public static CharacterLocker create(Long userNo, Long characterNo) {
     return new CharacterLocker(null, userNo, characterNo, false);
+  }
+
+  public static CharacterLocker createForNewUser(Long userNo, Long characterNo) {
+    return new CharacterLocker(null, userNo, characterNo, true);
   }
 }
