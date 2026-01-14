@@ -9,7 +9,7 @@ public record LegendResponseDTO(
     Long itemCount,
     Long presentCount,
     Long likeCount,
-    Long rspWinCount
+    Long RSPWinCount
 ) {
 
   public static LegendResponseDTO from(LegendDTO dto) {
