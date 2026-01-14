@@ -11,11 +11,11 @@ import kr.modernworld.modernworldv2.member.application.user.UserService;
 import kr.modernworld.modernworldv2.member.domain.auth.port.OAuthClient;
 import kr.modernworld.modernworldv2.member.domain.auth.port.SessionRepository;
 import kr.modernworld.modernworldv2.member.domain.auth.port.TokenProvider;
+import kr.modernworld.modernworldv2.member.domain.token.RefreshTokenRepository;
 import kr.modernworld.modernworldv2.member.domain.user.User;
 import kr.modernworld.modernworldv2.member.domain.user.UserDomain;
 import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenResultDTO;
 import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
-import kr.modernworld.modernworldv2.member.domain.token.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -78,8 +78,10 @@ public class OAuthService {
 
     eventPublisher.publishEvent(new LoginSuccessEvent(this));
 
-    return new LoginResultDTO(accessToken.token(), refreshToken.token(),
-        savedUser.getSocialName(),
+    return new LoginResultDTO(
+        accessToken.token(),
+        refreshToken.token(),
+        savedUser.getNickname(),
         savedUser.getNo(),
         accessToken.expirationMillis(),
         refreshToken.expirationMillis());
