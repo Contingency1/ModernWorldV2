@@ -13,7 +13,7 @@ public record GetUsersRequestDTO(
     @Max(50)
     Long take,
     String animal,
-    String orderBy,
+    String orderByField,
     @Size(min = 1, max = 50)
     String nickname
 ) {
@@ -27,8 +27,8 @@ public record GetUsersRequestDTO(
       take = 10L;
     }
 
-    if (orderBy == null || orderBy.isEmpty()) {
-      orderBy = OrderByField.CREATED_AT.getField();
+    if (orderByField == null || orderByField.isEmpty()) {
+      orderByField = OrderByField.CREATED_AT.getField();
     }
 
   }
