@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,7 +55,7 @@ public class PresentController {
   @PatchMapping("/my/presents/{presentNo}")
   public ResponseEntity<PresentResponseDTO> acceptOrReject(
       @AuthenticationPrincipal TokenUserInfoDTO user, @PathVariable Long presentNo,
-      HandlePresentStatus presentStatus) {
+      @RequestBody HandlePresentStatus presentStatus) {
     Present response = presentService.acceptOrReject(user.userNo(), presentNo, presentStatus);
 
     return new ResponseEntity<>(
@@ -75,7 +76,7 @@ public class PresentController {
   public ResponseEntity<PresentResponseDTO> giveOnePresent(
       @AuthenticationPrincipal TokenUserInfoDTO user,
       @PathVariable("userNo") Long receiverNo,
-      @Valid ItemNoRequestDTO item
+      @Valid @RequestBody ItemNoRequestDTO item
   ) {
     Present response = presentService.createOnePresent(user.userNo(), receiverNo, item.itemNo());
 

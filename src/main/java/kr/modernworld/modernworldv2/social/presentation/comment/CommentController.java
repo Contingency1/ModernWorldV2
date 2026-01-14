@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -38,7 +39,7 @@ public class CommentController {
   @PostMapping("/users/{userNo}/comments")
   public ResponseEntity<CommentResponseDTO> create(
       @AuthenticationPrincipal TokenUserInfoDTO user, @PathVariable("userNo") Long receiverNo,
-      @Valid CreateCommentRequestDTO body) {
+      @Valid @RequestBody CreateCommentRequestDTO body) {
     CommentDTO response = commentService.create(user.userNo(), receiverNo,
         body.content());
 
@@ -62,7 +63,7 @@ public class CommentController {
   @PatchMapping("/users/my/comments/{commentNo}")
   public ResponseEntity<CommentResponseDTO> updateOne(
       @AuthenticationPrincipal TokenUserInfoDTO user,
-      @PathVariable Long commentNo, @Valid CreateCommentRequestDTO body) {
+      @PathVariable Long commentNo, @Valid @RequestBody CreateCommentRequestDTO body) {
     CommentDTO response = commentService.update(user.userNo(), commentNo,
         body.content());
 

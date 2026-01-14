@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -47,7 +48,7 @@ public class ReplyController {
   @PostMapping("/comments/{commentNo}/replies")
   public ResponseEntity<CreateReplyResponseDTO> create(
       @AuthenticationPrincipal TokenUserInfoDTO user,
-      @PathVariable Long commentNo, @Valid CreateReplyRequestDTO body) {
+      @PathVariable Long commentNo, @Valid @RequestBody CreateReplyRequestDTO body) {
     String response = replyService.create(user.userNo(), commentNo, body.content());
 
     return new ResponseEntity<>(new CreateReplyResponseDTO(response), HttpStatus.CREATED);
@@ -57,7 +58,7 @@ public class ReplyController {
   public ResponseEntity<CreateReplyResponseDTO> updateOne(
       @AuthenticationPrincipal TokenUserInfoDTO user,
       @PathVariable Long commentNo, @PathVariable Long replyNo,
-      @Valid CreateReplyRequestDTO body) {
+      @Valid @RequestBody CreateReplyRequestDTO body) {
     String response = replyService.update(user.userNo(), replyNo, body.content());
 
     return new ResponseEntity<>(new CreateReplyResponseDTO(response), HttpStatus.OK);

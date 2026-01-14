@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -70,7 +71,8 @@ public class UserController {
 
   @PostMapping("/my/nickname")
   public ResponseEntity<UserNicknameResponseDTO> createUserNickname(
-      @AuthenticationPrincipal TokenUserInfoDTO user, @Valid CreateUserNicknameRequestDTO body) {
+      @AuthenticationPrincipal TokenUserInfoDTO user,
+      @Valid @RequestBody CreateUserNicknameRequestDTO body) {
     UserNicknameDTO response = userService.createUserNickname(user.userNo(), body.nickname());
 
     return new ResponseEntity<>(UserNicknameResponseDTO.from(response), HttpStatus.CREATED);
@@ -79,7 +81,7 @@ public class UserController {
   @PatchMapping("/my/attendance")
   public ResponseEntity<UserAttendanceResponseDTO> updateAttendance(
       @AuthenticationPrincipal TokenUserInfoDTO user,
-      @Valid UpdateUserAttendanceRequestDTO body) {
+      @Valid @RequestBody UpdateUserAttendanceRequestDTO body) {
     UserAttendanceDTO response = userService.updateAttendance(user.userNo(),
         body.stickerNo());
 
@@ -89,7 +91,7 @@ public class UserController {
   @PutMapping("/my/description")
   public ResponseEntity<UserDescriptionResponseDTO> updateDescription(
       @AuthenticationPrincipal TokenUserInfoDTO user,
-      @Valid UpdateUserDescriptionRequestDTO body) {
+      @Valid @RequestBody UpdateUserDescriptionRequestDTO body) {
     UserDescriptionDTO response = userService.updateDescription(user.userNo(),
         body.description());
 
