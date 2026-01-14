@@ -183,7 +183,7 @@ public class NeighborQueryRepositoryImpl implements NeighborQueryRepository {
     List<UserAchievementWrapperDTO> achievements = targetUser.getUserAchievements().stream()
         .filter(UserAchievementJPAEntity::getStatus)
         .map(userAchieve -> new UserAchievementWrapperDTO(
-            new NeighborUserAchievementDTO(userAchieve.getAchievement().getName(),
+            new NeighborUserAchievementDTO(userAchieve.getAchievement().getTitle(),
                 userAchieve.getAchievement().getLevel().toString())
         ))
         .toList();
