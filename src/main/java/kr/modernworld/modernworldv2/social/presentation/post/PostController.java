@@ -32,7 +32,7 @@ public class PostController {
       @AuthenticationPrincipal TokenUserInfoDTO user,
       @Valid GetAllPostsRequestDTO query
   ) {
-    List<PostDTO> response = postService.getAll(user.userNo(), query.senderReceiverNoField(),
+    List<PostDTO> response = postService.getAll(user.userNo(), query.type(),
         query.orderBy());
 
     return new ResponseEntity<>(

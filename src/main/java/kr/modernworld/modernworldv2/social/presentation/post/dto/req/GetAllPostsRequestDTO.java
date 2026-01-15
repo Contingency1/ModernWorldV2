@@ -4,7 +4,7 @@ import kr.modernworld.modernworldv2.global.common.OrderBy;
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
 
 public record GetAllPostsRequestDTO(
-    SenderReceiverNoField senderReceiverNoField,
+    SenderReceiverNoField type,
     OrderBy orderBy
 ) {
 
