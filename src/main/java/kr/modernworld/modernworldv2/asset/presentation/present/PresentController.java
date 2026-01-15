@@ -2,11 +2,11 @@ package kr.modernworld.modernworldv2.asset.presentation.present;
 
 import jakarta.validation.Valid;
 import java.util.List;
-import kr.modernworld.modernworldv2.asset.application.present.HandlePresentStatus;
 import kr.modernworld.modernworldv2.asset.application.present.PresentService;
 import kr.modernworld.modernworldv2.asset.application.present.dto.GetPresentDTO;
 import kr.modernworld.modernworldv2.asset.domain.present.Present;
 import kr.modernworld.modernworldv2.asset.presentation.present.dto.req.ItemNoRequestDTO;
+import kr.modernworld.modernworldv2.asset.presentation.present.dto.req.PatchPresentRequestDTO;
 import kr.modernworld.modernworldv2.asset.presentation.present.dto.res.GetPresentResponseDTO;
 import kr.modernworld.modernworldv2.asset.presentation.present.dto.res.PresentResponseDTO;
 import kr.modernworld.modernworldv2.global.common.SenderReceiverNoField;
@@ -55,8 +55,8 @@ public class PresentController {
   @PatchMapping("/my/presents/{presentNo}")
   public ResponseEntity<PresentResponseDTO> acceptOrReject(
       @AuthenticationPrincipal TokenUserInfoDTO user, @PathVariable Long presentNo,
-      @RequestBody HandlePresentStatus presentStatus) {
-    Present response = presentService.acceptOrReject(user.userNo(), presentNo, presentStatus);
+      @Valid @RequestBody PatchPresentRequestDTO body) {
+    Present response = presentService.acceptOrReject(user.userNo(), presentNo, body.status());
 
     return new ResponseEntity<>(
         new PresentResponseDTO(response.getNo(), response.getItemNo(), response.getSenderNo(),
