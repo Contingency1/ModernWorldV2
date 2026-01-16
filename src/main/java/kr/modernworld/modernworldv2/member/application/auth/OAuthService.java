@@ -121,4 +121,10 @@ public class OAuthService {
       refreshTokenRepository.unlock(user.userNo());
     }
   }
+
+  public String logout(Long userNo) {
+    refreshTokenRepository.delete(userNo);
+    
+    return "Logout Success.";
+  }
 }

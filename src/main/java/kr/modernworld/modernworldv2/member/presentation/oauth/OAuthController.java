@@ -7,13 +7,17 @@ import kr.modernworld.modernworldv2.member.application.auth.OAuthService;
 import kr.modernworld.modernworldv2.member.application.auth.dto.LoginResultDTO;
 import kr.modernworld.modernworldv2.member.application.auth.dto.RenewRefreshTokenDTO;
 import kr.modernworld.modernworldv2.member.domain.user.UserDomain;
+import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenUserInfoDTO;
 import kr.modernworld.modernworldv2.member.presentation.oauth.dto.LoginResponseDTO;
 import kr.modernworld.modernworldv2.member.presentation.oauth.dto.LoginURLResponseDTO;
+import kr.modernworld.modernworldv2.member.presentation.oauth.dto.LogoutResponseDTO;
 import kr.modernworld.modernworldv2.member.presentation.oauth.dto.RenewalAccessTokenResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,5 +71,12 @@ public class OAuthController {
 
     return new ResponseEntity<>(
         new RenewalAccessTokenResponseDTO(response.accessToken()), HttpStatus.OK);
+  }
+
+  @DeleteMapping("/logout")
+  public ResponseEntity<LogoutResponseDTO> logout(@AuthenticationPrincipal TokenUserInfoDTO user) {
+    String response = authService.logout(user.userNo());
+
+    return new ResponseEntity<>(new LogoutResponseDTO(response), HttpStatus.OK);
   }
 }
