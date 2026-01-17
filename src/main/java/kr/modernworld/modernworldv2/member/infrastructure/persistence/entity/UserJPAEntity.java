@@ -3,8 +3,6 @@ package kr.modernworld.modernworldv2.member.infrastructure.persistence.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,6 +20,7 @@ import java.util.Map;
 import kr.modernworld.modernworldv2.asset.infrastructure.persistence.entity.CharacterLockerJPAEntity;
 import kr.modernworld.modernworldv2.asset.infrastructure.persistence.entity.InventoryJPAEntity;
 import kr.modernworld.modernworldv2.growth.infrastructure.persistence.entity.LegendJPAEntity;
+import kr.modernworld.modernworldv2.member.domain.user.UserDomain;
 import kr.modernworld.modernworldv2.notification.infrastructure.entity.AlarmJPAEntity;
 import kr.modernworld.modernworldv2.social.infrastructure.persistence.entity.RspGameRecordJPAEntity;
 import lombok.AccessLevel;
@@ -105,8 +104,7 @@ public class UserJPAEntity {
   private String image;
 
   @NotNull
-  @Enumerated(EnumType.STRING)
-  @Column(name = "domain", nullable = false)
+  @Column(name = "domain", nullable = false, columnDefinition = "ENUM('naver', 'kakao', 'google')")
   private UserDomain domain;
 
   @ColumnDefault("'10'")
