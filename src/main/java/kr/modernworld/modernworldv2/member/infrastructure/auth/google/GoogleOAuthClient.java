@@ -11,6 +11,7 @@ import kr.modernworld.modernworldv2.member.infrastructure.auth.google.dto.Google
 import kr.modernworld.modernworldv2.member.infrastructure.auth.google.dto.GoogleUserInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -42,7 +43,7 @@ public class GoogleOAuthClient implements OAuthClient {
 
   @Override
   public UserDomain getProviderName() {
-    return UserDomain.google;
+    return UserDomain.GOOGLE;
   }
 
   @Override
@@ -100,6 +101,23 @@ public class GoogleOAuthClient implements OAuthClient {
     GoogleUserInfoDTO response = getGoogleUserInfo(socialAccessToken, uri);
 
     return new SocialUserInfoDTO(response.id(), response.name(), response.picture());
+  }
+
+  @Override
+  public void unlink(String socialAccessToken) {
+    String uri = "/revoke";
+
+    authWebClient
+        .post()
+        .uri(uriBuilder -> uriBuilder
+            .path(uri)
+            .queryParam("token", socialAccessToken)
+            .build())
+        .retrieve()
+        .onStatus(HttpStatusCode::isError, response -> Mono.error(
+            new IllegalStateException("[GoogleOAuthClient] Revoke api failed.")))
+        .toBodilessEntity()
+        .block();
   }
 
   private GoogleUserInfoDTO getGoogleUserInfo(String socialAccessToken, String uri) {

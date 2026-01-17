@@ -12,18 +12,21 @@ import kr.modernworld.modernworldv2.member.application.user.dto.UserDescriptionD
 import kr.modernworld.modernworldv2.member.application.user.dto.UserNicknameDTO;
 import kr.modernworld.modernworldv2.member.application.user.event.UserAttendanceUpdatedEvent;
 import kr.modernworld.modernworldv2.member.application.user.socialtoken.SocialTokenService;
-import kr.modernworld.modernworldv2.member.domain.auth.port.OAuthClient;
 import kr.modernworld.modernworldv2.member.domain.user.User;
+import kr.modernworld.modernworldv2.member.domain.user.UserDomain;
 import kr.modernworld.modernworldv2.member.domain.user.UserSocialToken;
 import kr.modernworld.modernworldv2.member.domain.user.port.UserQueryRepository;
 import kr.modernworld.modernworldv2.member.domain.user.port.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
 
   private final UserRepository userRepository;
@@ -47,7 +50,7 @@ public class UserService {
   }
 
   @Transactional
-  public User save(SocialUserInfoDTO socialUserInfo, OAuthClient client,
+  public User save(SocialUserInfoDTO socialUserInfo, UserDomain domain,
       OAuthTokenDTO socialToken) {
     User user = userQueryRepository.findByUniqueIdentifier(socialUserInfo.uniqueIdentifier())
         .orElseGet(() ->
@@ -55,7 +58,7 @@ public class UserService {
                 socialUserInfo.uniqueIdentifier(),
                 socialUserInfo.name(),
                 socialUserInfo.profileImageUrl(),
-                client.getProviderName()
+                domain
             )
         );
 
@@ -195,6 +198,37 @@ public class UserService {
   public User getUserForUpdate(Long userNo) {
     return userRepository.findUserByUserNoForUpdate(userNo).orElseThrow(
         () -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND, " userNo: " + userNo));
+  }
 
+  @Transactional
+  public void updateDeletedAt(Long userNo) {
+    User user = getUserForUpdate(userNo);
+
+    user.updateDeletedAt();
+
+    userRepository.save(user);
+  }
+
+  @Transactional(readOnly = true)
+  public UserDomain getUserDomain(Long userNo) {
+    return userQueryRepository.findUserDomainByNo(userNo)
+        .orElseThrow(() -> new BusinessException(BusinessErrorCode.USER_NOT_FOUND));
+  }
+
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public void deleteExpiredUser(Long userNo) {
+    User user = userRepository.findUserByUserNoForUpdate(userNo)
+        .orElse(null);
+
+    if (user == null) {
+      return;
+    }
+
+    if (user.getDeletedAt() == null) {
+      log.warn("User No: [{}] restored account just now. Skipping delete.", userNo);
+      return;
+    }
+
+    userRepository.deleteUser(userNo);
   }
 }

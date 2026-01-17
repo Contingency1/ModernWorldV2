@@ -1,11 +1,14 @@
 package kr.modernworld.modernworldv2.member.domain.user.port;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
 import kr.modernworld.modernworldv2.member.application.user.OrderByField;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserAttendanceDTO;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO;
 import kr.modernworld.modernworldv2.member.domain.user.User;
+import kr.modernworld.modernworldv2.member.domain.user.UserDomain;
 
 public interface UserQueryRepository {
 
@@ -24,4 +27,8 @@ public interface UserQueryRepository {
   Optional<UserAttendanceDTO> findAttendance(Long userNo);
 
   Boolean isAlreadyExistedName(String name);
+
+  List<Long> findUsersToDelete(Instant threshold);
+
+  Optional<UserDomain> findUserDomainByNo(Long userNo);
 }

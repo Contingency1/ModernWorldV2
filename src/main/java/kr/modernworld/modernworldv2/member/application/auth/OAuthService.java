@@ -8,6 +8,7 @@ import kr.modernworld.modernworldv2.member.application.auth.dto.RenewRefreshToke
 import kr.modernworld.modernworldv2.member.application.auth.event.LoginFailEvent;
 import kr.modernworld.modernworldv2.member.application.auth.event.LoginSuccessEvent;
 import kr.modernworld.modernworldv2.member.application.user.UserService;
+import kr.modernworld.modernworldv2.member.application.user.socialtoken.SocialTokenService;
 import kr.modernworld.modernworldv2.member.domain.auth.port.OAuthClient;
 import kr.modernworld.modernworldv2.member.domain.auth.port.SessionRepository;
 import kr.modernworld.modernworldv2.member.domain.auth.port.TokenProvider;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,19 +35,20 @@ public class OAuthService {
   private final TokenProvider tokenProvider;
   private final RefreshTokenRepository refreshTokenRepository;
   private final UserService userService;
+  private final SocialTokenService socialTokenService;
+  private final String sessionKey = "SESSION_KEY";
 
   public String buildLoginUrl(UserDomain providerName) {
-
     OAuthClient client = authProvider.getOAuthClient(providerName);
 
     String state = UUID.randomUUID().toString();
-    sessionRepository.save("SESSION_KEY", state);
+    sessionRepository.save(sessionKey, state);
 
     return client.getLoginUrl(state);
   }
 
   public LoginResultDTO login(UserDomain providerName, String authCode, String state) {
-    String storedSate = sessionRepository.findValue("SESSION_KEY");
+    String storedSate = sessionRepository.findValue(sessionKey);
 
     // 테스트 할때는 아래 state값 확인로직 주석처리할것.
     if (!storedSate.equals(state)) {
@@ -58,13 +61,7 @@ public class OAuthService {
     OAuthTokenDTO socialToken = client.getSocialToken(state, authCode);
     SocialUserInfoDTO socialUserInfo = client.getSocialUserInfo(socialToken.socialAccessToken());
 
-    //--------------------------------------------------------------------------------------
-    //밴 됐는지 확인하는 로직 추후에 추가할것.
-
-    //--------------------------------------------------------------------------------------
-
-    User savedUser = userService.save(socialUserInfo, client,
-        socialToken);
+    User savedUser = userService.save(socialUserInfo, providerName, socialToken);
 
     Long now = System.currentTimeMillis();
 
@@ -124,7 +121,22 @@ public class OAuthService {
 
   public String logout(Long userNo) {
     refreshTokenRepository.delete(userNo);
-    
+
     return "Logout Success.";
+  }
+
+  @Transactional
+  public String unlink(Long userNo) {
+    refreshTokenRepository.delete(userNo);
+    userService.updateDeletedAt(userNo);
+
+    UserDomain domain = userService.getUserDomain(userNo);
+    OAuthClient client = authProvider.getOAuthClient(domain);
+
+    String accessToken = socialTokenService.getSocialAccessTokenToDeleteUser(userNo);
+
+    client.unlink(accessToken);
+
+    return "Unlink Success.";
   }
 }

@@ -12,6 +12,7 @@ import kr.modernworld.modernworldv2.member.infrastructure.auth.kakao.dto.KakaoUs
 import kr.modernworld.modernworldv2.member.infrastructure.auth.kakao.dto.KakaoUserInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -45,7 +46,7 @@ public class KakaoOAuthClient implements OAuthClient {
 
   @Override
   public UserDomain getProviderName() {
-    return UserDomain.kakao;
+    return UserDomain.KAKAO;
   }
 
   @Override
@@ -111,6 +112,21 @@ public class KakaoOAuthClient implements OAuthClient {
         userInfo.nickname(),
         userInfo.profileImage()
     );
+  }
+
+  @Override
+  public void unlink(String socialAccessToken) {
+    String uri = "/v1/user/unlink";
+
+    apiWebClient
+        .post()
+        .uri(uri)
+        .header(HttpHeaders.AUTHORIZATION, "Bearer " + socialAccessToken)
+        .retrieve()
+        .onStatus(HttpStatusCode::isError, response -> Mono.error(
+            new IllegalStateException("[KakaoOAuthClient] Revoke api failed.")))
+        .toBodilessEntity()
+        .block();
   }
 
   private KakaoUserInfoDTO getKakaoUserInfo(String socialAccessToken) {

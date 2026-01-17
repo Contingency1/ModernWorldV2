@@ -8,4 +8,6 @@ public interface UserRepository {
   Optional<User> findUserByUserNoForUpdate(Long userNo);
 
   User save(User user);
+
+  void deleteUser(Long userNo);
 }
