@@ -129,6 +129,11 @@ public class KakaoOAuthClient implements OAuthClient {
         .block();
   }
 
+  @Override
+  public String getSocialImage(String socialAccessToken) {
+    return getSocialUserInfo(socialAccessToken).profileImageUrl();
+  }
+
   private KakaoUserInfoDTO getKakaoUserInfo(String socialAccessToken) {
     String uri = "/v2/user/me";
     String secure = "?secure_resource=true";

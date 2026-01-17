@@ -133,10 +133,22 @@ public class OAuthService {
     UserDomain domain = userService.getUserDomain(userNo);
     OAuthClient client = authProvider.getOAuthClient(domain);
 
-    String accessToken = socialTokenService.getSocialAccessTokenToDeleteUser(userNo);
+    String accessToken = socialTokenService.getSocialAccessToken(userNo);
 
     client.unlink(accessToken);
 
     return "Unlink Success.";
+  }
+
+  public String updateUserSocialImage(Long userNo) {
+    UserDomain domain = userService.getUserDomain(userNo);
+    String accessToken = socialTokenService.getSocialAccessToken(userNo);
+
+    OAuthClient client = authProvider.getOAuthClient(domain);
+    String socialImage = client.getSocialImage(accessToken);
+
+    userService.updateSocialImage(userNo, socialImage);
+
+    return socialImage;
   }
 }

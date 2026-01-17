@@ -231,4 +231,12 @@ public class UserService {
 
     userRepository.deleteUser(userNo);
   }
+
+  @Transactional
+  public void updateSocialImage(Long userNo, String imageURL) {
+    User user = getUserForUpdate(userNo);
+
+    user.updateImage(imageURL);
+    userRepository.save(user);
+  }
 }

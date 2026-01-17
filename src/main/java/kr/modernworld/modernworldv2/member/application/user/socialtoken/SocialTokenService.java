@@ -20,7 +20,7 @@ public class SocialTokenService {
   }
 
   @Transactional
-  public String getSocialAccessTokenToDeleteUser(Long userNo) {
+  public String getSocialAccessToken(Long userNo) {
     return socialTokenQueryRepository.findSocialAccessTokenByUserNo(userNo)
         .orElseThrow(() -> new RuntimeException("USER DOESN'T HAVE SOCIAL TOKEN"));
   }

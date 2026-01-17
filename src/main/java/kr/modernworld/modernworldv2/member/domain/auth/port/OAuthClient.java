@@ -16,4 +16,6 @@ public interface OAuthClient {
 
   void unlink(String socialAccessToken);
 
+  String getSocialImage(String socialAccessToken);
+
 }

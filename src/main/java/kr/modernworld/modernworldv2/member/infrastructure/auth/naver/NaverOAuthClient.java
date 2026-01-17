@@ -86,6 +86,11 @@ public class NaverOAuthClient implements OAuthClient {
         .block();
   }
 
+  @Override
+  public String getSocialImage(String socialAccessToken) {
+    return getSocialUserInfo(socialAccessToken).profileImageUrl();
+  }
+
   private NaverUserInfoSuccessDTO getNaverUserInfo(String socialAccessToken) {
     return apiWebClient
         .get()

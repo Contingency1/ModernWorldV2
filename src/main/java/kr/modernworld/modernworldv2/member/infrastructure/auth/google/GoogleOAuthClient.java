@@ -120,6 +120,11 @@ public class GoogleOAuthClient implements OAuthClient {
         .block();
   }
 
+  @Override
+  public String getSocialImage(String socialAccessToken) {
+    return getSocialUserInfo(socialAccessToken).profileImageUrl();
+  }
+
   private GoogleUserInfoDTO getGoogleUserInfo(String socialAccessToken, String uri) {
     return apiWebClient
         .get()
