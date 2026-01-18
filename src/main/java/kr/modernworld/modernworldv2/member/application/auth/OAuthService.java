@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -125,17 +124,16 @@ public class OAuthService {
     return "Logout Success.";
   }
 
-  @Transactional
   public String unlink(Long userNo) {
-    refreshTokenRepository.delete(userNo);
-    userService.updateDeletedAt(userNo);
-
     UserDomain domain = userService.getUserDomain(userNo);
     OAuthClient client = authProvider.getOAuthClient(domain);
 
     String accessToken = socialTokenService.getSocialAccessToken(userNo);
 
     client.unlink(accessToken);
+
+    refreshTokenRepository.delete(userNo);
+    userService.updateDeletedAt(userNo);
 
     return "Unlink Success.";
   }
