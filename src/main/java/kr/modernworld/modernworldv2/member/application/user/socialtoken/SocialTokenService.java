@@ -19,10 +19,10 @@ public class SocialTokenService {
     return socialTokenRepository.save(userSocialToken, userNo);
   }
 
-  @Transactional
+  @Transactional(readOnly = true)
   public String getSocialAccessToken(Long userNo) {
     return socialTokenQueryRepository.findSocialAccessTokenByUserNo(userNo)
-        .orElseThrow(() -> new RuntimeException("USER DOESN'T HAVE SOCIAL TOKEN"));
+        .orElseThrow(() -> new IllegalStateException("USER DOESN'T HAVE SOCIAL TOKEN"));
   }
 
 }
