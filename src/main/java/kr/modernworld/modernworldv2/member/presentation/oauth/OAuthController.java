@@ -4,7 +4,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
-import kr.modernworld.modernworldv2.global.util.CookieUtil;
+import kr.modernworld.modernworldv2.global.util.CustomCookieManager;
 import kr.modernworld.modernworldv2.member.application.auth.OAuthService;
 import kr.modernworld.modernworldv2.member.application.auth.dto.LoginResultDTO;
 import kr.modernworld.modernworldv2.member.application.auth.dto.RenewRefreshTokenDTO;
@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class OAuthController {
 
   private final OAuthService authService;
+  private final CustomCookieManager cookieManager;
 
   @GetMapping("/login-url/{provider}")
   public ResponseEntity<LoginURLResponseDTO> getLoginUrl(@PathVariable String provider) {
@@ -54,7 +55,7 @@ public class OAuthController {
 
     LoginResultDTO result = authService.login(providerName, code, state);
 
-    Cookie cookie = CookieUtil.createRefreshTokenCookie(
+    Cookie cookie = cookieManager.createRefreshTokenCookie(
         result.refreshToken(),
         result.refreshExpirationMillis());
     httpResponse.addCookie(cookie);
@@ -70,7 +71,7 @@ public class OAuthController {
       HttpServletResponse httpResponse) {
     RenewRefreshTokenDTO response = authService.renewToken(inputCookie);
 
-    Cookie cookie = CookieUtil.createRefreshTokenCookie(
+    Cookie cookie = cookieManager.createRefreshTokenCookie(
         response.refreshToken(),
         response.refreshExpirationMillis());
     httpResponse.addCookie(cookie);
@@ -80,15 +81,23 @@ public class OAuthController {
   }
 
   @DeleteMapping("/logout")
-  public ResponseEntity<ExitResponseDTO> logout(@AuthenticationPrincipal TokenUserInfoDTO user) {
+  public ResponseEntity<ExitResponseDTO> logout(@AuthenticationPrincipal TokenUserInfoDTO user,
+      HttpServletResponse httpResponse) {
     String response = authService.logout(user.userNo());
+
+    Cookie cookie = cookieManager.invalidateRefreshTokenCookie();
+    httpResponse.addCookie(cookie);
 
     return new ResponseEntity<>(new ExitResponseDTO(response), HttpStatus.OK);
   }
 
   @DeleteMapping("/unlink")
-  public ResponseEntity<ExitResponseDTO> unlink(@AuthenticationPrincipal TokenUserInfoDTO user) {
+  public ResponseEntity<ExitResponseDTO> unlink(@AuthenticationPrincipal TokenUserInfoDTO user,
+      HttpServletResponse httpResponse) {
     String response = authService.unlink(user.userNo());
+
+    Cookie cookie = cookieManager.invalidateRefreshTokenCookie();
+    httpResponse.addCookie(cookie);
 
     return new ResponseEntity<>(new ExitResponseDTO(response), HttpStatus.OK);
   }
