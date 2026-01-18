@@ -48,10 +48,10 @@ public class OAuthService {
   }
 
   public LoginResultDTO login(UserDomain providerName, String authCode, String state) {
-    String storedSate = sessionRepository.findValue(sessionKey);
+    String storedState = sessionRepository.findValue(sessionKey);
 
     // 테스트 할때는 아래 state값 확인로직 주석처리할것.
-    if (!storedSate.equals(state)) {
+    if (!storedState.equals(state)) {
       eventPublisher.publishEvent(new LoginFailEvent(this));
       throw new BusinessException(BusinessErrorCode.INVALID_OAUTH_STATE);
     }
