@@ -1,7 +1,8 @@
 package kr.modernworld.modernworldv2.global.util;
 
-import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseCookie.ResponseCookieBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,49 +12,55 @@ public class CustomCookieManager {
   private final RefreshCookieProperties refreshProps;
   private final SessionCookieProperties sessionProps;
 
-  public Cookie createRefreshTokenCookie(String refreshToken, long expiredAt) {
+  public ResponseCookie createRefreshTokenCookie(String refreshToken, long expiredAt) {
     long ttlSeconds = (expiredAt - System.currentTimeMillis()) / 1000;
 
-    Cookie cookie = setRefreshCookie(refreshToken);
+    ResponseCookieBuilder cookie = setRefreshCookie(refreshToken);
 
     if (ttlSeconds > 0) {
       if (ttlSeconds > Integer.MAX_VALUE) {
-        cookie.setMaxAge(Integer.MAX_VALUE);
+        cookie.maxAge(Integer.MAX_VALUE);
       } else {
-        cookie.setMaxAge((int) ttlSeconds);
+        cookie.maxAge((int) ttlSeconds);
       }
     } else {
-      cookie.setMaxAge(0);
+      cookie.maxAge(0);
     }
 
-    return cookie;
+    return cookie.build();
   }
 
-  public Cookie invalidateRefreshTokenCookie() {
-    Cookie cookie = setRefreshCookie(null);
+  public ResponseCookie invalidateRefreshTokenCookie() {
+    ResponseCookieBuilder cookie = setRefreshCookie(null);
 
-    cookie.setMaxAge(0);
-    return cookie;
+    return cookie.maxAge(0).build();
   }
 
-  private Cookie setRefreshCookie(String refreshToken) {
-    Cookie cookie = new Cookie(refreshProps.name(), refreshToken);
-    cookie.setHttpOnly(refreshProps.httpOnly());
-    cookie.setSecure(refreshProps.secure());
-    cookie.setPath(refreshProps.path());
-    cookie.setDomain(refreshProps.domain());
+  public ResponseCookie invalidateSessionCookie() {
+    ResponseCookieBuilder cookie = setSessionCookie(null);
 
-    return cookie;
+    return cookie.maxAge(0).build();
   }
 
-  private Cookie setSessionCookie(String refreshToken) {
-    Cookie cookie = new Cookie(sessionProps.name(), refreshToken);
-    cookie.setHttpOnly(sessionProps.httpOnly());
-    cookie.setSecure(sessionProps.secure());
-    cookie.setPath(sessionProps.path());
-    cookie.setDomain(sessionProps.domain());
+  private ResponseCookieBuilder setRefreshCookie(String refreshToken) {
 
-    return cookie;
+    return ResponseCookie
+        .from(refreshProps.name(), refreshToken == null ? "" : refreshToken)
+        .httpOnly(refreshProps.httpOnly())
+        .secure(refreshProps.secure())
+        .path(refreshProps.path())
+        .domain(refreshProps.domain())
+        .sameSite(refreshProps.sameSite());
+  }
+
+  private ResponseCookieBuilder setSessionCookie(String key) {
+    return ResponseCookie
+        .from(sessionProps.name(), key)
+        .httpOnly(sessionProps.httpOnly())
+        .secure(sessionProps.secure())
+        .path(sessionProps.path())
+        .domain(sessionProps.domain())
+        .sameSite(sessionProps.sameSite());
   }
 
 }
