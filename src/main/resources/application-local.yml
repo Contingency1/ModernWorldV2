@@ -89,7 +89,7 @@ cookie:
     secure: false # 운영환경에서는 true로 설정할것.
     same-site: none
     path: "/auth/login"
-    domain: "eomjunsick.com"
+    domain: "localhost"
 
   refresh:
     name: refreshToken
@@ -97,4 +97,4 @@ cookie:
     secure: false # 운영환경에서는 true로 설정할것.
     same-site: none
     path: "/auth/new-access-token"
-    domain: "eomjunsick.com"
+    domain: "localhost"
