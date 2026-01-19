@@ -14,4 +14,8 @@ public interface OAuthClient {
 
   SocialUserInfoDTO getSocialUserInfo(String socialAccessToken);
 
+  void unlink(String socialAccessToken);
+
+  String getSocialImage(String socialAccessToken);
+
 }

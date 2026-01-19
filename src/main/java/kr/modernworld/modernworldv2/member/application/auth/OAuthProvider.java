@@ -23,10 +23,11 @@ public class OAuthProvider {
         );
   }
 
-  public OAuthClient getOAuthClient(UserDomain clientId) {
-    OAuthClient client = clients.get(clientId);
+  public OAuthClient getOAuthClient(UserDomain domain) {
+    OAuthClient client = clients.get(domain);
+
     if (client == null) {
-      throw new IllegalArgumentException("No client with id " + clientId);
+      throw new IllegalArgumentException("No client with id " + domain);
     }
 
     return client;

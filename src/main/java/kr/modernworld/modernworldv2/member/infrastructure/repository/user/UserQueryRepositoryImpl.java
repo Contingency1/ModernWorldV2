@@ -15,6 +15,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,7 @@ import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO.UserChar
 import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO.UserCharacterLockerDTO;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserDTO.UserLegendDTO;
 import kr.modernworld.modernworldv2.member.domain.user.User;
+import kr.modernworld.modernworldv2.member.domain.user.UserDomain;
 import kr.modernworld.modernworldv2.member.domain.user.port.UserQueryRepository;
 import kr.modernworld.modernworldv2.member.infrastructure.mapper.UserMapper;
 import kr.modernworld.modernworldv2.member.infrastructure.persistence.entity.QUserAchievementJPAEntity;
@@ -273,6 +275,31 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
         .fetchFirst();
 
     return i != null;
+  }
+
+  @Override
+  public List<Long> findUsersToDelete(Instant threshold) {
+    return queryFactory
+        .select(userJPAEntity.no)
+        .from(userJPAEntity)
+        .where(userJPAEntity.deletedAt.loe(threshold),
+            userJPAEntity.deletedAt.isNotNull())
+        .fetch();
+  }
+
+  @Override
+  public Optional<UserDomain> findUserDomainByNo(Long userNo) {
+    UserDomain domain = queryFactory
+        .select(userJPAEntity.domain)
+        .from(userJPAEntity)
+        .where(userJPAEntity.no.eq(userNo))
+        .fetchOne();
+
+    if (domain == null) {
+      return Optional.empty();
+    }
+
+    return Optional.of(domain);
   }
 
   private OrderSpecifier<?>[] createOrderSpecifier(OrderByField orderBy) {

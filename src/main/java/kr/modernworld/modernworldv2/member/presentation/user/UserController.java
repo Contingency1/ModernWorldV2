@@ -3,6 +3,7 @@ package kr.modernworld.modernworldv2.member.presentation.user;
 import jakarta.validation.Valid;
 import java.util.List;
 import kr.modernworld.modernworldv2.global.common.dto.PageResponseDTO;
+import kr.modernworld.modernworldv2.member.application.auth.OAuthService;
 import kr.modernworld.modernworldv2.member.application.user.OrderByField;
 import kr.modernworld.modernworldv2.member.application.user.UserService;
 import kr.modernworld.modernworldv2.member.application.user.dto.UserAttendanceDTO;
@@ -16,6 +17,7 @@ import kr.modernworld.modernworldv2.member.presentation.user.dto.req.UpdateUserA
 import kr.modernworld.modernworldv2.member.presentation.user.dto.req.UpdateUserDescriptionRequestDTO;
 import kr.modernworld.modernworldv2.member.presentation.user.dto.res.UserAttendanceResponseDTO;
 import kr.modernworld.modernworldv2.member.presentation.user.dto.res.UserDescriptionResponseDTO;
+import kr.modernworld.modernworldv2.member.presentation.user.dto.res.UserImageResponseDTO;
 import kr.modernworld.modernworldv2.member.presentation.user.dto.res.UserNicknameResponseDTO;
 import kr.modernworld.modernworldv2.member.presentation.user.dto.res.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
   private final UserService userService;
+  private final OAuthService authService;
 
   @GetMapping("/{userNo}")
   public ResponseEntity<UserResponseDTO> getOneUser(@PathVariable Long userNo) {
@@ -99,4 +102,12 @@ public class UserController {
         new UserDescriptionResponseDTO(response.userNo(), response.description()), HttpStatus.OK);
   }
 
+  @PutMapping("/my/image")
+  public ResponseEntity<UserImageResponseDTO> updateSocialImage(
+      @AuthenticationPrincipal TokenUserInfoDTO user) {
+    String response = authService.updateUserSocialImage(user.userNo());
+
+    return new ResponseEntity<>(
+        new UserImageResponseDTO("User social image updated.", response), HttpStatus.OK);
+  }
 }

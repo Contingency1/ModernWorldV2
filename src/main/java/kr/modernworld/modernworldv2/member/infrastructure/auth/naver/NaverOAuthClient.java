@@ -15,6 +15,7 @@ import kr.modernworld.modernworldv2.member.infrastructure.auth.naver.dto.NaverUs
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -64,6 +65,30 @@ public class NaverOAuthClient implements OAuthClient {
     NaverUserInfoResponseDTO info = response.response();
 
     return new SocialUserInfoDTO(info.id(), info.name(), info.profileImage());
+  }
+
+  @Override
+  public void unlink(String socialAccessToken) {
+    String uri = "/oauth2.0/token";
+
+    tokenWebClient
+        .post()
+        .uri(uri)
+        .body(BodyInserters
+            .fromFormData("client_id", properties.id())
+            .with("client_secret", properties.secret())
+            .with("access_token", socialAccessToken)
+            .with("grant_type", "delete"))
+        .retrieve()
+        .onStatus(HttpStatusCode::isError, response -> Mono.error(
+            new IllegalStateException("[NaverOAuthClient] Revoke api failed.")))
+        .toBodilessEntity()
+        .block();
+  }
+
+  @Override
+  public String getSocialImage(String socialAccessToken) {
+    return getSocialUserInfo(socialAccessToken).profileImageUrl();
   }
 
   private NaverUserInfoSuccessDTO getNaverUserInfo(String socialAccessToken) {
@@ -132,7 +157,7 @@ public class NaverOAuthClient implements OAuthClient {
 
   @Override
   public UserDomain getProviderName() {
-    return UserDomain.naver;
+    return UserDomain.NAVER;
   }
 
   @Override

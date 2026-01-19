@@ -5,6 +5,10 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum BusinessErrorCode {
+  NOT_SUPPORTED_PROVIDER(HttpStatus.BAD_REQUEST,
+      "Unsupported provider value. Please provide a valid provider from the following list: [naver, kakao, google]."),
+
+
   REDIS_CONCURRENT_UPDATE_REQUEST(HttpStatus.TOO_MANY_REQUESTS,
       "Token renewal is already in progress. Please wait."),
   INVALID_OAUTH_STATE(HttpStatus.UNAUTHORIZED,

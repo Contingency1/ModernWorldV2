@@ -1,7 +1,7 @@
 package kr.modernworld.modernworldv2.member.domain.user;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -27,9 +27,9 @@ public class User {
 
   private final Boolean status;
 
-  private final LocalDateTime createdAt;
+  private final Instant createdAt;
 
-  private LocalDateTime deletedAt;
+  private Instant deletedAt;
 
   private final Boolean admin;
 
@@ -48,7 +48,7 @@ public class User {
   @Builder
   private User(Long no, String nickname, Long currentPoint, Long accumulationPoint,
       String description, Map<String, List<Integer>> attendance, Boolean status,
-      LocalDateTime createdAt, LocalDateTime deletedAt, Boolean admin,
+      Instant createdAt, Instant deletedAt, Boolean admin,
       String uniqueIdentifier, String socialName, String image,
       UserDomain domain, Long chance, UserSocialToken token) {
     this.no = no;
@@ -81,7 +81,7 @@ public class User {
         .chance(10L)
         .status(false)
         .admin(false)
-        .createdAt(LocalDateTime.now())
+        .createdAt(Instant.now())
         .attendance(createInitialAttendance())
         .build();
 
@@ -108,6 +108,12 @@ public class User {
   public void nullifyDeletedAt() {
     if (this.deletedAt != null) {
       this.deletedAt = null;
+    }
+  }
+
+  public void updateDeletedAt() {
+    if (this.deletedAt == null) {
+      this.deletedAt = Instant.now();
     }
   }
 
@@ -162,6 +168,10 @@ public class User {
     increaseCurrentAccumulationPoint((long) point);
 
     attendance.put(dayOfWeekNum, new ArrayList<>(List.of(number, point)));
+  }
+
+  public void updateImage(String newImage) {
+    this.image = newImage;
   }
 
   public void updateDescription(String newDescription) {

@@ -39,6 +39,11 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
+  public void deleteUser(Long userNo) {
+    userJPARepository.deleteById(userNo);
+  }
+
+  @Override
   public Optional<User> findUserByUserNoForUpdate(Long userNo) {
     UserJPAEntity entity = queryFactory
         .selectFrom(userJPAEntity)
