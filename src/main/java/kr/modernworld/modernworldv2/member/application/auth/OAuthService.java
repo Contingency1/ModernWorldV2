@@ -11,8 +11,8 @@ import kr.modernworld.modernworldv2.member.application.auth.event.LoginSuccessEv
 import kr.modernworld.modernworldv2.member.application.user.UserService;
 import kr.modernworld.modernworldv2.member.application.user.socialtoken.SocialTokenService;
 import kr.modernworld.modernworldv2.member.domain.auth.port.OAuthClient;
+import kr.modernworld.modernworldv2.member.domain.auth.port.RedisRepository;
 import kr.modernworld.modernworldv2.member.domain.auth.port.TokenProvider;
-import kr.modernworld.modernworldv2.member.domain.token.RedisRepository;
 import kr.modernworld.modernworldv2.member.domain.user.User;
 import kr.modernworld.modernworldv2.member.domain.user.UserDomain;
 import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenResultDTO;

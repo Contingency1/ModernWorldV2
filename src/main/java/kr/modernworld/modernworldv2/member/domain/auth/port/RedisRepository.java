@@ -1,4 +1,4 @@
-package kr.modernworld.modernworldv2.member.domain.token;
+package kr.modernworld.modernworldv2.member.domain.auth.port;
 
 
 import java.util.Optional;
