@@ -8,6 +8,7 @@ public enum BusinessErrorCode {
   NOT_SUPPORTED_PROVIDER(HttpStatus.BAD_REQUEST,
       "Unsupported provider value. Please provide a valid provider from the following list: [naver, kakao, google]."),
 
+  EXPIRED_OAUTH_SESSION(HttpStatus.BAD_REQUEST, "Session was Expired. Please Login Again."),
 
   REDIS_CONCURRENT_UPDATE_REQUEST(HttpStatus.TOO_MANY_REQUESTS,
       "Token renewal is already in progress. Please wait."),
