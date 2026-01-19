@@ -14,15 +14,23 @@ public class CustomCookieManager {
 
   public ResponseCookie createRefreshTokenCookie(String refreshToken, long expiredAt) {
     long ttlSeconds = (expiredAt - System.currentTimeMillis()) / 1000;
-
     ResponseCookieBuilder cookie = setRefreshCookie(refreshToken);
 
     if (ttlSeconds > 0) {
-      if (ttlSeconds > Integer.MAX_VALUE) {
-        cookie.maxAge(Integer.MAX_VALUE);
-      } else {
-        cookie.maxAge((int) ttlSeconds);
-      }
+      cookie.maxAge(ttlSeconds);
+    } else {
+      cookie.maxAge(0);
+    }
+
+    return cookie.build();
+  }
+
+  public ResponseCookie createSessionCookie(String sessionKey, long expiredAt) {
+    long ttlSeconds = (expiredAt - System.currentTimeMillis()) / 1000;
+    ResponseCookieBuilder cookie = setSessionCookie(sessionKey);
+
+    if (ttlSeconds > 0) {
+      cookie.maxAge(ttlSeconds);
     } else {
       cookie.maxAge(0);
     }

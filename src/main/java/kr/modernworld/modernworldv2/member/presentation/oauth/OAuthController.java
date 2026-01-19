@@ -4,6 +4,7 @@ import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
 import kr.modernworld.modernworldv2.global.util.CustomCookieManager;
 import kr.modernworld.modernworldv2.member.application.auth.OAuthService;
+import kr.modernworld.modernworldv2.member.application.auth.dto.BuilderLoginUrlDTO;
 import kr.modernworld.modernworldv2.member.application.auth.dto.LoginResultDTO;
 import kr.modernworld.modernworldv2.member.application.auth.dto.RenewRefreshTokenDTO;
 import kr.modernworld.modernworldv2.member.domain.user.UserDomain;
@@ -14,7 +15,6 @@ import kr.modernworld.modernworldv2.member.presentation.oauth.dto.LoginURLRespon
 import kr.modernworld.modernworldv2.member.presentation.oauth.dto.RenewalAccessTokenResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -39,20 +39,25 @@ public class OAuthController {
   public ResponseEntity<LoginURLResponseDTO> getLoginUrl(@PathVariable String provider) {
     UserDomain providerName = getProviderName(provider);
 
-    return new ResponseEntity<>(
-        new LoginURLResponseDTO(authService.buildLoginUrl(providerName)),
-        HttpStatus.OK);
+    BuilderLoginUrlDTO response = authService.buildLoginUrl(providerName);
+
+    ResponseCookie sessionCookie = cookieManager.createSessionCookie(response.sessionKey(),
+        response.expiredAt());
+
+    return ResponseEntity.ok()
+        .header(HttpHeaders.SET_COOKIE, sessionCookie.toString())
+        .body(new LoginURLResponseDTO(response.url()));
   }
 
   @PostMapping("/login/{provider}")
   public ResponseEntity<LoginResponseDTO> login(
       @PathVariable String provider,
       @RequestParam String code,
-      @RequestParam String state
-  ) {
+      @RequestParam String state,
+      @CookieValue(name = "${cookie.session.name}", required = false, defaultValue = "") String sessionKey) {
     UserDomain providerName = getProviderName(provider);
 
-    LoginResultDTO response = authService.login(providerName, code, state);
+    LoginResultDTO response = authService.login(sessionKey, providerName, code, state);
 
     ResponseCookie refreshTokenCookie = cookieManager
         .createRefreshTokenCookie(response.refreshToken(), response.refreshExpirationMillis());
@@ -66,8 +71,8 @@ public class OAuthController {
 
   @GetMapping("/new-access-token")
   public ResponseEntity<RenewalAccessTokenResponseDTO> renewAccessToken(
-      @CookieValue(name = "${cookie.refresh.name}", required = false) String inputCookie) {
-    RenewRefreshTokenDTO response = authService.renewToken(inputCookie);
+      @CookieValue(name = "${cookie.refresh.name}", required = false, defaultValue = "") String refreshToken) {
+    RenewRefreshTokenDTO response = authService.renewToken(refreshToken);
 
     ResponseCookie cookie = cookieManager.createRefreshTokenCookie(
         response.refreshToken(),
