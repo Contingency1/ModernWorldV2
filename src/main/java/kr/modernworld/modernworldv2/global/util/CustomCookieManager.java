@@ -53,9 +53,9 @@ public class CustomCookieManager {
         .sameSite(refreshProps.sameSite());
   }
 
-  private ResponseCookieBuilder setSessionCookie(String key) {
+  private ResponseCookieBuilder setSessionCookie(String sessionKey) {
     return ResponseCookie
-        .from(sessionProps.name(), key)
+        .from(sessionProps.name(), sessionKey == null ? "" : sessionKey)
         .httpOnly(sessionProps.httpOnly())
         .secure(sessionProps.secure())
         .path(sessionProps.path())
