@@ -2,9 +2,13 @@ package kr.modernworld.modernworldv2.global.error;
 
 import jakarta.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
+import kr.modernworld.modernworldv2.global.util.CustomCookieManager;
 import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.JwtValidationCustomException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,9 +17,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-@Slf4j
 @RestControllerAdvice
+@RequiredArgsConstructor
+@Slf4j
 public class GlobalExceptionHandler {
+
+  private final CustomCookieManager cookieManager;
 
   // Global
   @ExceptionHandler(RuntimeException.class)
@@ -128,6 +135,15 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponseDTO> handleBusinessException(BusinessException ex) {
     ErrorResponseDTO response = new ErrorResponseDTO(ex.getMessage(),
         ex.getErrorCode().getStatus().getReasonPhrase(), ex.getErrorCode().getStatus().value());
+
+    if (ex.getErrorCode() == BusinessErrorCode.INVALID_OAUTH_STATE) {
+      ResponseCookie stateCookie = cookieManager.invalidateStateCookie();
+
+      return ResponseEntity
+          .status(ex.getErrorCode().getStatus())
+          .header(HttpHeaders.SET_COOKIE, stateCookie.toString())
+          .body(response);
+    }
 
     return new ResponseEntity<>(response, ex.getErrorCode().getStatus());
   }
