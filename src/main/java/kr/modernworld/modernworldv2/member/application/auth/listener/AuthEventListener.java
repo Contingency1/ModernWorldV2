@@ -2,7 +2,6 @@ package kr.modernworld.modernworldv2.member.application.auth.listener;
 
 import kr.modernworld.modernworldv2.member.application.auth.event.LoginFailEvent;
 import kr.modernworld.modernworldv2.member.application.auth.event.LoginSuccessEvent;
-import kr.modernworld.modernworldv2.member.domain.auth.port.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -13,16 +12,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class AuthEventListener {
 
-  private final RedisRepository redisRepository;
-
   @EventListener
   public void loginSuccess(LoginSuccessEvent event) {
     log.info("UserNo {} login success.", event.userNo());
-    redisRepository.deleteSessionBySessionKey(event.sessionKey());
   }
 
   @EventListener
   public void loginFail(LoginFailEvent event) {
-    redisRepository.deleteSessionBySessionKey(event.sessionKey());
+    log.warn("Login failed. Invalid state. {}", event.state());
   }
 }
