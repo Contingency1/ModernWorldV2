@@ -55,6 +55,8 @@ public class OAuthController {
       @RequestParam String code,
       @RequestParam String state,
       @CookieValue(name = "${cookie.session.name}", required = false, defaultValue = "") String sessionKey) {
+    checkCookieValue(sessionKey);
+
     UserDomain providerName = getProviderName(provider);
 
     LoginResultDTO response = authService.login(sessionKey, providerName, code, state);
@@ -72,6 +74,8 @@ public class OAuthController {
   @GetMapping("/new-access-token")
   public ResponseEntity<RenewalAccessTokenResponseDTO> renewAccessToken(
       @CookieValue(name = "${cookie.refresh.name}", required = false, defaultValue = "") String refreshToken) {
+    checkCookieValue(refreshToken);
+
     RenewRefreshTokenDTO response = authService.renewToken(refreshToken);
 
     ResponseCookie cookie = cookieManager.createRefreshTokenCookie(
@@ -114,5 +118,11 @@ public class OAuthController {
       throw new BusinessException(BusinessErrorCode.NOT_SUPPORTED_PROVIDER);
     }
     return providerName;
+  }
+
+  private void checkCookieValue(String cookieValue) {
+    if (cookieValue == null || cookieValue.isBlank()) {
+      throw new BusinessException(BusinessErrorCode.NOT_FOUND_COOKIE);
+    }
   }
 }
