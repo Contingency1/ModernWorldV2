@@ -121,7 +121,7 @@ public class OAuthController {
   }
 
   private void checkCookieValue(String cookieValue) {
-    if (cookieValue == null || cookieValue.isBlank()) {
+    if (cookieValue.isBlank()) {
       throw new BusinessException(BusinessErrorCode.NOT_FOUND_COOKIE);
     }
   }
