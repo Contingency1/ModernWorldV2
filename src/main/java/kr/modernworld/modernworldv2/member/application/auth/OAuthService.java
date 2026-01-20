@@ -3,6 +3,7 @@ package kr.modernworld.modernworldv2.member.application.auth;
 import java.util.UUID;
 import kr.modernworld.modernworldv2.global.error.BusinessErrorCode;
 import kr.modernworld.modernworldv2.global.error.BusinessException;
+import kr.modernworld.modernworldv2.member.application.auth.dto.BuilderLoginUrlDTO;
 import kr.modernworld.modernworldv2.member.application.auth.dto.LoginResultDTO;
 import kr.modernworld.modernworldv2.member.application.auth.dto.RenewRefreshTokenDTO;
 import kr.modernworld.modernworldv2.member.application.auth.event.LoginFailEvent;
@@ -10,9 +11,8 @@ import kr.modernworld.modernworldv2.member.application.auth.event.LoginSuccessEv
 import kr.modernworld.modernworldv2.member.application.user.UserService;
 import kr.modernworld.modernworldv2.member.application.user.socialtoken.SocialTokenService;
 import kr.modernworld.modernworldv2.member.domain.auth.port.OAuthClient;
-import kr.modernworld.modernworldv2.member.domain.auth.port.SessionRepository;
+import kr.modernworld.modernworldv2.member.domain.auth.port.RedisRepository;
 import kr.modernworld.modernworldv2.member.domain.auth.port.TokenProvider;
-import kr.modernworld.modernworldv2.member.domain.token.RefreshTokenRepository;
 import kr.modernworld.modernworldv2.member.domain.user.User;
 import kr.modernworld.modernworldv2.member.domain.user.UserDomain;
 import kr.modernworld.modernworldv2.member.infrastructure.auth.jwt.TokenResultDTO;
@@ -27,37 +27,39 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class OAuthService {
 
-  private final SessionRepository sessionRepository;
   private final OAuthProvider authProvider;
   private final ApplicationEventPublisher eventPublisher;
 
   private final TokenProvider tokenProvider;
-  private final RefreshTokenRepository refreshTokenRepository;
+  private final RedisRepository redisRepository;
   private final UserService userService;
   private final SocialTokenService socialTokenService;
-  private final String sessionKey = "SESSION_KEY";
 
-  public String buildLoginUrl(UserDomain providerName) {
+  public BuilderLoginUrlDTO buildLoginUrl(UserDomain providerName) {
     OAuthClient client = authProvider.getOAuthClient(providerName);
 
     String state = UUID.randomUUID().toString();
-    sessionRepository.save(sessionKey, state);
 
-    return client.getLoginUrl(state);
+    // 5분
+    long expirationMS = 300_000L;
+    Long expiredAt = System.currentTimeMillis() + expirationMS;
+
+    String url = client.getLoginUrl(state);
+
+    return new BuilderLoginUrlDTO(url, state, expiredAt);
   }
 
-  public LoginResultDTO login(UserDomain providerName, String authCode, String state) {
-    String storedState = sessionRepository.findValue(sessionKey);
-
+  public LoginResultDTO login(String cookieState, UserDomain providerName, String authCode,
+      String queryState) {
     // 테스트 할때는 아래 state값 확인로직 주석처리할것.
-    if (!storedState.equals(state)) {
-      eventPublisher.publishEvent(new LoginFailEvent(this));
+    if (!cookieState.equals(queryState)) {
+      eventPublisher.publishEvent(new LoginFailEvent(cookieState));
       throw new BusinessException(BusinessErrorCode.INVALID_OAUTH_STATE);
     }
 
     OAuthClient client = authProvider.getOAuthClient(providerName);
 
-    OAuthTokenDTO socialToken = client.getSocialToken(state, authCode);
+    OAuthTokenDTO socialToken = client.getSocialToken(queryState, authCode);
     SocialUserInfoDTO socialUserInfo = client.getSocialUserInfo(socialToken.socialAccessToken());
 
     User savedUser = userService.save(socialUserInfo, providerName, socialToken);
@@ -69,10 +71,10 @@ public class OAuthService {
     TokenResultDTO refreshToken = tokenProvider.createRefresh(savedUser.getNo(),
         savedUser.getAdmin(), now);
 
-    refreshTokenRepository.save(savedUser.getNo(), refreshToken.token(),
+    redisRepository.saveRefreshToken(savedUser.getNo(), refreshToken.token(),
         refreshToken.expirationMillis());
 
-    eventPublisher.publishEvent(new LoginSuccessEvent(this));
+    eventPublisher.publishEvent(new LoginSuccessEvent(savedUser.getNo()));
 
     return new LoginResultDTO(
         accessToken.token(),
@@ -86,23 +88,23 @@ public class OAuthService {
   public RenewRefreshTokenDTO renewToken(String inputToken) {
     TokenUserInfoDTO user = tokenProvider.validateRefresh(inputToken);
 
-    if (!refreshTokenRepository.tryLock(user.userNo())) {
+    if (!redisRepository.tryLock(user.userNo())) {
       throw new BusinessException(BusinessErrorCode.REDIS_CONCURRENT_UPDATE_REQUEST);
     }
 
     try {
       String savedRefreshToken =
-          refreshTokenRepository.findByUserNo(user.userNo())
+          redisRepository.findRefreshTokenByUserNo(user.userNo())
               .orElseThrow(() -> new BusinessException(BusinessErrorCode.INVALID_REFRESH_TOKEN));
 
       if (!savedRefreshToken.equals(inputToken)) {
-        refreshTokenRepository.delete(user.userNo());
+        redisRepository.deleteRefreshTokenByUserNo(user.userNo());
         log.warn("Refresh Token Reuse Detected! UserNo: {}", user.userNo());
 
         throw new BusinessException(BusinessErrorCode.INVALID_REFRESH_TOKEN);
       }
 
-      refreshTokenRepository.delete(user.userNo());
+      redisRepository.deleteRefreshTokenByUserNo(user.userNo());
 
       Long now = System.currentTimeMillis();
 
@@ -110,16 +112,16 @@ public class OAuthService {
       TokenResultDTO refresh = tokenProvider.createRefresh(user.userNo(), user.isAdmin(),
           now);
 
-      refreshTokenRepository.save(user.userNo(), refresh.token(), refresh.expirationMillis());
+      redisRepository.saveRefreshToken(user.userNo(), refresh.token(), refresh.expirationMillis());
 
       return new RenewRefreshTokenDTO(access.token(), refresh.token(), refresh.expirationMillis());
     } finally {
-      refreshTokenRepository.unlock(user.userNo());
+      redisRepository.unlock(user.userNo());
     }
   }
 
   public String logout(Long userNo) {
-    refreshTokenRepository.delete(userNo);
+    redisRepository.deleteRefreshTokenByUserNo(userNo);
 
     return "Logout Success.";
   }
@@ -132,7 +134,7 @@ public class OAuthService {
 
     client.unlink(accessToken);
 
-    refreshTokenRepository.delete(userNo);
+    redisRepository.deleteRefreshTokenByUserNo(userNo);
     userService.updateDeletedAt(userNo);
 
     return "Unlink Success.";

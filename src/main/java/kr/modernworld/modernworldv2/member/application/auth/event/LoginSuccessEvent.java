@@ -1,10 +1,5 @@
 package kr.modernworld.modernworldv2.member.application.auth.event;
 
-import org.springframework.context.ApplicationEvent;
+public record LoginSuccessEvent(Long userNo) {
 
-public class LoginSuccessEvent extends ApplicationEvent {
-
-  public LoginSuccessEvent(Object source) {
-    super(source);
-  }
 }

@@ -10,19 +10,27 @@ import org.springframework.stereotype.Component;
 public class CustomCookieManager {
 
   private final RefreshCookieProperties refreshProps;
-  private final SessionCookieProperties sessionProps;
+  private final StateCookieProperties stateProps;
 
   public ResponseCookie createRefreshTokenCookie(String refreshToken, long expiredAt) {
     long ttlSeconds = (expiredAt - System.currentTimeMillis()) / 1000;
-
     ResponseCookieBuilder cookie = setRefreshCookie(refreshToken);
 
     if (ttlSeconds > 0) {
-      if (ttlSeconds > Integer.MAX_VALUE) {
-        cookie.maxAge(Integer.MAX_VALUE);
-      } else {
-        cookie.maxAge((int) ttlSeconds);
-      }
+      cookie.maxAge(ttlSeconds);
+    } else {
+      cookie.maxAge(0);
+    }
+
+    return cookie.build();
+  }
+
+  public ResponseCookie createStateCookie(String state, long expiredAt) {
+    long ttlSeconds = (expiredAt - System.currentTimeMillis()) / 1000;
+    ResponseCookieBuilder cookie = setStateCookie(state);
+
+    if (ttlSeconds > 0) {
+      cookie.maxAge(ttlSeconds);
     } else {
       cookie.maxAge(0);
     }
@@ -36,8 +44,8 @@ public class CustomCookieManager {
     return cookie.maxAge(0).build();
   }
 
-  public ResponseCookie invalidateSessionCookie() {
-    ResponseCookieBuilder cookie = setSessionCookie(null);
+  public ResponseCookie invalidateStateCookie() {
+    ResponseCookieBuilder cookie = setStateCookie(null);
 
     return cookie.maxAge(0).build();
   }
@@ -53,14 +61,14 @@ public class CustomCookieManager {
         .sameSite(refreshProps.sameSite());
   }
 
-  private ResponseCookieBuilder setSessionCookie(String sessionKey) {
+  private ResponseCookieBuilder setStateCookie(String state) {
     return ResponseCookie
-        .from(sessionProps.name(), sessionKey == null ? "" : sessionKey)
-        .httpOnly(sessionProps.httpOnly())
-        .secure(sessionProps.secure())
-        .path(sessionProps.path())
-        .domain(sessionProps.domain())
-        .sameSite(sessionProps.sameSite());
+        .from(stateProps.name(), state == null ? "" : state)
+        .httpOnly(stateProps.httpOnly())
+        .secure(stateProps.secure())
+        .path(stateProps.path())
+        .domain(stateProps.domain())
+        .sameSite(stateProps.sameSite());
   }
 
 }
