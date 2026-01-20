@@ -71,7 +71,7 @@ cors:
     - "http://localhost:3000"
 
 cookie:
-  session:
+  login-state:
     name: MODERN_WORLD_V2
     http-only: false # 운영환경에서는 true로 설정할것.
     secure: false # 운영환경에서는 true로 설정할것.

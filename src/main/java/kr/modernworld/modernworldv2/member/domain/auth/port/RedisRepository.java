@@ -15,9 +15,9 @@ public interface RedisRepository {
 
   void unlock(Long userNo);
 
-  void saveSession(String sessionKey, String state, Long expiredAt);
-
-  Optional<String> findSessionValueBySessionKey(String sessionKey);
-
-  void deleteSessionBySessionKey(String sessionKey);
+//  void saveSession(String sessionKey, String state, Long expiredAt);
+//
+//  Optional<String> findSessionValueBySessionKey(String sessionKey);
+//
+//  void deleteSessionBySessionKey(String sessionKey);
 }

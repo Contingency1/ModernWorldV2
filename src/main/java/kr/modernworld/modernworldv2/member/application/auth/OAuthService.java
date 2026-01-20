@@ -38,34 +38,28 @@ public class OAuthService {
   public BuilderLoginUrlDTO buildLoginUrl(UserDomain providerName) {
     OAuthClient client = authProvider.getOAuthClient(providerName);
 
-    String sessionKey = UUID.randomUUID().toString();
     String state = UUID.randomUUID().toString();
 
     // 5분
-    long sessionExpirationMS = 300_000L;
-
-    Long expiredAt = System.currentTimeMillis() + sessionExpirationMS;
-    redisRepository.saveSession(sessionKey, state, expiredAt);
+    long expirationMS = 300_000L;
+    Long expiredAt = System.currentTimeMillis() + expirationMS;
 
     String url = client.getLoginUrl(state);
 
-    return new BuilderLoginUrlDTO(url, sessionKey, expiredAt);
+    return new BuilderLoginUrlDTO(url, state, expiredAt);
   }
 
-  public LoginResultDTO login(String sessionKey, UserDomain providerName, String authCode,
-      String state) {
-    String storedState = redisRepository.findSessionValueBySessionKey(sessionKey)
-        .orElseThrow(() -> new BusinessException(BusinessErrorCode.EXPIRED_OAUTH_SESSION));
-
+  public LoginResultDTO login(String cookieState, UserDomain providerName, String authCode,
+      String queryState) {
     // 테스트 할때는 아래 state값 확인로직 주석처리할것.
-    if (!storedState.equals(state)) {
-      eventPublisher.publishEvent(new LoginFailEvent(sessionKey));
+    if (!cookieState.equals(queryState)) {
+      eventPublisher.publishEvent(new LoginFailEvent(cookieState));
       throw new BusinessException(BusinessErrorCode.INVALID_OAUTH_STATE);
     }
 
     OAuthClient client = authProvider.getOAuthClient(providerName);
 
-    OAuthTokenDTO socialToken = client.getSocialToken(state, authCode);
+    OAuthTokenDTO socialToken = client.getSocialToken(queryState, authCode);
     SocialUserInfoDTO socialUserInfo = client.getSocialUserInfo(socialToken.socialAccessToken());
 
     User savedUser = userService.save(socialUserInfo, providerName, socialToken);
@@ -80,7 +74,7 @@ public class OAuthService {
     redisRepository.saveRefreshToken(savedUser.getNo(), refreshToken.token(),
         refreshToken.expirationMillis());
 
-    eventPublisher.publishEvent(new LoginSuccessEvent(sessionKey, savedUser.getNo()));
+    eventPublisher.publishEvent(new LoginSuccessEvent(savedUser.getNo()));
 
     return new LoginResultDTO(
         accessToken.token(),

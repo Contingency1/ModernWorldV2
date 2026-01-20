@@ -56,31 +56,31 @@ public class RedisRepositoryImpl implements RedisRepository {
     redisTemplate.delete(LOCK_PREFIX + userNo);
   }
 
-  @Override
-  public void saveSession(String sessionKey, String state, Long expiredAt) {
-    long currentTime = System.currentTimeMillis();
-    long timeToLive = expiredAt - currentTime;
-
-    if (timeToLive < 0) {
-      throw new IllegalArgumentException("Expired after " + timeToLive + " [ms]");
-    }
-
-    redisTemplate.opsForValue().set(sessionKey, state, Duration.ofMillis(timeToLive));
-  }
-
-  @Override
-  public Optional<String> findSessionValueBySessionKey(String sessionKey) {
-    String response = redisTemplate.opsForValue().get(sessionKey);
-
-    if (response == null) {
-      return Optional.empty();
-    }
-
-    return Optional.of(response);
-  }
-
-  @Override
-  public void deleteSessionBySessionKey(String sessionKey) {
-    redisTemplate.delete(sessionKey);
-  }
+//  @Override
+//  public void saveSession(String sessionKey, String state, Long expiredAt) {
+//    long currentTime = System.currentTimeMillis();
+//    long timeToLive = expiredAt - currentTime;
+//
+//    if (timeToLive < 0) {
+//      throw new IllegalArgumentException("Expired after " + timeToLive + " [ms]");
+//    }
+//
+//    redisTemplate.opsForValue().set(sessionKey, state, Duration.ofMillis(timeToLive));
+//  }
+//
+//  @Override
+//  public Optional<String> findSessionValueBySessionKey(String sessionKey) {
+//    String response = redisTemplate.opsForValue().get(sessionKey);
+//
+//    if (response == null) {
+//      return Optional.empty();
+//    }
+//
+//    return Optional.of(response);
+//  }
+//
+//  @Override
+//  public void deleteSessionBySessionKey(String sessionKey) {
+//    redisTemplate.delete(sessionKey);
+//  }
 }
