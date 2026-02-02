@@ -16,8 +16,6 @@ import kr.modernworld.modernworldv2.social.domain.neighbor.event.NeighborSentEve
 import kr.modernworld.modernworldv2.social.domain.post.event.PostCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
@@ -34,7 +32,6 @@ public class AlarmEventListener {
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void RSPWin(RSPWinEvent event) {
     Long userNo = event.userNo();
 
@@ -45,7 +42,6 @@ public class AlarmEventListener {
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void givePresent(PresentCreatedEvent event) {
     Long receiverNo = event.receiverNo();
     String senderName = event.senderName();
@@ -58,7 +54,6 @@ public class AlarmEventListener {
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void handlePresentRefund(PresentItemRefundedEvent event) {
     Long userNo = event.userNo();
     String itemName = event.itemName();
@@ -73,7 +68,6 @@ public class AlarmEventListener {
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void createComment(CommentCreatedEvent event) {
     Long receiverNo = event.receiverNo();
     String senderName = event.senderName();
@@ -84,7 +78,6 @@ public class AlarmEventListener {
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void createOneLike(LikeCreatedEvent event) {
     Long receiverNo = event.receiverNo();
     String senderName = event.senderName();
@@ -95,7 +88,6 @@ public class AlarmEventListener {
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void createOnePost(PostCreatedEvent event) {
     Long receiverNo = event.receiverNo();
     String senderName = event.senderName();
@@ -106,7 +98,6 @@ public class AlarmEventListener {
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void sendOneNeighborRequest(NeighborSentEvent event) {
     Long receiverNo = event.receiverNo();
     String senderName = event.senderName();
@@ -117,7 +108,6 @@ public class AlarmEventListener {
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void connectNeighbor(NeighborConnectedEvent event) {
     Long senderNo = event.senderNo();
     Long receiverNo = event.receiverNo();
@@ -137,7 +127,6 @@ public class AlarmEventListener {
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void unlockAchievement(AchievementUnlockedEvent event) {
     Long userNo = event.userNo();
     String achievementTitle = event.achievementTitle();
