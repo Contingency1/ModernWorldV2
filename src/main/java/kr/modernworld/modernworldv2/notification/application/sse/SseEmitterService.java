@@ -1,7 +1,7 @@
 package kr.modernworld.modernworldv2.notification.application.sse;
 
 import java.io.IOException;
-import java.util.Map;
+import java.util.Optional;
 import kr.modernworld.modernworldv2.notification.application.sse.port.SseEmitterRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,29 +17,45 @@ public class SseEmitterService {
   private static final Long SSE_TTL = 30 * 60 * 1000L;
 
   public SseEmitter connect(Long userNo) {
-    sseEmitterRepository.deleteAll(String.valueOf(userNo));
+    String emitterKey = String.valueOf(userNo);
 
-    String emitterName = userNo + "_" + System.currentTimeMillis();
+    Optional<SseEmitter> oldOne = sseEmitterRepository.findOne(emitterKey);
+
+    if (oldOne.isPresent()) {
+      oldOne.get().complete();
+      sseEmitterRepository.deleteById(emitterKey);
+    }
+
     SseEmitter emitter = new SseEmitter(SSE_TTL);
 
-    emitter.onCompletion(() -> sseEmitterRepository.deleteById(emitterName));
-    emitter.onTimeout(() -> sseEmitterRepository.deleteById(emitterName));
-    emitter.onError((e) -> sseEmitterRepository.deleteById(emitterName));
+    setEmitter(emitter, emitterKey);
 
-    sseEmitterRepository.create(emitterName, emitter);
+    sseEmitterRepository.create(emitterKey, emitter);
 
     sendEvent(userNo, emitter, "connected");
 
     return emitter;
   }
 
-  public void send(Long userNo, SseEvent event) {
-    Map<String, SseEmitter> emitters = sseEmitterRepository.getAllByUserNo(
-        String.valueOf(userNo));
+  private void setEmitter(SseEmitter emitter, String emitterKey) {
+    emitter.onCompletion(() -> sseEmitterRepository.deleteById(emitterKey));
 
-    for (SseEmitter emitter : emitters.values()) {
-      sendEvent(userNo, emitter, event);
-    }
+    emitter.onTimeout(() -> {
+      emitter.complete();
+      sseEmitterRepository.deleteById(emitterKey);
+    });
+
+    emitter.onError((e) -> {
+      log.error("userNo {}: SSE error", emitterKey, e);
+      emitter.completeWithError(e);
+      sseEmitterRepository.deleteById(emitterKey);
+    });
+  }
+
+  public void send(Long userNo, SseEvent event) {
+    Optional<SseEmitter> emitter = sseEmitterRepository.findOne(String.valueOf(userNo));
+
+    emitter.ifPresent(sseEmitter -> sendEvent(userNo, sseEmitter, event));
   }
 
   private void sendEvent(Long userNo, SseEmitter emitter, Object event) {
@@ -51,6 +67,7 @@ public class SseEmitterService {
     } catch (IOException e) {
       log.error("UserNo: {}, SSE connection Error: {}", userNo, e.getMessage());
       emitter.completeWithError(e);
+      sseEmitterRepository.deleteById(String.valueOf(userNo));
     }
   }
 

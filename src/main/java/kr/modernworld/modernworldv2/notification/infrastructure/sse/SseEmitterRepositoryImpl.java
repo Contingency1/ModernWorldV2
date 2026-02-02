@@ -1,7 +1,7 @@
 package kr.modernworld.modernworldv2.notification.infrastructure.sse;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import kr.modernworld.modernworldv2.notification.application.sse.port.SseEmitterRepository;
 import org.springframework.stereotype.Repository;
@@ -10,38 +10,27 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @Repository
 public class SseEmitterRepositoryImpl implements SseEmitterRepository {
 
-  private static final ConcurrentHashMap<String, SseEmitter> emitters = new ConcurrentHashMap<>();
+  private final Map<String, SseEmitter> userEmitters = new ConcurrentHashMap<>();
 
   @Override
   public SseEmitter create(String emitterKey, SseEmitter emitter) {
-    emitters.put(emitterKey, emitter);
+    userEmitters.put(emitterKey, emitter);
     return emitter;
   }
 
   @Override
-  public Map<String, SseEmitter> getAllByUserNo(String userNo) {
-    Map<String, SseEmitter> result = new HashMap<>();
+  public Optional<SseEmitter> findOne(String userNo) {
+    SseEmitter sseEmitter = userEmitters.get(userNo);
 
-    emitters.forEach((k, v) -> {
-      if (k.startsWith(userNo + "_")) {
-        result.put(k, v);
-      }
-    });
-
-    return result;
-  }
-
-  @Override
-  public void deleteAll(String userNo) {
-    for (String name : emitters.keySet()) {
-      if (name.startsWith(userNo + "_")) {
-        emitters.remove(name);
-      }
+    if (sseEmitter == null) {
+      return Optional.empty();
     }
+
+    return Optional.of(sseEmitter);
   }
 
   @Override
   public void deleteById(String id) {
-    emitters.remove(id);
+    userEmitters.remove(id);
   }
 }

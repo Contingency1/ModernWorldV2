@@ -28,9 +28,9 @@ public class AlarmEventListener {
   private final AlarmService alarmService;
   private final SseEmitterService sseEmitterService;
 
-  private void saveAlarmAndSendSSE(Long userNo, AlarmTitle game, String message) {
-    alarmService.create(userNo, game, message);
-    sseEmitterService.send(userNo, new SseEvent(game.getTitle(), message));
+  private void saveAlarmAndSendSSE(Long userNo, AlarmTitle alarm, String message) {
+    alarmService.create(userNo, alarm, message);
+    sseEmitterService.send(userNo, new SseEvent(alarm.getTitle(), message));
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
