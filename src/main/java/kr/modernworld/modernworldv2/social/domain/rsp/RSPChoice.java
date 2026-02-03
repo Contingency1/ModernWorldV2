@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public enum RSPChoice {
 
-  SCISSORS(0, "Scissors"), PAPER(1, "Paper"), ROCK(2, "Rock"),
+  SCISSORS(0, "Scissors"), ROCK(1, "Rock"), PAPER(2, "Paper"),
   NULL(null, "-");
 
   final Integer number;
