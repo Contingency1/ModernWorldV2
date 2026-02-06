@@ -9,6 +9,6 @@ public interface SseEmitterRepository {
 
   Optional<SseEmitter> findOne(String userNo);
 
-  void deleteById(String id);
+  void delete(String emitterKey, SseEmitter emitter);
 
 }

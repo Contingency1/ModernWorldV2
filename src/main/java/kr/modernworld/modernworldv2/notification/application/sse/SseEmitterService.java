@@ -22,8 +22,8 @@ public class SseEmitterService {
     Optional<SseEmitter> oldOne = sseEmitterRepository.findOne(emitterKey);
 
     if (oldOne.isPresent()) {
+      sseEmitterRepository.delete(emitterKey, oldOne.get());
       oldOne.get().complete();
-      sseEmitterRepository.deleteById(emitterKey);
     }
 
     SseEmitter emitter = new SseEmitter(SSE_TTL);
@@ -38,17 +38,19 @@ public class SseEmitterService {
   }
 
   private void setEmitter(SseEmitter emitter, String emitterKey) {
-    emitter.onCompletion(() -> sseEmitterRepository.deleteById(emitterKey));
+    emitter.onCompletion(() -> {
+//      log.info("=== [성공] Emitter 객체 수명 종료됨 (GC 대기 상태 진입) ===");
+      sseEmitterRepository.delete(emitterKey, emitter);
+    });
 
     emitter.onTimeout(() -> {
-      emitter.complete();
-      sseEmitterRepository.deleteById(emitterKey);
+//      log.info("=== [성공] Emitter 객체 수명 TTL에 따른 종료 (GC 대기 상태 진입) ===");
+      sseEmitterRepository.delete(emitterKey, emitter);
     });
 
     emitter.onError((e) -> {
       log.error("userNo {}: SSE error", emitterKey, e);
-      emitter.completeWithError(e);
-      sseEmitterRepository.deleteById(emitterKey);
+      sseEmitterRepository.delete(emitterKey, emitter);
     });
   }
 
@@ -67,7 +69,7 @@ public class SseEmitterService {
     } catch (IOException e) {
       log.error("UserNo: {}, SSE connection Error: {}", userNo, e.getMessage());
       emitter.completeWithError(e);
-      sseEmitterRepository.deleteById(String.valueOf(userNo));
+      sseEmitterRepository.delete(String.valueOf(userNo), emitter);
     }
   }
 

@@ -30,7 +30,7 @@ public class SseEmitterRepositoryImpl implements SseEmitterRepository {
   }
 
   @Override
-  public void deleteById(String id) {
-    userEmitters.remove(id);
+  public void delete(String emitterKey, SseEmitter emitter) {
+    userEmitters.remove(emitterKey, emitter);
   }
 }
