@@ -39,12 +39,10 @@ public class SseEmitterService {
 
   private void setEmitter(SseEmitter emitter, String emitterKey) {
     emitter.onCompletion(() -> {
-//      log.info("=== [성공] Emitter 객체 수명 종료됨 (GC 대기 상태 진입) ===");
       sseEmitterRepository.delete(emitterKey, emitter);
     });
 
     emitter.onTimeout(() -> {
-//      log.info("=== [성공] Emitter 객체 수명 TTL에 따른 종료 (GC 대기 상태 진입) ===");
       sseEmitterRepository.delete(emitterKey, emitter);
     });
 
